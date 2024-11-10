@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="shortcut icon" href="./assets/images/favicon.svg" type="image/svg+xml" />
+        <!-- ============= Theme ============= -->
+        <script src="./assets/js/theme.js"></script>
+        <script>
+            const theme = new Theme("light");
+            theme.init();
+        </script>
+
+        <!-- ============= Remixicon ============= -->
+        <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet" />
+        <!-- ============= SwiperJS Stylesheet ============= -->
+        <link rel="stylesheet" href="./assets/css/swiper.css" />
+        <!-- ============= CSS Stylesheet ============= -->
+        <link rel="stylesheet" href="./assets/css/style.css" />
+
+        <!-- ============= SwiperJS ============= -->
+        <script src="./assets/js/swiper.js"></script>
+        <!-- ============= ScrollRevealJS ============= -->
+        <script src="./assets/js/scrollReveal.js"></script>
+        <!-- ============= EmailJS ============= -->
+        <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+        <!-- ============= JavaScript ============= -->
+        <script src="./assets/js/script.js" defer></script>
+        <title>Portfolio | CodingWeb</title>
+    </head>
+    <body>
+        <!-- ============= Header ============= -->
+        <header class="header d-flex align-center">
+            <nav class="header__container container d-flex justify-between align-center">
+                <div class="header__logo">
+                    <a href="./"><img src="./assets/images/favicon.svg" alt="logo" /></a>
+                </div>
+                <div class="group d-flex align-center">
+                    <ul class="header__links d-flex">
+                        <li class="header__link body-md"><a href="#home">home</a></li>
+                        <li class="header__link body-md"><a href="#about">about</a></li>                        <li class="header__link body-md"><a href="#contact">contact</a></li>
+                    </ul>
+                    <div class="color-theme body-md d-flex align-center justify-center">
+                        <i class="ri-moon-fill"></i>
+                    </div>
+                </div>
+                <div class="header__links-mobile justify-center align-center">
+                    <ul class="d-flex align-center justify-center">
+                        <li class="header__link-mobile d-flex align-center justify-center">
+                            <a href="#home" class="d-flex justify-center">
+                                <i class="ri-home-5-fill"></i>
+                                <p>home</p>
+                            </a>
+                        </li>
+                        <li class="header__link-mobile d-flex align-center justify-center">
+                            <a href="#about" class="d-flex justify-center">
+                                <i class="ri-user-3-fill"></i>
+                                <p>about</p>
+                            </a>
+                        </li>
+                        <li class="header__link-mobile d-flex align-center justify-center">
+                            <a href="#contact" class="d-flex justify-center">
+                                <i class="ri-send-plane-fill"></i>
+                                <p>contact</p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <!-- ============= Home Section ============= -->
+        <section id="home" class="home d-flex align-center">
+            <div class="home__container container d-flex align-center">
+                <div class="home__content d-flex align-center justify-between">
+                    <div class="home__left-side d-flex f-column r-gap-2">
+                        <div class="group d-flex f-column">
+                            <h1 class="home__title heading-1">Hi It's Riddhi Doshi</h1>
+                            <p class="home__subtitle subtitle-lg">I'm a <span>Finacial Advisor & Consultant</span></p>
+                            <p class="home__text body-es">
+                                Specialised in debt syndication, structuring of loans and construction finance
+                            </p>
+                        </div>
+                        <div class="home__scoial-links d-flex c-gap-1">
+                            <a href="#" class="home__social-link subtitle-es">
+                                <i class="ri-facebook-circle-fill"></i>
+                            </a>
+                            <a href="#" class="home__social-link subtitle-es">
+                                <i class="ri-twitter-x-fill"></i>
+                            </a>
+                            <a href="#" class="home__social-link subtitle-es">
+                                <i class="ri-instagram-fill"></i>
+                            </a>
+                            <a href="#" class="home__social-link subtitle-es">
+                                <i class="ri-linkedin-box-fill"></i>
+                            </a>
+                            <a href="#" class="home__social-link subtitle-es">
+                                <i class="ri-whatsapp-fill"></i>
+                            </a>
+                        </div>
+                        <a href="#contact" class="btn btn-primary d-flex align-center c-gap-1">Contact me <i class="ri-send-plane-fill"></i></a>
+                    </div>
+                    <div class="home__right-side">
+                        <div class="home__image d-flex justify-end">
+                            <img src="./assets/images/profile-image.svg" alt="profile image" />
+                        </div>
+                    </div>
+                </div>
+                <a href="#about" class="scroll-down-btn">
+                    <svg id="scroll-down" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 13.02 22.74" width="20">
+                        <rect x="1" y="1" width="11.02" height="20.74" rx="5.51" ry="5.51" fill="transparent" stroke="#1b7be2" stroke-miterlimit="10" stroke-width="2" />
+                        <circle cx="6.51" cy="8.14" r="1.47" fill="#1b7be2" />
+                    </svg>
+                </a>
+            </div>
+        </section>
+
+        <!-- ============= About Section ============= -->
+        <section id="about" class="about">
+            <div class="section__title">
+                <h2 class="heading-2">About us</h2>
+            </div>
+            <div class="about__container container">
+                <div class="about__content d-flex justify-between align-center gap-2">
+                    <div class="about__left-side d-flex">
+                        <div class="about__image">
+                            <img src="./assets/images/about-image.jpg" alt="about image" />
+                        </div>
+                    </div>
+                    <div class="about__right-side d-flex f-column r-gap-2">
+                        <div class="group">
+                            <p class="about__title subtitle-lg"> <span>Realty Finserve</span></p>
+                            <p class="about__text body-es">
+                                We are among the top service providers of debt syndication in Gujarat. We are dealing in the field of debt syndication more than last 19 plus years having presence in the city of Ahmedabad, Surat, Vadodara,mumbai and many. We are working in all type of industrial segments including real estate, chemical, pharma, paper, tiles, infrastructure, renewable energy, food processing, iron and steel, packaging, automotives, trading business etc. <br />
+                                Realty Finserve is actively working with all sectors of banks including public sector banks, private banks, foreign banks and NBFC's.
+                            </p>
+                        </div>
+                        <div class="group d-flex align-center gap-1 f-wrap">
+                            <div class="about__info d-flex align-center c-gap-1">
+                                <h4 class="heading-4">19+</h4>
+                                <p class="body-es">Years of experience</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============= CTA Section ============= -->
+        <section class="cta">
+            <div class="cta__container container">
+                <div class="cta__content cta__bg d-flex align-center justify-between f-wrap gap-2">
+                    <div class="group">
+                        <p class="cta__title subtitle-md">Let’s get started with your next project</p>
+                    </div>
+                    <a href="#contact" class="cta__btn btn btn-primary d-flex align-center c-gap-1">Contact me <i class="ri-send-plane-fill"></i></a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============= Testimonials Section ============= -->
+        <section class="testimonials">
+            <div class="section__title">
+                <h2 class="heading-2">testimonials</h2>
+            </div>
+            <div class="testimonials__container container">
+                <div class="testimonials__content">
+                    <div class="testimonials__slider swiper">
+                        <div class="testimonials__slider-wrapper swiper-wrapper">
+                            <div class="testimonials__slide swiper-slide d-flex f-column r-gap-1">
+                                <div class="testimonials__slide-comment">
+                                    <img src="./assets/images/double-qoutes.svg" alt="" class="double-qoutes" />
+                                    <p class="body-sm">
+                                        Wonderful site! It's easy to use and edit, has many options to design everything you need, and is professional and fun. I successfully built
+                                        my portfolio website with a designer who gave me incredible reach and recognition.
+                                    </p>
+                                </div>
+                                <div class="group d-flex align-center gap-1">
+                                    <div class="testimonials__slide-pic">
+                                        <img src="./assets/images/pic-01.jpg" alt="Alex" />
+                                    </div>
+                                    <div class="group">
+                                        <p class="testimonials__slide-title subtitle-es">Alex</p>
+                                        <p class="testimonials__slide-subtitle body-es">client</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="testimonials__slide swiper-slide d-flex f-column r-gap-1">
+                                <div class="testimonials__slide-comment">
+                                    <img src="./assets/images/double-qoutes.svg" alt="" class="double-qoutes" />
+                                    <p class="body-sm">
+                                        Wonderful site! It's easy to use and edit, has many options to design everything you need, and is professional and fun. I successfully built
+                                        my portfolio website with a designer who gave me incredible reach and recognition.
+                                    </p>
+                                </div>
+                                <div class="group d-flex align-center gap-1">
+                                    <div class="testimonials__slide-pic">
+                                        <img src="./assets/images/pic-02.jpg" alt="Jack" />
+                                    </div>
+                                    <div class="group">
+                                        <p class="testimonials__slide-title subtitle-es">Jack</p>
+                                        <p class="testimonials__slide-subtitle body-es">client</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="testimonials__slide swiper-slide d-flex f-column r-gap-1">
+                                <div class="testimonials__slide-comment">
+                                    <img src="./assets/images/double-qoutes.svg" alt="" class="double-qoutes" />
+                                    <p class="body-sm">
+                                        Wonderful site! It's easy to use and edit, has many options to design everything you need, and is professional and fun. I successfully built
+                                        my portfolio website with a designer who gave me incredible reach and recognition.
+                                    </p>
+                                </div>
+                                <div class="group d-flex align-center gap-1">
+                                    <div class="testimonials__slide-pic">
+                                        <img src="./assets/images/pic-03.jpg" alt="Muhammad" />
+                                    </div>
+                                    <div class="group">
+                                        <p class="testimonials__slide-title subtitle-es">Muhammad</p>
+                                        <p class="testimonials__slide-subtitle body-es">client</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="testimonials__slider-pagination swiper-pagination"></div>
+                    </div>
+                    <button type="button" class="testimonials__btn-left btn swiper-button-prev"><i class="ri-arrow-left-s-line"></i></button>
+                    <button type="button" class="testimonials__btn-right btn swiper-button-next"><i class="ri-arrow-right-s-line"></i></button>
+                </div>
+            </div>
+        </section>
+
+                <!-- ============= Contact Section ============= -->
+                <section id="contact" class="contact">
+                    <div class="section__title">
+                        <h2 class="heading-2">contact me</h2>
+                    </div>
+                    <div class="contact__container container">
+                        <div class="contact__content d-flex justify-between f-wrap gap-2">
+                            <div class="contact__info-list d-flex f-column gap-2">
+                                <div class="contact__info-item">
+                                    <a href="tel:+91 98984 11277" class="d-flex align-center c-gap-2">
+                                        <i class="ri-phone-fill heading-3"></i>
+                                        <div class="group">
+                                            <p class="contact__title heading-4">call me</p>
+                                            <p class="contact__subtitle body-es">+91 98984 11277</p>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="contact__info-item">
+                                    <a href="mailto:riddhi@realtyfinserve.com" class="d-flex align-center c-gap-2">
+                                        <i class="ri-mail-fill heading-3"></i>
+                                        <div class="group">
+                                            <p class="contact__title heading-4">email</p>
+                                            <p class="contact__subtitle body-es">riddhi@realtyfinserve.com</p>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="contact__info-item">
+                                    <a href="#" class="d-flex align-center c-gap-2">
+                                        <i class="ri-map-pin-fill heading-3"></i>
+                                        <div class="group">
+                                            <p class="contact__title heading-4">location</p>
+                                            <p class="contact__subtitle body-es">Ahmedabad - Gujarat - India</p>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                            <form class="form" id="contact-form">
+                                <div class="group d-flex gap-2 f-column">
+                                    <div class="group d-flex gap-2 align-center f-wrap">
+                                        <div class="form__group">
+                                            <label for="name" class="form__label body-es">name</label>
+                                            <input type="text" name="user_name" id="name" class="input-primary form__input" autocomplete="off" required />
+                                        </div>
+                                        <div class="form__group">
+                                            <label for="email" class="form__label body-es">email</label>
+                                            <input type="text" name="user_email" id="email" class="input-primary form__input" autocomplete="off" required />
+                                        </div>
+                                    </div>
+                                    <div class="form__group">
+                                        <label for="subject" class="form__label body-es">subject</label>
+                                        <input type="text" name="subject" id="subject" class="input-primary form__input" autocomplete="off" required />
+                                    </div>
+                                    <div class="form__group">
+                                        <label for="message" class="form__label body-es">message</label>
+                                        <textarea type="text" name="message" id="message" class="input-primary form__input" autocomplete="off" required></textarea>
+                                    </div>
+                                    <div class="form__status-box">
+                                        <p class="body-es"></p>
+                                    </div>
+                                    <button type="submit" name="submit" class="btn btn-primary d-flex align-center c-gap-1">Contact me <i class="ri-send-plane-fill"></i></button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+        <!-- ============= Footer ============= -->
+        <footer class="footer">
+            <div class="footer__container container">
+                <div class="footer__content d-flex align-center justify-center">
+                    <div class="group">
+                        <h3 class="footer__title heading-3">Riddhi Doshi</h3>
+                        <p class="footer__subtitle body-sm">Finacial Advisor & Consultant</p>
+                        <a href="#" class="footer__social-link subtitle-es">
+                            <i class="ri-facebook-circle-fill"></i>
+                        </a>
+                        <a href="#" class="footer__social-link subtitle-es">
+                            <i class="ri-twitter-x-fill"></i>
+                        </a>
+                        <a href="#" class="footer__social-link subtitle-es">
+                            <i class="ri-instagram-fill"></i>
+                        </a>
+                        <a href="#" class="footer__social-link subtitle-es">
+                            <i class="ri-linkedin-box-fill"></i>
+                        </a>
+                        <a href="#" class="footer__social-link subtitle-es">
+                            <i class="ri-whatsapp-fill"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer__copyRight">
+                <p class="body-sm">&copy; 2023 <span>Realty Finserve</span> All Rights Reserved</p>
+            </div>
+        </footer>
+
+        <!-- ============= Scroll Up ============= -->
+        <button type="button" class="btn btn-primary scroll-up d-flex align-center justify-center"><i class="ri-arrow-up-line"></i></button>
+    </body>
+</html>
