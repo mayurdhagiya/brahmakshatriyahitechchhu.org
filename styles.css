@@ -69,3 +69,10 @@ button:hover {
     height: auto;
     border-radius: 8px;
 }
+
+.archive-item p {
+    margin-top: 5px; /* Adjust spacing as needed */
+    font-size: 1em;
+    font-weight: bold;
+    color: #333;
+}
