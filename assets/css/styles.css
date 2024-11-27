@@ -1,3 +1,30 @@
+/* Center the logo and style it */
+header {
+    text-align: center;
+    position: relative;
+    padding: 10px;
+    background-color: #0066cc;
+    color: white;
+}
+
+header .logo img {
+    max-width: 250px; /* Adjust size as needed */
+    height: auto;
+    display: block;
+    margin: 0 auto 10px; /* Center the logo with margin */
+    cursor: pointer; /* Show pointer on hover */
+}
+
+header h1 {
+    margin: 10px 0 0; /* Add space below the logo */
+    font-size: 1.5em;
+}
+
+header .logo img:hover {
+    transform: scale(1.1); /* Slightly enlarge the logo on hover */
+    transition: transform 0.3s ease;
+}
+
 /* ====================== Basic Reset ====================== */
 * {
     margin: 0;
