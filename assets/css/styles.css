@@ -1,18 +1,21 @@
-/* Basic Reset */
+/* ====================== Basic Reset ====================== */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* ====================== Body Styles ====================== */
 body {
     font-family: Arial, sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
     background-color: #f4f4f4;
+    color: #333; /* Set default text color */
 }
 
+/* ====================== Header Section ====================== */
 header {
     width: 100%;
     background-color: #333;
@@ -21,22 +24,23 @@ header {
     text-align: center;
 }
 
-#current-edition, #archive {
+/* ====================== Current Edition Section ====================== */
+#current-edition {
     width: 90%;
     max-width: 800px;
     margin: 20px auto;
     text-align: center;
 }
 
-/* Set the size for the current edition image */
 #current-edition img {
     width: 300px;
     height: 300px;
     object-fit: cover; /* Ensures the image scales without distortion */
     border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
 }
 
-button {
+#current-edition button {
     margin-top: 10px;
     padding: 10px 20px;
     font-size: 16px;
@@ -45,41 +49,19 @@ button {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-button:hover {
+#current-edition button:hover {
     background-color: #555;
 }
 
-.archive-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-}
-
-.archive-item {
-    flex: 1 1 200px;
-    max-width: 200px;
+/* ====================== Archive Section ====================== */
+#archive {
+    width: 90%;
+    max-width: 800px;
+    margin: 20px auto;
     text-align: center;
-}
-
-.archive-item img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-}
-
-.archive-item p {
-    margin-top: 5px; /* Adjust spacing as needed */
-    font-size: 1em;
-    font-weight: bold;
-    color: #333;
-}
-
-#current-edition, #archive {
-    text-align: center;
-    margin: 20px 0;
 }
 
 .archive-grid {
@@ -89,8 +71,34 @@ button:hover {
     padding: 10px;
 }
 
+.archive-item {
+    flex: 1 1 200px;
+    max-width: 200px;
+    text-align: center;
+}
+
 .archive-item img {
     width: 100%;
     height: auto;
-    border-radius: 5px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+}
+
+.archive-item p {
+    margin-top: 5px; /* Adjust spacing as needed */
+    font-size: 1em;
+    font-weight: bold;
+    color: #333;
+}
+
+/* ====================== Responsive Design Tweaks ====================== */
+@media (max-width: 600px) {
+    #current-edition img {
+        width: 100%;
+        height: auto;
+    }
+
+    .archive-grid {
+        grid-template-columns: 1fr;
+    }
 }
