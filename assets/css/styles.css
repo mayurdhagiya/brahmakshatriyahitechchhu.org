@@ -76,3 +76,21 @@ button:hover {
     font-weight: bold;
     color: #333;
 }
+
+#current-edition, #archive {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.archive-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px;
+    padding: 10px;
+}
+
+.archive-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
