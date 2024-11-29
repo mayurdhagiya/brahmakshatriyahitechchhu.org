@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Magazine Archive</title>
+
+  <!-- External CSS Link -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body>
+  <!-- Header Section -->
+  <header>
+    <h1>Magazine Archive</h1>
+  </header>
+
+  <!-- Main Content Section -->
+  <main class="archive" id="archive">
+    <!-- Current Edition Section -->
+    <section class="current-edition">
+      <div class="current-edition-card">
+        <img src="cover-current-edition.jpg" alt="Current Edition Cover">
+        <p class="current-edition-title">November 2023</p>
+        <a href="https://example.com/current-edition" target="_blank" class="read-now">
+          <i class="fas fa-book-open"></i> <span>Read Now</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- Archive Section for Year -->
+    <div id="year-2023" class="year-group">
+      <h3 onclick="toggleYear('year-2023')">2023</h3>
+      <div class="magazine-grid-container">
+        <!-- Left scroll button -->
+        <button class="scroll-btn left" onclick="scrollLeft('year-2023')">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+    
+        <!-- Magazine grid -->
+        <div class="magazine-grid">
+          <!-- Add dynamic magazine cards here -->
+        </div>
+    
+        <!-- Right scroll button -->
+        <button class="scroll-btn right" onclick="scrollRight('year-2023')">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+      
+  </main>
+
+  <!-- Footer Section -->
+  <footer>
+    <p>&copy; 2023 Magazine Archive. All rights reserved.</p>
+  </footer>
+
+  <!-- External JavaScript Link -->
+  <script src="script.js"></script>
+</body>
+
+</html>

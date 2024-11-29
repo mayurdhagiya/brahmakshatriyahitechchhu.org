@@ -1,0 +1,219 @@
+/* General Body Styling */
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f9f9f9; /* Light background for readability */
+  color: #333; /* Default text color */
+}
+
+/* Header Styling */
+header {
+  background-color: #007BFF; /* Primary blue */
+  color: #fff; /* White text for contrast */
+  padding: 1rem 2rem; /* Padding around the header content */
+  text-align: center; /* Center-align the header content */
+}
+
+header h1 {
+  margin: 0; /* Remove default margin */
+  font-size: 1.8rem; /* Font size for the title */
+}
+
+/* Main Archive Container Styling */
+.archive {
+  max-width: 1200px; /* Set maximum width */
+  margin: 2rem auto; /* Center the container with spacing */
+  padding: 1rem; /* Inner spacing */
+}
+
+/* Year Group Section */
+.year-group {
+  margin-bottom: 2rem; /* Spacing between year sections */
+}
+
+.year-group h3 {
+  font-size: 1.5rem; /* Larger font for year headings */
+  color: #444; /* Dark gray for headings */
+  cursor: pointer; /* Pointer cursor for interactivity */
+  margin-bottom: 1rem; /* Space below the heading */
+}
+
+/* Magazine Grid Container */
+.magazine-grid-container {
+  position: relative; /* For positioning the scroll buttons */
+  display: flex;
+  align-items: center;
+}
+
+/* Magazine Grid */
+.magazine-grid {
+  display: flex; /* Flexbox layout for horizontal alignment */
+  flex-wrap: nowrap; /* No wrapping */
+  gap: 1.5rem; /* Space between cards */
+  overflow-x: auto; /* Enable horizontal scrolling */
+  scroll-behavior: smooth; /* Smooth scrolling */
+  padding: 1rem 0; /* Padding for better visuals */
+}
+
+/* Scroll Buttons */
+.scroll-btn {
+  position: absolute;
+  top: 50%; /* Center vertically */
+  transform: translateY(-50%); /* Adjust for centering */
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  color: #fff; /* White icon color */
+  border: none; /* Remove border */
+  border-radius: 50%; /* Circular buttons */
+  width: 40px; /* Button width */
+  height: 40px; /* Button height */
+  cursor: pointer; /* Pointer cursor */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10; /* Ensure above other content */
+  transition: background 0.3s ease; /* Hover effect */
+}
+
+.scroll-btn:hover {
+  background: rgba(0, 0, 0, 0.8); /* Darker background on hover */
+}
+
+.scroll-btn.left {
+  left: 0; /* Adjust position as needed */
+}
+
+.scroll-btn.right {
+  right: 0; /* Adjust position as needed */
+}
+
+
+/* Scroll Button Icons */
+.scroll-btn i {
+  font-size: 1.5rem; /* Icon size */
+}
+
+.magazine-grid {
+  scrollbar-width: none; /* For Firefox */
+  -ms-overflow-style: none; /* For Internet Explorer and Edge */
+}
+
+.magazine-grid::-webkit-scrollbar {
+  display: none; /* For Chrome, Safari, and Opera */
+}
+
+
+/* Magazine Card Styling */
+.magazine-card {
+  background: #fff; /* White background */
+  border: 1px solid #ddd; /* Light border */
+  border-radius: 8px; /* Rounded corners */
+  text-align: center; /* Center-align text and content */
+  padding: 1rem; /* Inner padding */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  transition: transform 0.2s; /* Smooth hover animation */
+  display: flex; /* Use flexbox layout */
+  flex-direction: column; /* Stack items vertically */
+  justify-content: center; /* Center content vertically */
+  align-items: center; /* Center content horizontally */
+}
+
+.magazine-card:hover {
+  transform: scale(1.05); /* Slight zoom on hover */
+}
+
+/* Magazine Card Image Styling */
+.magazine-card img {
+  height: 210px; /* Fixed height for magazine cover images */
+  width: 160px; /* Fixed width for magazine cover images */
+  border-radius: 4px; /* Rounded corners for images */
+  margin-bottom: 0.5rem; /* Space below the image */
+}
+
+
+/* Magazine Card Text Styling */
+.magazine-card p {
+  margin: 0.5rem 0; /* Spacing for paragraphs */
+  color: #333; /* Default text color */
+}
+
+.magazine-card p:nth-child(3) {
+  font-size: 0.85rem; /* Smaller font size for publication date */
+  color: #777; /* Light gray color for publication date */
+}
+
+/* Read Now Button Styling */
+.read-now {
+  background: #007BFF; /* Blue background for the button */
+  color: #fff; /* White text */
+  border: none; /* Remove default border */
+  padding: 0.5rem 1rem; /* Padding for button */
+  border-radius: 4px; /* Rounded corners */
+  font-size: 0.9rem; /* Font size */
+  cursor: pointer; /* Pointer cursor for interactivity */
+  display: inline-flex; /* Inline-flex for alignment */
+  align-items: center; /* Vertically align icon and text */
+  justify-content: center; /* Horizontally center the content */
+  gap: 0.5rem; /* Space between icon and text */
+  text-decoration: none; /* Remove underline */
+  min-width: 120px; /* Minimum button width */
+}
+
+.read-now span {
+  font-weight: bold; /* Bold text for emphasis */
+}
+
+.read-now i {
+  font-size: 1rem; /* Icon size */
+  display: flex; /* Align icon properly */
+}
+
+.read-now:hover {
+  background: #0056b3; /* Darker blue on hover */
+}
+
+/* Current Edition Section */
+.current-edition {
+  display: flex; /* Flexbox layout */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  margin: 2rem auto; /* Space above and below */
+}
+
+/* Current Edition Card Styling */
+.current-edition-card {
+  text-align: center; /* Center-align content */
+  background: #fff; /* White background */
+  border: 1px solid #ddd; /* Light border */
+  border-radius: 8px; /* Rounded corners */
+  padding: 1rem; /* Inner padding */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  max-width: 200px; /* Restrict maximum width */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effects */
+}
+
+.current-edition-card:hover {
+  transform: scale(1.05); /* Slight zoom effect */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Enhance shadow on hover */
+}
+
+.current-edition-card img {
+  height: 210px; /* Fixed height for cover image */
+  width: 160px; /* Fixed width for cover image */
+  border-radius: 4px; /* Rounded corners */
+  margin-bottom: 1rem; /* Space below the image */
+}
+
+.current-edition-title {
+  font-size: 1.2rem; /* Larger font size for title */
+  font-weight: bold; /* Bold text */
+  margin-bottom: 1rem; /* Space below title */
+}
+
+/* Footer Styling */
+footer {
+  text-align: center; /* Center-align footer text */
+  padding: 1rem 0; /* Padding for spacing */
+  background: #f1f1f1; /* Light background for footer */
+  color: #777; /* Light gray text */
+}
