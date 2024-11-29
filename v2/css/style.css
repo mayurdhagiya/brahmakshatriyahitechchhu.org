@@ -440,9 +440,9 @@ a:focus {
   -webkit-box-align: start;
       -ms-flex-align: start;
           align-items: flex-start;
-  width: 135px;
-  min-width: 100px;
-  height: 135px;
+  /* width: 135px;
+  min-width: 100px; */
+  height: 180px;
   margin-bottom: 15px;
 }
 
@@ -651,7 +651,7 @@ a:focus {
 
 .team_section .team_container .box .img-box img {
   width: 120px;
-  border-radius: 100%;
+  /* border-radius: 100%; */
   border: 5px solid #ffffff;
 }
 
@@ -959,7 +959,57 @@ a:focus {
 }
 
 .light-scroll {
+  scroll-behavior: smooth;
   scrollbar-width: thin;
   scrollbar-color: #e6e6e6 #ffffff;
 }
+
+.box-shadow {
+    border: 1px solid whitesmoke;
+    box-shadow: 0 15px 35px rgba(50, 50, 93, .1), 0 5px 15px rgba(0, 0, 0, .07);
+}
+
+.app-btn {
+  display: inline-block;
+    padding: 10px 15px;
+    background-color: #00bbf0;
+    color: #ffffff;
+    border-radius: 0;
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+    border: none;
+    cursor: pointer;
+}
+
+.app-btn:hover {
+  background-color: #007fa4;
+}
+
+.scroll-btn {
+  position: absolute;
+  top: 50%;
+  background: black;
+  opacity: 0.4;
+  height: 60px;
+  width: 45px;
+  z-index: 1;
+  cursor: pointer;
+}
+
+.scroll-btn img {
+  width: 100%;
+}
+
+.scroll-btn-prev {
+  left: 0;
+  padding-right: 4px;
+  padding-top: 10px;
+}
+
+.scroll-btn-next {
+  right: 0;
+  padding-left: 4px;
+  padding-top: 10px;
+}
+
 /*# sourceMappingURL=style.css.map */

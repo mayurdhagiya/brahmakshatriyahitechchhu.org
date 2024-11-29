@@ -9,3 +9,11 @@ function openFile(path) {
         alert('File not found!'); // Show an alert if the path is invalid
     }
 }
+
+function scrollPrev(element) {
+    element.parentElement.scrollLeft = element.parentElement.scrollLeft - 300;
+}
+
+function scrollNext(element) {
+    element.parentElement.scrollLeft = element.parentElement.scrollLeft + 300;
+}
