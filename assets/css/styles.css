@@ -1,0 +1,140 @@
+/* Center and style the logo */
+header {
+    text-align: center;
+    position: relative;
+    padding: 20px;
+    background-color: #0066cc;
+    color: white;
+}
+
+header .logo img {
+    width: 100%;               /* Make the logo scale with the container */
+    max-width: 200px;          /* Set a maximum width for large screens */
+    height: auto;              /* Maintain aspect ratio */
+    display: block;            /* Center the image */
+    margin: 0 auto 10px;       /* Center with margin */
+    cursor: pointer;           /* Show pointer on hover */
+}
+
+/* Adjustments for smaller screens */
+@media (max-width: 768px) {
+    header .logo img {
+        max-width: 150px;      /* Smaller logo for tablets */
+    }
+}
+
+@media (max-width: 480px) {
+    header .logo img {
+        max-width: 100px;      /* Even smaller logo for mobile phones */
+    }
+}
+
+header .logo img:hover {
+    transform: scale(1.1); /* Slightly enlarge the logo on hover */
+    transition: transform 0.3s ease;
+}
+
+/* ====================== Basic Reset ====================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ====================== Body Styles ====================== */
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f4f4f4;
+    color: #333; /* Set default text color */
+}
+
+/* ====================== Header Section ====================== */
+header {
+    width: 100%;
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+/* ====================== Current Edition Section ====================== */
+#current-edition {
+    width: 90%;
+    max-width: 800px;
+    margin: 20px auto;
+    text-align: center;
+}
+
+#current-edition img {
+    width: 300px;
+    height: 300px;
+    object-fit: cover; /* Ensures the image scales without distortion */
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+}
+
+/* ====================== Archive Section ====================== */
+#archive {
+    width: 90%;
+    max-width: 800px;
+    margin: 20px auto;
+    text-align: center;
+}
+
+.archive-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px;
+    padding: 10px;
+}
+
+.archive-item {
+    max-width: 200px;
+    text-align: center;
+}
+
+.archive-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+}
+
+.archive-item p {
+    margin-top: 5px; /* Adjust spacing as needed */
+    font-size: 1em;
+    font-weight: bold;
+    color: #333;
+}
+
+/* ====================== Button Styles ====================== */
+.button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #555;
+}
+
+/* ====================== Responsive Design Tweaks ====================== */
+@media (max-width: 600px) {
+    #current-edition img {
+        width: 100%;
+        height: auto;
+    }
+
+    .archive-grid {
+        grid-template-columns: 1fr;
+    }
+}

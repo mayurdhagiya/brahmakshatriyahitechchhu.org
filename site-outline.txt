@@ -1,0 +1,39 @@
+/brahmakshatriya-hitechchhu
+├── index.html                        # Home page (Highlights current edition)
+├── about.html                        # About the magazine
+├── contact.html                      # Contact page
+├── trustee.html                      # trustee page
+├── assets/                           # Folder for all assets
+│   ├── css/                            # Stylesheets
+│   │   ├── styles.css                  # Main CSS file
+│   │   ├── responsive.css              # Additional or responsive styles
+│   │   └── theme.css                   # Theme-specific CSS
+│   ├── js/                             # JavaScript files
+│   │   ├── scripts.js                  # Main JS file
+│   │   ├── analytics.js                # Tracking or analytics scripts
+│   │   └── utilities.js                # Utility functions
+│   ├── images/                         # Images used in the website
+│   │   ├── logo.png                    # Logo image
+│   │   ├── current-cover.jpg         # Cover image for the current edition
+│   │   └── editions                  # Folder for older edition cover images
+│   │       ├── jan-2024-cover.jpg
+│   │       ├── feb-2024-cover.jpg
+│   │       └── ...
+│   │   └── icons/                      # Subfolder for icons
+│   │       ├── home-icon.svg
+│   │       └── menu-icon.svg
+│   └── /fonts
+│       └── custom-fonts              # Any custom fonts
+├── /editions
+│   ├── index.html                    # Current edition's content
+│   ├── jan-2024.html                 # January 2024 edition
+│   ├── feb-2024.html                 # February 2024 edition
+│   └── ...                           # More editions
+├── /downloads
+│   ├── jan-2024.pdf                  # PDF of the January 2024 edition
+│   ├── feb-2024.pdf                  # PDF of the February 2024 edition
+│   └── ...                           # More PDFs
+├── docs/                   # Documentation for your website (optional)
+│   └── README.md           # Website setup or usage instructions
+├── sitemap.xml             # Sitemap for SEO
+├── robots.txt              # Robots.txt for search engine bots
