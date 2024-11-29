@@ -489,3 +489,16 @@ button:hover, .read-now:hover, .read-now-btn:hover {
         font-size: 12px;
     }
 }
+
+@media (max-width: 768px) {
+    .trustee-image {
+        width: 120px;
+        height: 160px;
+        padding-top: 5px; /* Reduce padding for smaller screens */
+    }
+
+    .trustee-image img {
+        width: 100%;
+        height: 100%;
+    }
+}
