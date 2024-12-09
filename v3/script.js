@@ -77,6 +77,7 @@ function addMagazine(year, month, coverUrl, readUrl, editionName, publishDate) {
   
 // Example usage
 addMagazine(2023, 'January', 'cover-jan-2023.jpg', 'https://example.com/jan-2023', 'New Year Special Edition', 'January 1, 2023');
+addMagazine(2024, 'January', 'cover-jan-2023.jpg', 'https://example.com/jan-2023', 'New Year Special Edition', 'January 1, 2023');
 addMagazine(2023, 'January', 'cover-jan-2023.jpg', 'https://example.com/jan-2023', 'New Year Special Edition', 'January 1, 2023');
 addMagazine(2023, 'January', 'cover-jan-2023.jpg', 'https://example.com/jan-2023', 'New Year Special Edition', 'January 1, 2023');
 addMagazine(2023, 'January', 'cover-jan-2023.jpg', 'https://example.com/jan-2023', 'New Year Special Edition', 'January 1, 2023');
@@ -84,14 +85,13 @@ addMagazine(2023, 'January', 'cover-jan-2023.jpg', 'https://example.com/jan-2023
 addMagazine(2023, 'January', 'cover-jan-2023.jpg', 'https://example.com/jan-2023', 'New Year Special Edition', 'January 1, 2023');
 addMagazine(2023, 'January', 'cover-jan-2023.jpg', 'https://example.com/jan-2023', 'New Year Special Edition', 'January 1, 2023');
 addMagazine(2023, 'January', 'cover-jan-2023.jpg', 'https://example.com/jan-2023', 'New Year Special Edition', 'January 1, 2023');
-addMagazine(2023, 'January', 'cover-jan-2023.jpg', 'https://example.com/jan-2023', 'New Year Special Edition', 'January 1, 2023');
 addMagazine(2022, 'January', 'cover-jan-2023.jpg', 'https://example.com/jan-2023', 'New Year Special Edition', 'January 1, 2023');
 addMagazine(2022, 'January', 'cover-jan-2023.jpg', 'https://example.com/jan-2023', 'New Year Special Edition', 'January 1, 2023');
 addMagazine(2022, 'January', 'cover-jan-2023.jpg', 'https://example.com/jan-2023', 'New Year Special Edition', 'January 1, 2023');
+addMagazine(2018, 'January', 'cover-jan-2023.jpg', 'https://example.com/jan-2023', 'New Year Special Edition', 'January 1, 2023');
+addMagazine(2022, 'January', 'cover-jan-2023.jpg', 'https://example.com/jan-2023', 'New Year Special Edition', 'January 1, 2023');
+addMagazine(2015, 'January', 'cover-jan-2023.jpg', 'https://example.com/jan-2023', 'New Year Special Edition', 'January 1, 2023');
 addMagazine(2022, 'January', 'cover-jan-2023.jpg', 'https://example.com/jan-2023', 'New Year Special Edition', 'January 1, 2023');
 addMagazine(2022, 'January', 'cover-jan-2023.jpg', 'https://example.com/jan-2023', 'New Year Special Edition', 'January 1, 2023');
-addMagazine(2022, 'January', 'cover-jan-2023.jpg', 'https://example.com/jan-2023', 'New Year Special Edition', 'January 1, 2023');
-addMagazine(2022, 'January', 'cover-jan-2023.jpg', 'https://example.com/jan-2023', 'New Year Special Edition', 'January 1, 2023');
-addMagazine(2022, 'January', 'cover-jan-2023.jpg', 'https://example.com/jan-2023', 'New Year Special Edition', 'January 1, 2023');
-addMagazine(2022, 'January', 'cover-jan-2023.jpg', 'https://example.com/jan-2023', 'New Year Special Edition', 'January 1, 2023');
+addMagazine(2014, 'January', 'cover-jan-2023.jpg', 'https://example.com/jan-2023', 'New Year Special Edition', 'January 1, 2023');
 addMagazine(2021, 'January', 'cover-jan-2023.jpg', 'https://example.com/jan-2023', 'New Year Special Edition', 'January 1, 2023');
