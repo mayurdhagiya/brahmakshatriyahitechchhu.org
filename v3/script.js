@@ -75,22 +75,6 @@ function addMagazine(year, month, coverUrl, readUrl, editionName, publishDate) {
     magazineGrid.appendChild(magazineCard);
   }
   
-  // Scroll left function
-  function scrollLeft(yearId) {
-    const grid = document.querySelector(`#${yearId} .magazine-grid`);
-    if (grid) {
-      grid.scrollBy({ left: -200, behavior: 'smooth' });
-    }
-  }
-  
-  // Scroll right function
-  function scrollRight(yearId) {
-    const grid = document.querySelector(`#${yearId} .magazine-grid`);
-    if (grid) {
-      grid.scrollBy({ left: 200, behavior: 'smooth' });
-    }
-  }
-  
 // Example usage
 addMagazine(2023, 'January', 'cover-jan-2023.jpg', 'https://example.com/jan-2023', 'New Year Special Edition', 'January 1, 2023');
 addMagazine(2023, 'January', 'cover-jan-2023.jpg', 'https://example.com/jan-2023', 'New Year Special Edition', 'January 1, 2023');
