@@ -56,42 +56,6 @@ header h1 {
   padding: 1rem 0; /* Padding for better visuals */
 }
 
-/* Scroll Buttons */
-.scroll-btn {
-  position: absolute;
-  top: 50%; /* Center vertically */
-  transform: translateY(-50%); /* Adjust for centering */
-  background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-  color: #fff; /* White icon color */
-  border: none; /* Remove border */
-  border-radius: 50%; /* Circular buttons */
-  width: 40px; /* Button width */
-  height: 40px; /* Button height */
-  cursor: pointer; /* Pointer cursor */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10; /* Ensure above other content */
-  transition: background 0.3s ease; /* Hover effect */
-}
-
-.scroll-btn:hover {
-  background: rgba(0, 0, 0, 0.8); /* Darker background on hover */
-}
-
-.scroll-btn.left {
-  left: 0; /* Adjust position as needed */
-}
-
-.scroll-btn.right {
-  right: 0; /* Adjust position as needed */
-}
-
-
-/* Scroll Button Icons */
-.scroll-btn i {
-  font-size: 1.5rem; /* Icon size */
-}
 
 .magazine-grid {
   scrollbar-width: none; /* For Firefox */
