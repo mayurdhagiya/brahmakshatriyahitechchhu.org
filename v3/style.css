@@ -39,33 +39,13 @@ header h1 {
   margin-bottom: 1rem; /* Space below the heading */
 }
 
-/* Magazine Grid Container */
-.magazine-grid-container {
-  position: relative; /* For positioning the scroll buttons */
-  display: flex;
-  align-items: center;
-}
-
 /* Magazine Grid */
 .magazine-grid {
   display: flex; /* Flexbox layout for horizontal alignment */
-  flex-wrap: nowrap; /* No wrapping */
+  flex-wrap: wrap; /* Allow wrapping to the next line */
   gap: 1.5rem; /* Space between cards */
-  overflow-x: auto; /* Enable horizontal scrolling */
-  scroll-behavior: smooth; /* Smooth scrolling */
   padding: 1rem 0; /* Padding for better visuals */
 }
-
-
-.magazine-grid {
-  scrollbar-width: none; /* For Firefox */
-  -ms-overflow-style: none; /* For Internet Explorer and Edge */
-}
-
-.magazine-grid::-webkit-scrollbar {
-  display: none; /* For Chrome, Safari, and Opera */
-}
-
 
 /* Magazine Card Styling */
 .magazine-card {
@@ -80,6 +60,9 @@ header h1 {
   flex-direction: column; /* Stack items vertically */
   justify-content: center; /* Center content vertically */
   align-items: center; /* Center content horizontally */
+  width: 160px; /* Fixed width */
+  height: 300px; /* Fixed height */
+  overflow: hidden; /* Ensure content doesn't overflow */
 }
 
 .magazine-card:hover {
@@ -92,18 +75,15 @@ header h1 {
   width: 160px; /* Fixed width for magazine cover images */
   border-radius: 4px; /* Rounded corners for images */
   margin-bottom: 0.5rem; /* Space below the image */
+  object-fit: cover; /* Ensure image fits within dimensions */
 }
-
 
 /* Magazine Card Text Styling */
 .magazine-card p {
   margin: 0.5rem 0; /* Spacing for paragraphs */
   color: #333; /* Default text color */
-}
-
-.magazine-card p:nth-child(3) {
-  font-size: 0.85rem; /* Smaller font size for publication date */
-  color: #777; /* Light gray color for publication date */
+  font-size: 0.85rem; /* Adjust font size for fixed size */
+  line-height: 1.2; /* Ensure text doesn't overflow */
 }
 
 /* Read Now Button Styling */
