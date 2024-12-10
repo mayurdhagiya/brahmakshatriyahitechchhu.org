@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Meta Information for SEO and Responsive Design -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Explore the latest editions and insights from Brahmakshatriya Hitechchhu Magazine.">
+    <meta name="keywords" content="Brahmakshatriya Hitechchhu, Magazine, Community, Heritage">
+    <meta name="author" content="Your Company">
+
+    <!-- OpenGraph Meta Tags for Social Media Sharing -->
+    <meta property="og:title" content="Home | Brahmakshatriya Hitechchhu">
+    <meta property="og:description" content="Explore the latest editions and insights from Brahmakshatriya Hitechchhu Magazine.">
+    <meta property="og:image" content="logo.png"> <!-- Update with absolute URL if sharing globally -->
+    <meta property="og:url" content="https://example.com/index.html"> <!-- Update with actual page URL -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Brahmakshatriya Hitechchhu">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Home | Brahmakshatriya Hitechchhu">
+    <meta name="twitter:description" content="Explore the latest editions and insights from Brahmakshatriya Hitechchhu Magazine.">
+    <meta name="twitter:image" content="logo.png"> <!-- Update with absolute URL -->
+
+    <!-- Page Title -->
+    <title>Home | Brahmakshatriya Hitechchhu</title>
+
+    <!-- External Stylesheets -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
+
+    <!-- Google Analytics Integration -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXX-Y"></script>
+    <script>
+        // Google Analytics Initialization
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        gtag('config', 'UA-XXXXX-Y');
+    </script>
+</head>
+
+<body>
+     <!-- Header Section -->
+     <header>
+        <div class="container">
+            <!-- Logo -->
+            <div class="logo">
+                <a class="navbar-brand" href="index.html">
+                <img src="logo.png" alt="Brahmakshatriya Hitechchhu Logo" loading="lazy">
+            </a>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <div class="menu-toggle" id="menu-toggle" aria-label="Toggle Navigation Menu">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="navigation" id="navigation">
+                <a href="index.html" aria-label="Go to Home Page">Home</a>
+                <a href="about.html" aria-label="Learn About Us">About Us</a>
+                <a href="trustee.html" aria-label="Meet Our Trustees">Trustee</a>
+                <a href="contact.html" aria-label="Contact Us">Contact Us</a>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main>
+        <!-- Section for Current Edition -->
+        <section class="section">
+            <h2 class="section-title">Current Edition</h2>
+            <div class="edition">
+                <!-- Content dynamically loaded via app.js -->
+            </div>
+        </section>
+
+        <!-- Section for Previous Editions -->
+        <section class="section">
+            <h2 class="section-title">Previous Editions</h2>
+            <div id="previous-editions">
+                <!-- Content dynamically loaded via app.js -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <p>&copy; 2024 Brahmakshatriya Hitechchhu. Built by <a href="#" title="Visit Developer's Page">Your Company</a>.</p>
+        <div class="social-icons">
+            <a href="#" target="_blank" title="Facebook"><i class="fab fa-facebook"></i></a>
+            <a href="#" target="_blank" title="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="#" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+        </div>
+    </footer>
+
+    <!-- JavaScript Files -->
+    <script src="js/data.js"></script>
+    <script src="js/app.js"></script>
+
+    <!-- Script to Load Editions -->
+    <script>
+        // Function to dynamically load content
+        loadEditions();
+    </script>
+</body>
+
+</html>
