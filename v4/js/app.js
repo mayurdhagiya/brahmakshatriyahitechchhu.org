@@ -115,16 +115,6 @@ function loadTrustees() {
                     <a href="${trustee.social.instagram}" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
                     <a href="${trustee.social.linkedin}" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
                 </div>
-                <div class="contact-box">
-                <div class="contact-item">
-                <a href="${trustee.phone}" title="Call"><i class="fas fa-phone"></i></a>
-                </div>
-                <div class="contact-item">
-                <a href="${trustee.whatsapp}" title="Whatsapp"><i class="fab fa-whatsapp"></i></a>
-                </div>
-                <div class="contact-item">
-                <a href="${trustee.email}" title="Call"><i class="fas fa-envelope"></i></a>
-                </div>
             </div>
             `;
             section.appendChild(card);
