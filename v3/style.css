@@ -39,13 +39,69 @@ header h1 {
   margin-bottom: 1rem; /* Space below the heading */
 }
 
+/* Magazine Grid Container */
+.magazine-grid-container {
+  position: relative; /* For positioning the scroll buttons */
+  display: flex;
+  align-items: center;
+}
+
 /* Magazine Grid */
 .magazine-grid {
   display: flex; /* Flexbox layout for horizontal alignment */
-  flex-wrap: wrap; /* Allow wrapping to the next line */
+  flex-wrap: nowrap; /* No wrapping */
   gap: 1.5rem; /* Space between cards */
+  overflow-x: auto; /* Enable horizontal scrolling */
+  scroll-behavior: smooth; /* Smooth scrolling */
   padding: 1rem 0; /* Padding for better visuals */
 }
+
+/* Scroll Buttons */
+.scroll-btn {
+  position: absolute;
+  top: 50%; /* Center vertically */
+  transform: translateY(-50%); /* Adjust for centering */
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  color: #fff; /* White icon color */
+  border: none; /* Remove border */
+  border-radius: 50%; /* Circular buttons */
+  width: 40px; /* Button width */
+  height: 40px; /* Button height */
+  cursor: pointer; /* Pointer cursor */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10; /* Ensure above other content */
+  transition: background 0.3s ease; /* Hover effect */
+}
+
+.scroll-btn:hover {
+  background: rgba(0, 0, 0, 0.8); /* Darker background on hover */
+}
+
+.scroll-btn.left {
+  left: 0; /* Adjust position as needed */
+}
+
+.scroll-btn.right {
+  right: 0; /* Adjust position as needed */
+}
+
+
+/* Scroll Button Icons */
+.scroll-btn i {
+  font-size: 1.5rem; /* Icon size */
+}
+
+.magazine-grid {
+  scrollbar-width: none; /* For Firefox */
+  -ms-overflow-style: none; /* For Internet Explorer and Edge */
+}
+
+.magazine-grid::-webkit-scrollbar {
+  display: none; /* For Chrome, Safari, and Opera */
+}
+
 
 /* Magazine Card Styling */
 .magazine-card {
@@ -60,9 +116,6 @@ header h1 {
   flex-direction: column; /* Stack items vertically */
   justify-content: center; /* Center content vertically */
   align-items: center; /* Center content horizontally */
-  width: 160px; /* Fixed width */
-  height: 300px; /* Fixed height */
-  overflow: hidden; /* Ensure content doesn't overflow */
 }
 
 .magazine-card:hover {
@@ -75,15 +128,18 @@ header h1 {
   width: 160px; /* Fixed width for magazine cover images */
   border-radius: 4px; /* Rounded corners for images */
   margin-bottom: 0.5rem; /* Space below the image */
-  object-fit: cover; /* Ensure image fits within dimensions */
 }
+
 
 /* Magazine Card Text Styling */
 .magazine-card p {
   margin: 0.5rem 0; /* Spacing for paragraphs */
   color: #333; /* Default text color */
-  font-size: 0.85rem; /* Adjust font size for fixed size */
-  line-height: 1.2; /* Ensure text doesn't overflow */
+}
+
+.magazine-card p:nth-child(3) {
+  font-size: 0.85rem; /* Smaller font size for publication date */
+  color: #777; /* Light gray color for publication date */
 }
 
 /* Read Now Button Styling */
