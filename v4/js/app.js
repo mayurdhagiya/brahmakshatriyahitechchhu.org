@@ -26,7 +26,7 @@ function loadEditions() {
         <div class="card">
             <img src="${currentEdition.cover}" alt="Cover ${currentEdition.year}">
             <h3>${currentEdition.edition}</h3>
-            <p>Publication Date: ${currentEdition.date}</p>
+            <p>Issue Date: ${currentEdition.date}</p>
             <button onclick="window.open('${currentEdition.link}', '_blank')">Read Now</button>
         </div>
     `;
@@ -61,7 +61,7 @@ function loadEditions() {
                 card.innerHTML = `
                     <img src="${edition.cover}" alt="Cover ${edition.year}">
                     <h3>${edition.edition}</h3>
-                    <p>${edition.date}</p>
+                    <p>Issue Date: ${edition.date}</p>
                     <button onclick="window.open('${edition.link}', '_blank')">Read Now</button>
                 `;
                 scrollContainer.appendChild(card);
@@ -103,6 +103,7 @@ function loadTrustees() {
             card.innerHTML = `
                 <img src="${trustee.image}" alt="${trustee.name}" class="trustee-image">
                 <h4>${trustee.name}</h4>
+                <p class="bio">${trustee.info}</p>
                 <div class="trustee-actions">
                     <a href="${trustee.phone}" title="Call"><i class="fas fa-phone"></i></a>
                     <a href="${trustee.whatsapp}" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
@@ -114,6 +115,17 @@ function loadTrustees() {
                     <a href="${trustee.social.instagram}" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
                     <a href="${trustee.social.linkedin}" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
                 </div>
+                <div class="contact-box">
+                <div class="contact-item">
+                <a href="${trustee.phone}" title="Call"><i class="fas fa-phone"></i></a>
+                </div>
+                <div class="contact-item">
+                <a href="${trustee.whatsapp}" title="Whatsapp"><i class="fab fa-whatsapp"></i></a>
+                </div>
+                <div class="contact-item">
+                <a href="${trustee.email}" title="Call"><i class="fas fa-envelope"></i></a>
+                </div>
+            </div>
             `;
             section.appendChild(card);
         });

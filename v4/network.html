@@ -5,32 +5,33 @@
     <!-- Basic Meta Tags -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Meet the trustees of Brahmakshatriya Hitechchhu, dedicated to preserving our heritage and inspiring future generations.">
-    <meta name="keywords" content="Trustees, Brahmakshatriya Hitechchhu, Heritage, Community Leaders">
+    <meta name="description" content="Learn about Brahmakshatriya Hitechchhu, a community dedicated to preserving heritage and inspiring future generations.">
+    <meta name="keywords" content="About Brahmakshatriya Hitechchhu, Heritage, Community, Future Generations">
     <meta name="author" content="Your Company">
 
     <!-- OpenGraph Meta Tags -->
-    <meta property="og:title" content="Trustees | Brahmakshatriya Hitechchhu">
-    <meta property="og:description" content="Meet the trustees of Brahmakshatriya Hitechchhu, dedicated to preserving our heritage and inspiring future generations.">
-    <meta property="og:image" content="logo.png"> <!-- Use absolute URL if global sharing is required -->
-    <meta property="og:url" content="https://example.com/trustee.html"> <!-- Replace with actual page URL -->
+    <meta property="og:title" content="About Us | Brahmakshatriya Hitechchhu">
+    <meta property="og:description" content="Discover the mission and vision of Brahmakshatriya Hitechchhu as we aim to create an inspiring impact for our community.">
+    <meta property="og:image" content="logo.png"> <!-- Replace with an absolute URL for global sharing -->
+    <meta property="og:url" content="https://example.com/about.html"> <!-- Replace with the actual page URL -->
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Brahmakshatriya Hitechchhu">
 
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Trustees | Brahmakshatriya Hitechchhu">
-    <meta name="twitter:description" content="Meet the trustees of Brahmakshatriya Hitechchhu, dedicated to preserving our heritage and inspiring future generations.">
-    <meta name="twitter:image" content="logo.png"> <!-- Use absolute URL -->
+    <meta name="twitter:title" content="About Us | Brahmakshatriya Hitechchhu">
+    <meta name="twitter:description" content="Learn about the mission of Brahmakshatriya Hitechchhu to preserve heritage and inspire future generations.">
+    <meta name="twitter:image" content="logo.png"> <!-- Replace with an absolute URL -->
 
     <!-- Page Title -->
-    <title>Trustees | Brahmakshatriya Hitechchhu</title>
+    <title>About Us | Brahmakshatriya Hitechchhu</title>
 
     <!-- Stylesheets -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
 </head>
 
+<body>
      <!-- Header Section -->
      <header>
         <div class="container">
@@ -58,23 +59,16 @@
             </nav>
         </div>
     </header>
-
-    <!-- Main Content -->
+    
+    <div class="filters">
+        <select id="stateFilter">
+          <option value="">All States</option>
+        </select>
+        <input type="text" id="searchInput" placeholder="Search by name, city, or contact">
+      </div>
+    </header>
     <main>
-        <!-- Trustees Section -->
-        <section class="section">
-            <h2 class="section-title">Our Trustees</h2>
-            <p class="intro-text">
-                Meet the esteemed trustees of Brahmkshatriya Hittecchu, who are dedicated to driving our mission and vision forward.
-            </p>
-            <!-- Trustees Grid -->
-            <div class="trustee-grid">
-            <div class="about-container">
-            <div id="trustee-container">
-                <!-- Dynamically loaded trustee content via app.js -->
-            </div>
-        </div>
-        </section>
+      <div id="directory"></div>
     </main>
 
  <!-- Footer Section -->
@@ -89,14 +83,8 @@
 </footer>
 
     <!-- JavaScript Files -->
-    <script src="js/data.js"></script>
-    <script src="js/app.js"></script>
-
-    <!-- Function to Load Trustees -->
-    <script>
-        // Dynamically load trustees' data
-        loadTrustees();
-    </script>
+    <script src="js/address-data.js"></script>
+    <script src="js/address-script.js"></script>
 </body>
 
 </html>

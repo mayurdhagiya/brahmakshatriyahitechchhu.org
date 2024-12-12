@@ -48,6 +48,7 @@ const trusteesData = [
     {
         name: "John Doe",
         designation: "President",
+        info: "Hello World",
         image: "https://placehold.co/160x210",
         phone: "tel:+1234567890",
         whatsapp: "https://wa.me/1234567890",
