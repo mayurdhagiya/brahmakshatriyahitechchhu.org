@@ -36,4 +36,7 @@ year	date	title	volume	cover	link
 2023	2023-03-01	March 2023	Vol. 45, Issue 3	https://placehold.co/300x400/1a2a4f/c9a55a?text=Mar+2023	#
 2022	2022-11-01	November 2022	Vol. 44, Issue 11	https://placehold.co/300x400/1a2a4f/c9a55a?text=Nov+2022	#
 2022	2022-05-01	May 2022	Vol. 44, Issue 5	https://placehold.co/300x400/1a2a4f/c9a55a?text=May+2022	#
+2028	01 05 2025	May 25	Vol. 47, Issue 5	https://placehold.co/300x400/1a2a4f/c9a55a?text=May+2025	#
+2027	01 04 2025	Apr 25	Vol. 47, Issue 4	https://placehold.co/300x400/1a2a4f/c9a55a?text=Apr+2025	#
+
 `).map((e) => ({ ...e, year: Number(e.year) }));
