@@ -3,6 +3,14 @@
 There are **two places** to add a redirect, depending on your hosting.
 Pick one (or use both — they coexist safely).
 
+> **Note for GitHub Pages users (CNAME present)**
+>
+> GitHub Pages does **not** read `.htaccess`. If your site is hosted
+> there (the presence of a `CNAME` file at the root tells you it is),
+> use [`js/redirects.js`](js/redirects.js) below — that's the file
+> that does the work for you. The `.htaccess` is kept as a reference
+> for if you ever migrate to Apache.
+
 ---
 
 ## 1. `.htaccess` — preferred for Apache hosting

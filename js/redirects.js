@@ -1,33 +1,61 @@
 /* ============================================================
    Brahmakshatriya Hitechchhu — Client-side redirect manager
    ------------------------------------------------------------
-   Use this ONLY if your hosting doesn't run Apache/Nginx (rare —
-   most shared hosts do, and .htaccess is the canonical place to
-   manage redirects). This is a JS fallback.
+   THE ONE FILE TO EDIT when you want to add a URL alias.
 
-   How it works:
-     • Loaded synchronously in the <head> of every page so it can
-       redirect BEFORE the page paints.
-     • Looks up the current path in the REDIRECTS map below.
-     • If a match is found, replaces the URL with the target.
+   When does this file run?
+     • Loaded synchronously at the very top of every page's <head>
+       so it can redirect BEFORE the page paints.
+     • If a redirect matches, the browser swaps to the target URL
+       immediately; otherwise execution falls through and the page
+       loads normally.
 
-   Limitations vs. server-side redirects:
-     • Sends a 200 first, so SEO crawlers can't read this as 301.
-     • Brief flash of a blank page on slow connections.
-   For these reasons, prefer .htaccess in production. Keep this
-   file for friendly aliases and quick fixes.
+   When should you use this file?
+     • You're hosted on a service that DOESN'T process .htaccess
+       (GitHub Pages, Netlify, Vercel, Cloudflare Pages, S3, …).
+     • Or you just want a quick alias without touching server config.
+
+   When should you use .htaccess instead?
+     • You're on Apache hosting (most cPanel-based shared hosts).
+       Server-side 301s are faster and SEO-correct.
+
+   Both files can coexist — server redirects fire first, this is
+   the safety net.
+
+   ============================================================
+   HOW TO ADD A REDIRECT
+   ============================================================
+   Add a key/value pair to the REDIRECTS object below:
+
+     '/old-path/': '/new-path/'
+
+   Trailing slashes are normalised — both `/foo` and `/foo/`
+   match the same key. Query strings (?x=1) and hash fragments
+   (#section) are preserved through the redirect.
+
+   You can also redirect to an external URL:
+     '/podcast': 'https://anchor.fm/our-podcast'
+
+   ============================================================
+   IDIOT-PROOFING
+   ============================================================
+     • Wrapped in try/catch so a typo can never break the page.
+     • Self-redirect detection (target === current) → no-op.
+     • Uses location.replace() so back-button works as expected.
 ============================================================ */
 
 (function () {
   'use strict';
 
   /* ----------------------------------------------------------
-     Add or remove redirects here.
+     ⬇️  EDIT THIS MAP — your redirect rules live here
      Format: 'old path (with leading slash)': 'new path or full URL'
-     Trailing slashes are normalised — both /foo and /foo/ match.
   ---------------------------------------------------------- */
   const REDIRECTS = {
+
     /* --- Lower-case month aliases → canonical capitalised folders --- */
+    /* (URLs are case-sensitive on most servers, so anyone typing      */
+    /*  "may-2025" lands on the wrong path. These send them home.)    */
     '/editions/jan-2025/':  '/editions/Jan-2025/',
     '/editions/feb-2025/':  '/editions/Feb-2025/',
     '/editions/mar-2025/':  '/editions/Mar-2025/',
@@ -51,25 +79,38 @@
     // '/subscribe':        '/contact.html#subscription',
   };
 
+
   /* ----------------------------------------------------------
-     Normalise + match logic
+     ⚙️  Match + redirect logic — you shouldn't need to edit
+                                    anything below this line
   ---------------------------------------------------------- */
-  const path = window.location.pathname;
-  const stripped = path.replace(/\/$/, '');           // /foo/ → /foo
-  const slashed  = stripped + '/';                    // /foo  → /foo/
-  const target =
-    REDIRECTS[path] ||
-    REDIRECTS[stripped] ||
-    REDIRECTS[slashed] ||
-    null;
+  try {
+    const path     = window.location.pathname;
+    const stripped = path.replace(/\/$/, '');   // /foo/ → /foo
+    const slashed  = stripped + '/';            // /foo  → /foo/
 
-  if (target && target !== path) {
-    // Preserve query string + hash through the redirect
-    const dest = target + window.location.search + window.location.hash;
-    // Use replace() so the old URL doesn't pollute browser history
-    window.location.replace(dest);
+    // Check the path 3 ways so editors don't have to worry about
+    // trailing slashes when they add new entries.
+    const target =
+      REDIRECTS[path]     ||
+      REDIRECTS[stripped] ||
+      REDIRECTS[slashed]  ||
+      null;
+
+    if (target && target !== path && target !== stripped && target !== slashed) {
+      // Preserve query string + hash through the redirect so users
+      // landing on /old?utm=email#bio still get to /new?utm=email#bio.
+      const dest = target + window.location.search + window.location.hash;
+      // location.replace() — back-button still works as expected
+      // because the old URL doesn't get pushed onto history.
+      window.location.replace(dest);
+    }
+
+    // Expose the map so other code (or analytics) can introspect.
+    window.__REDIRECTS__ = REDIRECTS;
+  } catch (err) {
+    // Belt-and-braces: even a typo in the map should never break
+    // the page. Log it for the editor and move on.
+    console.error('[redirects] failed:', err);
   }
-
-  // Also expose the map so other code (or analytics) can introspect
-  window.__REDIRECTS__ = REDIRECTS;
 })();

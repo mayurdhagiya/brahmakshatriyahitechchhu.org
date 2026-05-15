@@ -1575,3 +1575,18 @@ main { flex: 1; padding-bottom: 64px; }
 
 /* Prevent horizontal overflow on any device */
 html, body { overflow-x: hidden; }
+
+/* ============================================================
+   <noscript> fallback — shown only when JavaScript is disabled.
+   Keeps content readable + invites users to enable JS.
+============================================================ */
+.noscript-banner {
+  background: #fff8e6;
+  border: 1px solid var(--gold);
+  color: var(--navy);
+  padding: 14px 18px;
+  text-align: center;
+  font-size: 0.95rem;
+  font-family: var(--sans);
+}
+.noscript-banner a { color: var(--navy); text-decoration: underline; }

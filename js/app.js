@@ -1,19 +1,112 @@
 /* ============================================================
    Brahmakshatriya Hitechchhu — App Logic
-   Mobile nav, edition loader, trustee loader, network filter
+   ------------------------------------------------------------
+   ONE script powers every page. Each loader (loadEditions,
+   loadTrustees, loadNetwork, loadEvents, loadAds) checks for
+   the data file's presence and silently no-ops if it isn't on
+   the current page — so this single file is safe to include
+   on every HTML document.
+
+   Defensive philosophy:
+     • If a data file is missing or empty, log a console warning
+       and gracefully render an empty state — never throw.
+     • If a date string is malformed, fall back to "Invalid date"
+       text rather than crashing the sort/filter pipeline.
+     • If an image URL 404s in the browser, swap to an inline
+       SVG placeholder so the layout doesn't collapse.
+     • Every event listener is null-guarded — missing DOM nodes
+       are normal because not every page has every widget.
 ============================================================ */
 
-/* ---------- Mobile navigation toggle ---------- */
+
+/* =============================================================
+   ⚙️  Defensive helpers — reused everywhere
+============================================================= */
+
+/* Inline SVG placeholders (data: URIs so they need no HTTP request) */
+const FALLBACK_COVER =
+  'data:image/svg+xml;utf8,' + encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400">
+       <rect fill="#1a2a4f" width="300" height="400"/>
+       <text x="50%" y="48%" text-anchor="middle" fill="#c9a55a"
+             font-family="Georgia,serif" font-size="22">Brahmakshatriya</text>
+       <text x="50%" y="58%" text-anchor="middle" fill="#c9a55a"
+             font-family="Georgia,serif" font-size="22">Hitechchhu</text>
+     </svg>`);
+
+const FALLBACK_PHOTO =
+  'data:image/svg+xml;utf8,' + encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+       <rect fill="#1a2a4f" width="600" height="360"/>
+       <text x="50%" y="50%" text-anchor="middle" fill="#c9a55a"
+             font-family="Georgia,serif" font-size="26">Image unavailable</text>
+     </svg>`);
+
+/**
+ * Build an <img> tag that auto-falls-back to a placeholder if the
+ * real URL 404s. Use everywhere instead of writing <img> by hand.
+ *
+ *   safeImg('cover.jpg', 'May 2025', 'cover-img')
+ *
+ * @param {string} src       The intended image URL.
+ * @param {string} alt       Alt text — required for accessibility/SEO.
+ * @param {string} [fb]      Fallback URL (defaults to FALLBACK_COVER).
+ * @param {string} [extra]   Extra HTML attrs (e.g. 'class="x"').
+ * @return {string} HTML string ready to drop into innerHTML.
+ */
+function safeImg(src, alt, fb, extra) {
+  const fallback = fb || FALLBACK_COVER;
+  const safeAlt  = (alt || '').replace(/"/g, '&quot;');
+  const safeSrc  = (src || fallback);
+  // onerror disables itself first so a broken fallback can't loop forever
+  return `<img src="${safeSrc}" alt="${safeAlt}" loading="lazy" ${extra || ''} onerror="this.onerror=null;this.src='${fallback}'" />`;
+}
+
+/**
+ * Safe date parser — returns a real Date or `null` for bad input.
+ * Avoids the JavaScript "Invalid Date" trap that breaks sorts.
+ */
+function safeDate(iso) {
+  if (!iso) return null;
+  const d = new Date(iso);
+  return isNaN(d.getTime()) ? null : d;
+}
+
+/**
+ * Format an ISO date for display. Returns '' on bad input
+ * instead of "Invalid Date" so card UIs stay clean.
+ */
+function formatDate(iso) {
+  const d = safeDate(iso);
+  return d ? d.toLocaleDateString('en-IN', { month: 'long', year: 'numeric' }) : '';
+}
+
+/**
+ * Wrap a loader so a runtime error in one section can never break
+ * the rest of the page. The error is logged to the console so the
+ * editor can investigate.
+ */
+function safely(label, fn) {
+  try { fn(); }
+  catch (err) { console.error(`[${label}] failed:`, err); }
+}
+
+
+/* =============================================================
+   📱  Mobile navigation toggle
+============================================================= */
 function initNav() {
   const toggle = document.querySelector('.nav-toggle');
-  const nav = document.querySelector('.nav');
-  if (!toggle || !nav) return;
+  const nav    = document.querySelector('.nav');
+  if (!toggle || !nav) return; // pages without nav (shouldn't happen)
 
+  // Tap the hamburger → reveal/hide the menu
   toggle.addEventListener('click', () => {
     nav.classList.toggle('open');
     toggle.classList.toggle('open');
   });
 
+  // Tap anywhere else → close the menu
   document.addEventListener('click', (e) => {
     if (!nav.contains(e.target) && !toggle.contains(e.target)) {
       nav.classList.remove('open');
@@ -22,17 +115,24 @@ function initNav() {
   });
 }
 
-/* ---------- Helpers ---------- */
-function formatDate(iso) {
-  const d = new Date(iso);
-  return d.toLocaleDateString('en-IN', { month: 'long', year: 'numeric' });
-}
-
 /* ---------- Home: current edition + past editions grouped by year ---------- */
 function loadEditions() {
+  // No-op when this page didn't load editions.js (about, contact, etc.).
   if (typeof editionsData === 'undefined') return;
+  if (!Array.isArray(editionsData) || !editionsData.length) {
+    console.warn('[loadEditions] editionsData is empty');
+    return;
+  }
 
-  const sorted = [...editionsData].sort((a, b) => new Date(b.date) - new Date(a.date));
+  // Sort newest-first. Rows with a missing/invalid date sink to the
+  // bottom rather than crashing the comparator.
+  const sorted = [...editionsData].sort((a, b) => {
+    const da = safeDate(a.date), db = safeDate(b.date);
+    if (!da && !db) return 0;
+    if (!da) return 1;
+    if (!db) return -1;
+    return db - da;
+  });
   const current = sorted[0];
   const rest = sorted.slice(1);
 
@@ -66,7 +166,7 @@ function loadEditions() {
 
   const cardHTML = (ed) => `
     <div class="edition-card">
-      <div class="cover"><img src="${ed.cover}" alt="${ed.title} cover" loading="lazy"></div>
+      <div class="cover">${safeImg(ed.cover, ed.title + ' cover', FALLBACK_COVER)}</div>
       <h4 class="title">${ed.title}</h4>
       <p class="date">${ed.volume}</p>
       <a class="btn" href="${ed.link}" target="_blank" rel="noopener">
@@ -229,7 +329,7 @@ function loadTrustees() {
       card.className = 'trustee-card';
       const social = t.social || {};
       card.innerHTML = `
-        <div class="trustee-photo"><img src="${t.image}" alt="${t.name}" loading="lazy"></div>
+        <div class="trustee-photo">${safeImg(t.image, t.name, FALLBACK_PHOTO)}</div>
         <h4>${t.name}</h4>
         <div class="role">${t.designation}</div>
         <p class="bio">${t.bio || ''}</p>
@@ -503,7 +603,10 @@ function showLightbox(idx) {
   const img      = lightbox.querySelector('img');
   const counter  = lightbox.querySelector('.event-lightbox-counter');
   const caption  = lightbox.querySelector('.event-lightbox-caption');
-  img.src = item.src;
+  // Defensive: if the image URL 404s, swap to a placeholder so the
+  // lightbox still renders something instead of a broken-image icon.
+  img.onerror = () => { img.onerror = null; img.src = FALLBACK_PHOTO; };
+  img.src = item.src || FALLBACK_PHOTO;
   img.alt = item.caption || `Photo ${_galleryIndex + 1} of ${_galleryItems.length}`;
   counter.textContent = `${_galleryIndex + 1} / ${_galleryItems.length}`;
   caption.textContent = item.caption || '';
@@ -581,7 +684,7 @@ function openEventModal(ev) {
         ${galleryItems.map((g, i) => `
           <figure class="event-gallery-thumb">
             <button type="button" class="event-gallery-btn" data-gallery-index="${i}" aria-label="Open photo ${i + 1}${g.caption ? ': ' + g.caption : ''}">
-              <img src="${g.src}" alt="${g.caption || 'Photo ' + (i + 1)}" loading="lazy" />
+              ${safeImg(g.src, g.caption || ('Photo ' + (i + 1)), FALLBACK_PHOTO)}
             </button>
             ${g.caption ? `<figcaption>${g.caption}</figcaption>` : ''}
           </figure>
@@ -592,7 +695,7 @@ function openEventModal(ev) {
 
   body.innerHTML = `
     <div class="event-modal-hero">
-      <img src="${ev.image}" alt="${ev.title}" />
+      ${safeImg(ev.image, ev.title, FALLBACK_PHOTO)}
       <span class="event-status ${isPast ? 'is-past' : ''}">${isPast ? 'Past Event' : 'Upcoming'}</span>
       <div class="event-modal-hero-text">
         <h2 id="eventModalTitle">${ev.title}</h2>
@@ -671,7 +774,14 @@ function loadEvents() {
   const tabs           = document.querySelectorAll('[data-event-tab]');
 
   const today = new Date(); today.setHours(0, 0, 0, 0);
-  const sorted = [...eventsData].sort((a, b) => new Date(b.date) - new Date(a.date));
+  // Newest-first; rows with invalid dates sink to the bottom safely.
+  const sorted = [...eventsData].sort((a, b) => {
+    const da = safeDate(a.date), db = safeDate(b.date);
+    if (!da && !db) return 0;
+    if (!da) return 1;
+    if (!db) return -1;
+    return db - da;
+  });
 
   // Populate year + location dropdowns
   const years     = [...new Set(sorted.map((e) => new Date(e.date).getFullYear()))].sort((a, b) => b - a);
@@ -700,7 +810,7 @@ function loadEvents() {
   const cardHTML = (e, isPast, idx) => `
     <article class="event-card ${isPast ? 'is-past' : 'is-upcoming'}">
       <div class="event-media">
-        <img src="${e.image}" alt="${e.title}" loading="lazy" />
+        ${safeImg(e.image, e.title, FALLBACK_PHOTO)}
         <div class="event-date-badge">
           <span class="day">${fmtDay(e.date)}</span>
           <span class="month">${fmtMonth(e.date)}</span>
@@ -844,7 +954,14 @@ function loadAds() {
   });
 
   // Sort newest-first by publishedDate
-  live.sort((a, b) => new Date(b.publishedDate || 0) - new Date(a.publishedDate || 0));
+  // Newest-first by publishedDate. Rows missing a date sink to the bottom.
+  live.sort((a, b) => {
+    const da = safeDate(a.publishedDate), db = safeDate(b.publishedDate);
+    if (!da && !db) return 0;
+    if (!da) return 1;
+    if (!db) return -1;
+    return db - da;
+  });
 
   // Populate filter dropdowns
   if (categoryFilter) {
@@ -874,7 +991,7 @@ function loadAds() {
   const displayCardHTML = (a) => `
     <article class="ad-card ad-display">
       <div class="ad-media">
-        <img src="${a.image}" alt="${a.title}" loading="lazy" />
+        ${safeImg(a.image, a.title, FALLBACK_PHOTO)}
         <span class="ad-category">${a.category}</span>
       </div>
       <div class="ad-body">
@@ -1081,19 +1198,25 @@ function setFooterYear() {
   if (el) el.textContent = new Date().getFullYear();
 }
 
-/* ---------- Bootstrap ---------- */
+/* =============================================================
+   🚀  Bootstrap — runs once the DOM is parsed.
+   Each call is wrapped in `safely()` so a runtime error in one
+   loader (e.g. a malformed event row) can't break the others.
+============================================================= */
 document.addEventListener('DOMContentLoaded', () => {
-  initNav();
-  setFooterYear();
-  loadEditions();
-  loadTrustees();
-  loadNetwork();
-  loadEvents();
-  loadAds();
-  initContactForm();
+  safely('initNav',           initNav);
+  safely('setFooterYear',     setFooterYear);
+  safely('loadEditions',      loadEditions);
+  safely('loadTrustees',      loadTrustees);
+  safely('loadNetwork',       loadNetwork);
+  safely('loadEvents',        loadEvents);
+  safely('loadAds',           loadAds);
+  safely('initContactForm',   initContactForm);
 
-  // SEO: emit JSON-LD for any data sets present on this page
-  injectEventStructuredData();
-  injectTrusteesStructuredData();
-  injectNetworkStructuredData();
+  // SEO: emit JSON-LD for any data sets present on this page.
+  // Each injector is also self-guarded — it only emits markup
+  // when the matching data file is loaded.
+  safely('injectEventStructuredData',    injectEventStructuredData);
+  safely('injectTrusteesStructuredData', injectTrusteesStructuredData);
+  safely('injectNetworkStructuredData',  injectNetworkStructuredData);
 });
