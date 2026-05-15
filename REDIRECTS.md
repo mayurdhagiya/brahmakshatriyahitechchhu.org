@@ -1,67 +1,16 @@
 # Managing redirects
 
-There are **two places** to add a redirect, depending on your hosting.
-Pick one (or use both — they coexist safely).
-
-> **Note for GitHub Pages users (CNAME present)**
->
-> GitHub Pages does **not** read `.htaccess`. If your site is hosted
-> there (the presence of a `CNAME` file at the root tells you it is),
-> use [`js/redirects.js`](js/redirects.js) below — that's the file
-> that does the work for you. The `.htaccess` is kept as a reference
-> for if you ever migrate to Apache.
+> **You're hosted on GitHub Pages.** GitHub Pages **does not** read
+> `.htaccess`, so the file in this repo is just kept for reference
+> (in case you ever migrate to Apache hosting). Your live redirects
+> live in **`js/redirects.js`** — that's the file to edit.
 
 ---
 
-## 1. `.htaccess` — preferred for Apache hosting
-
-Most shared web hosts (Hostinger, Bluehost, GoDaddy, cPanel-based hosts)
-run **Apache** and read `.htaccess`. This is the canonical place to
-manage redirects because:
-
-- Returns proper **301 Moved Permanently** responses → great for SEO.
-- The redirect happens **before** the page loads → no flash of content.
-- Works for visitors with JavaScript disabled.
-
-### Add a redirect
-
-Open [`.htaccess`](.htaccess) and add a line under
-`# YOUR REDIRECTS — add new entries below`:
-
-```apache
-# Simple page redirect
-Redirect 301 /old-page.html         /new-page.html
-
-# Pattern with capture group
-RedirectMatch 301 ^/edition-(\d{4})/?$   /editions/$1/
-
-# Friendly short URL
-Redirect 301 /donate                /contact.html#bank-details
-```
-
-### Already configured for you
-
-- `/about-us` → `/about.html`
-- `/contact-us` → `/contact.html`
-- `/trustee.html` → `/trustees.html`
-- All lower-case month aliases (`/editions/may-2025/`) → canonical
-  capitalised versions (`/editions/May-2025/`)
-- Auto-add trailing slash to `/editions/<Month>-<Year>` if missing
-- HTTPS + www enforcement (commented out — uncomment when SSL is live)
-- Strip `.html` from URLs (`/about` serves `/about.html`)
-
----
-
-## 2. `js/redirects.js` — fallback for non-Apache hosts
-
-If you host on **Netlify, Vercel, Cloudflare Pages, GitHub Pages,
-Firebase Hosting** (anything that isn't Apache), `.htaccess` won't
-do anything. Use this JavaScript fallback instead.
-
-### Add a redirect
+## ✅ Add a redirect — `js/redirects.js`
 
 Open [`js/redirects.js`](js/redirects.js) and add a key/value pair
-inside the `REDIRECTS` object:
+inside the `REDIRECTS` object. Save, commit, push.
 
 ```js
 const REDIRECTS = {
@@ -71,21 +20,64 @@ const REDIRECTS = {
 };
 ```
 
-### Trade-offs vs. server redirects
+**How it works:**
+- Loaded synchronously at the very top of every page's `<head>` so
+  it redirects **before** the page paints.
+- Trailing slashes are normalised — both `/foo` and `/foo/` match.
+- Query strings (`?utm=…`) and hash fragments (`#section`) are
+  preserved through the redirect.
+- Wrapped in `try/catch` so a typo can never break the page.
 
-| | `.htaccess` | `js/redirects.js` |
-|---|---|---|
-| HTTP status code | **301** (SEO-friendly) | 200 then JS redirect |
-| Speed | Instant (server-side) | Tiny delay (after JS loads) |
-| Works without JS | ✅ | ❌ |
-| Works on any static host | Apache only | ✅ everywhere |
+**Already configured for you:**
+- All lower-case month aliases redirect to canonical capitalised
+  folders (`/editions/may-2025/` → `/editions/May-2025/`)
+- `/about-us` → `/about.html`
+- `/contact-us` → `/contact.html`
+- `/trustee.html` → `/trustees.html` (legacy from earlier versions)
 
 ---
 
-## 3. Platform-specific alternatives
+## How GitHub Pages handles bad URLs
 
-If you're on a specific platform, here's the equivalent of `.htaccess`
-to use instead:
+When someone visits a path that doesn't exist on your site,
+GitHub Pages automatically serves [`404.html`](404.html). I built
+you a branded 404 page that:
+
+- Matches the rest of the site's design.
+- Shows the URL the visitor tried (helpful for spotting typos).
+- Offers Home + Contact buttons plus quick-links to every section.
+- Sends a `page_not_found` event to Google Analytics so you can see
+  which broken paths people are hitting.
+
+So between **`js/redirects.js`** (catches known bad paths) and
+**`404.html`** (gracefully handles everything else), unknown URLs
+never look broken to a visitor.
+
+---
+
+## Trade-offs vs. server-side redirects
+
+|                              | `js/redirects.js` | `.htaccess` (Apache only) |
+|------------------------------|-------------------|---------------------------|
+| Works on GitHub Pages        | ✅                | ❌                         |
+| HTTP status code             | 200 then JS jump  | 301 (SEO-friendly)        |
+| Speed                        | ~5ms after load   | Instant (server-side)     |
+| Works without JavaScript     | ❌                | ✅                         |
+
+For most use cases on GitHub Pages, the JS approach is good enough —
+search engines now execute JavaScript when crawling, and visitors
+notice no delay.
+
+---
+
+## If you ever migrate to Apache hosting
+
+Open [`.htaccess`](.htaccess) and copy your `js/redirects.js` entries
+across as `Redirect 301` lines. The format is documented in the file.
+
+## If you ever migrate to Netlify / Vercel / Cloudflare Pages
+
+Each platform has its own redirect file format:
 
 | Platform | File to create | Format |
 |---|---|---|
@@ -94,20 +86,19 @@ to use instead:
 | Cloudflare Pages | `_redirects` | same as Netlify |
 | Nginx (VPS) | `nginx.conf` | `rewrite ^/old$ /new permanent;` |
 
-If you tell me which host you use, I can generate the matching file.
+In all those cases the JS file (`js/redirects.js`) keeps working
+too — they just coexist as belt-and-braces.
 
 ---
 
-## URL case sensitivity — important
+## URL case sensitivity — important reminder
 
-URLs **are** case-sensitive on most servers (Linux + Apache/Nginx
-serve filesystem paths exactly). So:
+GitHub Pages serves URLs **case-sensitively**, like most servers:
 
 - `/editions/May-2025/` ≠ `/editions/may-2025/` ≠ `/editions/MAY-2025/`
 
-Your folder naming convention is **capitalised first letter**, with
-3-letter month abbreviations EXCEPT for May/June/July (which stay
-full):
+Your folder convention is **capitalised first letter**, with
+3-letter month abbreviations EXCEPT for May/June/July (full):
 
 | Month | Folder |
 |---|---|
@@ -124,5 +115,5 @@ full):
 | November | `Nov` |
 | December | `Dec` |
 
-The site-wide redirects in `.htaccess` and `js/redirects.js` already
-catch lower-case typos and send users to the right canonical URL.
+The redirects in `js/redirects.js` already catch lower-case typos
+and bounce visitors to the right canonical URL.
