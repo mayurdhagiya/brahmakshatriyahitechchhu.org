@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- ===== Basic ===== -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#1a2a4f" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+  <meta name="author" content="Brahmakshatriya Hitechchhu Trust" />
+
+  <title>Community Network | Brahmakshatriya Hitechchhu — Regional Contacts Across India</title>
+  <meta name="description" content="Find regional Brahmakshatriya community contacts across India — Gujarat, Maharashtra, Karnataka, Delhi, Tamil Nadu and more. Filter by state and search for a chapter near you." />
+  <meta name="keywords" content="Brahmakshatriya community network, Brahmakshatriya contacts India, Brahmakshatriya Ahmedabad Surat Mumbai, community chapter directory, Hitechchhu regional contacts" />
+  <link rel="canonical" href="https://brahmakshatriyahitechchhu.org/network.html" />
+
+  <link rel="icon" href="images/logo.png" type="image/png" />
+  <link rel="apple-touch-icon" href="images/logo.png" />
+
+  <!-- ===== Open Graph ===== -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Brahmakshatriya Hitechchhu" />
+  <meta property="og:title" content="Community Network | Brahmakshatriya Hitechchhu" />
+  <meta property="og:description" content="Regional community contacts across India — find a chapter near you." />
+  <meta property="og:url" content="https://brahmakshatriyahitechchhu.org/network.html" />
+  <meta property="og:image" content="https://brahmakshatriyahitechchhu.org/images/logo.png" />
+  <meta property="og:locale" content="en_IN" />
+
+  <!-- ===== Twitter Card ===== -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Community Network | Brahmakshatriya Hitechchhu" />
+  <meta name="twitter:description" content="Find regional Brahmakshatriya community contacts across India." />
+  <meta name="twitter:image" content="https://brahmakshatriyahitechchhu.org/images/logo.png" />
+
+  <!-- ===== Resources ===== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- ===== Analytics: GA4 + Microsoft Clarity ===== -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-P3QXRQTHMW"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-P3QXRQTHMW');
+  </script>
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "wracrh4b8s");
+  </script>
+
+  <!-- ===== Structured Data: CollectionPage + Breadcrumb ===== -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Brahmakshatriya Community Network",
+    "url": "https://brahmakshatriyahitechchhu.org/network.html",
+    "description": "Directory of regional Brahmakshatriya community contacts across India.",
+    "isPartOf": { "@type": "WebSite", "name": "Brahmakshatriya Hitechchhu", "url": "https://brahmakshatriyahitechchhu.org/" }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home",    "item": "https://brahmakshatriyahitechchhu.org/" },
+      { "@type": "ListItem", "position": 2, "name": "Network", "item": "https://brahmakshatriyahitechchhu.org/network.html" }
+    ]
+  }
+  </script>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">B</span>
+        <span class="brand-text">
+          Brahmakshatriya Hitechchhu
+          <small>Monthly Publication · Since 1978</small>
+        </span>
+      </a>
+      <button class="nav-toggle" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="trustees.html">Trustees</a>
+        <a href="network.html" class="active">Network</a>
+        <a href="events.html">Events</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Community Directory</span>
+          <h2>Our Network Across India</h2>
+          <p>Find a regional contact close to you — for subscriptions, queries, or to get involved with local community activity.</p>
+        </div>
+
+        <div class="filter-bar">
+          <select id="stateFilter" aria-label="Filter by state">
+            <option value="">All States</option>
+          </select>
+          <input type="text" id="searchInput" placeholder="Search by name, city, or contact number…" aria-label="Search directory" />
+        </div>
+
+        <div id="directory" class="directory-grid"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a class="brand" href="index.html">
+            <span class="brand-mark">B</span>
+            <span class="brand-text">Brahmakshatriya Hitechchhu<small>Trust Publication</small></span>
+          </a>
+          <p style="margin-top:14px; max-width:340px;">A monthly magazine dedicated to the Brahmakshatriya community — preserving heritage, celebrating achievements, building connections.</p>
+          <div class="footer-social">
+            <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+        <div>
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="index.html">Latest edition</a></li>
+            <li><a href="about.html">About the trust</a></li>
+            <li><a href="trustees.html">Trustees</a></li>
+            <li><a href="network.html">Community network</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="contact.html">Contact us</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Reach us</h4>
+          <ul>
+            <li><i class="fas fa-map-marker-alt"></i> &nbsp;Ahmedabad, Gujarat</li>
+            <li><i class="fas fa-phone"></i> &nbsp;<a href="tel:+917926734157">079-26734157</a></li>
+            <li><i class="fas fa-envelope"></i> &nbsp;<a href="mailto:info@brahmkshatriya.org">info@brahmkshatriya.org</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        &copy; <span data-year>2025</span> Brahmakshatriya Hitechchhu Trust. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/parse-data.js"></script>
+  <script src="js/data/network.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
