@@ -140,7 +140,10 @@ function loadEditions() {
   const heroCover  = document.querySelector('[data-current-cover]');
   const heroTitle  = document.querySelector('[data-current-title]');
   const heroVolume = document.querySelector('[data-current-volume]');
-  const heroLink   = document.querySelector('[data-current-link]');
+  // querySelectorAll: there are THREE elements that point at the current
+  // edition - the hero CTA button, the hero cover wrapper, and the
+  // "From the Editor" section's Read button. All three need their href set.
+  const heroLinks  = document.querySelectorAll('[data-current-link]');
 
   // Build the hero subtitle: "Year 51, Issue 1 · Edition #609"
   const heroVolumeLabel = (ed) => {
@@ -153,7 +156,7 @@ function loadEditions() {
   if (current && heroCover)  heroCover.src = current.cover;
   if (current && heroTitle)  heroTitle.textContent  = current.title;
   if (current && heroVolume) heroVolume.textContent = heroVolumeLabel(current);
-  if (current && heroLink)   heroLink.href = current.link;
+  if (current) heroLinks.forEach((el) => { el.href = current.link; });
 
   const archive = document.getElementById('archive');
   if (!archive) return;
@@ -174,7 +177,8 @@ function loadEditions() {
 
   // Each archive card is wrapped in an <a> so clicking ANYWHERE on the
   // card (cover, title, volume label, badge) opens the edition.
-  // The "Read" pill at the bottom stays as a visual cue.
+  // A subtle "Read >" indicator (not a button) signals interactivity without
+  // duplicating the click target visually.
   const cardHTML = (ed) => `
     <a class="edition-card" href="${ed.link}" target="_blank" rel="noopener"
        aria-label="Read ${ed.title}, ${ed.volume || ''}${ed.editionNo ? ', edition #' + ed.editionNo : ''}">
@@ -182,8 +186,9 @@ function loadEditions() {
       <h4 class="title">${ed.title}</h4>
       <p class="date">${ed.volume || ''}</p>
       ${ed.editionNo ? `<span class="edition-no">#${ed.editionNo}</span>` : ''}
-      <span class="btn edition-card-btn">
-        <i class="fas fa-book-open"></i> Read
+      <span class="edition-card-cta">
+        <i class="fas fa-book-open"></i> Read edition
+        <i class="fas fa-arrow-right edition-card-arrow"></i>
       </span>
     </a>
   `;

@@ -546,8 +546,9 @@ main { flex: 1; padding-bottom: 64px; }
 .scroll-btn.left  { left: -16px; }
 .scroll-btn.right { right: -16px; }
 
-/* The whole edition card is now an <a> so clicking anywhere opens
-   the edition. Reset link styling and add a clearer hover state. */
+/* The whole edition card is an <a> - clicking anywhere opens the edition.
+   We remove the underline, add a clear hover lift, gold border + cover zoom,
+   and a visible focus ring for keyboard users. */
 .edition-card {
   flex: 0 0 200px;
   background: var(--paper);
@@ -563,19 +564,60 @@ main { flex: 1; padding-bottom: 64px; }
   text-decoration: none;
   color: inherit;
   cursor: pointer;
+  position: relative;
 }
 .edition-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-md);
   border-color: var(--gold);
 }
-/* The "Read" pill is now decorative; the parent <a> captures the click. */
-.edition-card-btn {
-  align-self: center;
-  pointer-events: none;
+/* Keyboard focus ring (accessibility) */
+.edition-card:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
 }
-/* Hero cover is also an anchor - keep it visually identical, no underline. */
-.hero-cover .cover-frame { text-decoration: none; color: inherit; cursor: pointer; display: block; }
+/* Subtle zoom on the cover image when the card is hovered */
+.edition-card .cover img {
+  transition: transform 0.5s ease;
+}
+.edition-card:hover .cover img { transform: scale(1.04); }
+
+/* Replace the old gold button with a subtle "Read edition >" text cue.
+   Less visual noise now that the entire card is the link. */
+.edition-card-cta {
+  align-self: center;
+  margin-top: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gold);
+  pointer-events: none;          /* parent <a> handles the click */
+}
+.edition-card-cta .fa-book-open { font-size: 0.82em; }
+.edition-card-arrow {
+  font-size: 0.7em;
+  transition: transform 0.25s ease;
+}
+.edition-card:hover .edition-card-arrow { transform: translateX(4px); }
+
+/* Hero cover frame is also an anchor - keep its tilt/badge styling intact
+   and add the same focus ring for keyboard users. */
+.hero-cover .cover-frame {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  display: block;
+}
+.hero-cover .cover-frame:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 6px;
+  border-radius: var(--radius);
+}
 .edition-card .cover {
   width: 100%;
   aspect-ratio: 3 / 4;
