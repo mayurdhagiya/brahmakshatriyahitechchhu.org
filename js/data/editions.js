@@ -30,22 +30,21 @@
 
 const editionsData = parseTSV(`
 year	date	title	volume	cover	link
-2024	2024-09-15	September 2024	Vol. 49, Issue 5	https://placehold.co/300x400/1a2a4f/c9a55a?text=Sep+2024	/editions/Sep-2024/
-2025	2025-01-15	January 2025	Vol. 49, Issue 9	https://placehold.co/300x400/1a2a4f/c9a55a?text=Jan+2025	/editions/Jan-2025/
-2025	2025-03-15	March 2025	Vol. 49, Issue 11	https://placehold.co/300x400/1a2a4f/c9a55a?text=Mar+2025	/editions/Mar-2025/
-2025	2025-06-15	June 2025	Vol. 50, Issue 2	https://placehold.co/300x400/1a2a4f/c9a55a?text=Jun+2025	/editions/June-2025/
-2025	2025-07-15	July 2025	Vol. 50, Issue 3	https://placehold.co/300x400/1a2a4f/c9a55a?text=Jul+2025	/editions/July-2025/
-2025	2025-08-15	August 2025	Vol. 50, Issue 4	https://placehold.co/300x400/1a2a4f/c9a55a?text=Aug+2025	/editions/Aug-2025/
-2025	2025-09-15	September 2025	Vol. 50, Issue 5	https://placehold.co/300x400/1a2a4f/c9a55a?text=Sep+2025	/editions/Sep-2025/
-2025	2025-10-15	October 2025	Vol. 50, Issue 6	https://placehold.co/300x400/1a2a4f/c9a55a?text=Oct+2025	/editions/Oct-2025/
-2025	2025-11-15	November 2025	Vol. 50, Issue 7	https://placehold.co/300x400/1a2a4f/c9a55a?text=Nov+2025	/editions/Nov-2025/
-2025	2025-12-15	December 2025	Vol. 50, Issue 8	https://placehold.co/300x400/1a2a4f/c9a55a?text=Dec+2025	/editions/Dec-2025/
-2026	2026-01-15	January 2026	Vol. 50, Issue 9	https://placehold.co/300x400/1a2a4f/c9a55a?text=Jan+2026	/editions/Jan-2026/
-2026	2026-02-15	February 2026	Vol. 50, Issue 10	https://placehold.co/300x400/1a2a4f/c9a55a?text=Feb+2026	/editions/Feb-2026/
-2026	2026-03-15	March 2026	Vol. 50, Issue 11	https://placehold.co/300x400/1a2a4f/c9a55a?text=Mar+2026	/editions/Mar-2026/
-2026	2026-04-15	April 2026	Vol. 50, Issue 12	https://placehold.co/300x400/1a2a4f/c9a55a?text=Apr+2026	/editions/Apr-2026/
-2026	2026-05-15	May 2026	Vol. 51, Issue 1	https://placehold.co/300x400/1a2a4f/c9a55a?text=May+2026	/editions/May-2026/
-`).map((e) => {
+2024	2024-09-15	September 2024	Vol. 49, Issue 5	/editions/Sep-2024/files/thumb/1.png	/editions/Sep-2024/
+2025	2025-01-15	January 2025	Vol. 49, Issue 9	/editions/Jan-2025/files/thumb/1.png	/editions/Jan-2025/
+2025	2025-03-15	March 2025	Vol. 49, Issue 11	/editions/Mar-2025/files/thumb/1.png	/editions/Mar-2025/
+2025	2025-06-15	June 2025	Vol. 50, Issue 2	/editions/June-2025/files/thumb/1.png	/editions/June-2025/
+2025	2025-07-15	July 2025	Vol. 50, Issue 3	/editions/July-2025/files/thumb/1.png	/editions/July-2025/
+2025	2025-08-15	August 2025	Vol. 50, Issue 4	/editions/Aug-2025/files/thumb/1.png	/editions/Aug-2025/
+2025	2025-09-15	September 2025	Vol. 50, Issue 5	/editions/Sep-2025/files/thumb/1.png	/editions/Sep-2025/
+2025	2025-10-15	October 2025	Vol. 50, Issue 6	/editions/Oct-2025/files/thumb/1.png	/editions/Oct-2025/
+2025	2025-11-15	November 2025	Vol. 50, Issue 7	/editions/Nov-2025/files/thumb/1.png	/editions/Nov-2025/
+2025	2025-12-15	December 2025	Vol. 50, Issue 8	/editions/Dec-2025/files/thumb/1.png	/editions/Dec-2025/
+2026	2026-01-15	January 2026	Vol. 50, Issue 9	/editions/Jan-2026/files/thumb/1.png	/editions/Jan-2026/
+2026	2026-02-15	February 2026	Vol. 50, Issue 10	/editions/Feb-2026/files/thumb/1.png	/editions/Feb-2026/
+2026	2026-03-15	March 2026	Vol. 50, Issue 11	/editions/Mar-2026/files/thumb/1.png	/editions/Mar-2026/
+2026	2026-04-15	April 2026	Vol. 50, Issue 12	/editions/Apr-2026/files/thumb/1.png	/editions/Apr-2026/
+2026	2026-05-15	May 2026	Vol. 51, Issue 1	/editions/May-2026/files/thumb/1.png	/editions/May-2026/
   // Map full month names → folder-name form. May/June/July stay full.
   const SHORT = {
     January: 'Jan', February: 'Feb', March: 'Mar', April: 'Apr',
