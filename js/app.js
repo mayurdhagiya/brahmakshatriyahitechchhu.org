@@ -142,9 +142,17 @@ function loadEditions() {
   const heroVolume = document.querySelector('[data-current-volume]');
   const heroLink   = document.querySelector('[data-current-link]');
 
+  // Build the hero subtitle: "Year 51, Issue 1 · Edition #609"
+  const heroVolumeLabel = (ed) => {
+    const parts = [];
+    if (ed.volume)    parts.push(ed.volume);                    // e.g. "Year 51, Issue 1"
+    if (ed.editionNo) parts.push('Edition #' + ed.editionNo);   // e.g. "Edition #609"
+    return parts.join(' · ');
+  };
+
   if (current && heroCover)  heroCover.src = current.cover;
   if (current && heroTitle)  heroTitle.textContent  = current.title;
-  if (current && heroVolume) heroVolume.textContent = current.volume;
+  if (current && heroVolume) heroVolume.textContent = heroVolumeLabel(current);
   if (current && heroLink)   heroLink.href = current.link;
 
   const archive = document.getElementById('archive');
@@ -164,11 +172,14 @@ function loadEditions() {
     });
   }
 
+  // Each archive card shows: cover, title, "Year 51, Issue 1" + small "#609"
+  // pill, and a Read button.
   const cardHTML = (ed) => `
     <div class="edition-card">
       <div class="cover">${safeImg(ed.cover, ed.title + ' cover', FALLBACK_COVER)}</div>
       <h4 class="title">${ed.title}</h4>
-      <p class="date">${ed.volume}</p>
+      <p class="date">${ed.volume || ''}</p>
+      ${ed.editionNo ? `<span class="edition-no">#${ed.editionNo}</span>` : ''}
       <a class="btn" href="${ed.link}" target="_blank" rel="noopener">
         <i class="fas fa-book-open"></i> Read
       </a>
@@ -1192,6 +1203,41 @@ function injectNetworkStructuredData() {
   });
 }
 
+/* =============================================================
+   📊  Home page: number highlights ("By the numbers" band)
+   -------------------------------------------------------------
+   Auto-computes the dynamic stats so they never go stale:
+     • Years of publishing  =  current year − founded year
+     • Editions published   =  count of rows in editionsData
+   The founded year is read from the section's data-founded
+   attribute so editors can change it in one place (the HTML).
+   The "Community members" tile is plain HTML — edit the number
+   directly in index.html when membership changes.
+============================================================= */
+function loadStats() {
+  // No-op when this page doesn't have the stats band (about, ads, …)
+  const section = document.querySelector('.stats-section');
+  if (!section) return;
+
+  // Years of publishing — read founded year from data-founded (default 1976)
+  const founded = parseInt(section.dataset.founded, 10) || 1976;
+  const years   = Math.max(0, new Date().getFullYear() - founded);
+  const yearsEl = section.querySelector('[data-stat="years"]');
+  if (yearsEl) yearsEl.innerHTML = years + '<span class="stat-plus">+</span>';
+
+  // Editions published — use the HIGHEST editionNo across all rows
+  // (since edition numbers are continuous across the entire history).
+  // Falls back to the row count if no editionNo is set anywhere.
+  const editionsEl = section.querySelector('[data-stat="editions"]');
+  if (editionsEl && typeof editionsData !== 'undefined' && Array.isArray(editionsData)) {
+    const numbered = editionsData
+      .map((e) => Number(e.editionNo))
+      .filter((n) => Number.isFinite(n));
+    const total = numbered.length ? Math.max(...numbered) : editionsData.length;
+    editionsEl.innerHTML = total + '<span class="stat-plus">+</span>';
+  }
+}
+
 /* ---------- Footer year ---------- */
 function setFooterYear() {
   const el = document.querySelector('[data-year]');
@@ -1207,6 +1253,7 @@ document.addEventListener('DOMContentLoaded', () => {
   safely('initNav',           initNav);
   safely('setFooterYear',     setFooterYear);
   safely('loadEditions',      loadEditions);
+  safely('loadStats',         loadStats);
   safely('loadTrustees',      loadTrustees);
   safely('loadNetwork',       loadNetwork);
   safely('loadEvents',        loadEvents);

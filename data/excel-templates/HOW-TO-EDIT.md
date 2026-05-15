@@ -51,14 +51,28 @@ your rows, then paste back into the matching `js/data/*.js` file.
 
 ### `editions.csv`
 
-| Column   | What to write                                            |
-| -------- | -------------------------------------------------------- |
-| `year`   | 4-digit year (e.g. `2025`)                               |
-| `date`   | `YYYY-MM-DD` issue date — the newest auto-becomes "Current Edition" |
-| `title`  | Display title (e.g. `May 2025`)                          |
-| `volume` | Volume / issue label (e.g. `Vol. 47, Issue 5`)           |
-| `cover`  | URL to the cover image (300×400 looks best)              |
-| `link`   | URL to the full PDF or page; use `#` if not yet uploaded |
+| Column      | What to write                                                      |
+| ----------- | ------------------------------------------------------------------ |
+| `year`      | 4-digit calendar year (e.g. `2026`) — used to group cards on the archive |
+| `date`      | `YYYY-MM-DD` issue date — newest auto-becomes "Current Edition"    |
+| `title`     | Display title (e.g. `May 2026`)                                    |
+| `volume`    | Publication-year label, formatted as `Year NN, Issue MM`           |
+| `editionNo` | Continuous edition number across the entire history (e.g. `609`)   |
+| `cover`     | URL to the cover image (300×400 looks best)                        |
+| `link`      | URL to the full edition; leave blank to auto-derive from title     |
+
+**Anchor for the numbering convention** *(so editors can verify):*
+
+> **May 2026** = `Year 51, Issue 1`, `editionNo` = **609**
+
+From there:
+- `editionNo` adds 1 every month (next is 610, then 611, …)
+- `Issue` rolls 1→12 within a publication year and resets every May
+- `Year NN` (the publication year) increments every May (Year 52 starts May 2027)
+
+The home page "Editions Published" stat reads the **highest editionNo**
+in this file, so it's always accurate without anyone touching the
+homepage.
 
 ### `trustees.csv`
 
