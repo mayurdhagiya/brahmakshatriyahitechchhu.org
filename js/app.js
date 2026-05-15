@@ -522,9 +522,9 @@ function buildShareData(ev) {
   return { url, text, title: ev.title };
 }
 
-/** Trigger native Web Share if available; otherwise open the share popover anchored to the clicked button. */
-async function shareEvent(ev, anchorEl) {
-  const data = buildShareData(ev);
+/** Generic share helper - takes a pre-built {url, text, title} object.
+ *  Triggers native Web Share if available; otherwise opens the popover. */
+async function shareData(data, anchorEl) {
   if (navigator.share) {
     try {
       await navigator.share({ title: data.title, text: data.text, url: data.url });
@@ -535,6 +535,11 @@ async function shareEvent(ev, anchorEl) {
     }
   }
   showSharePopover(anchorEl, data);
+}
+
+/** Share an event - thin wrapper that builds the share data first. */
+async function shareEvent(ev, anchorEl) {
+  return shareData(buildShareData(ev), anchorEl);
 }
 
 /** Render the fallback share popover (WhatsApp / FB / Twitter / Email / Copy) anchored to a button. */
@@ -1183,23 +1188,37 @@ function loadNews() {
     n.title, n.titleGu, n.summary, n.category, n.city, n.publishedIn, fmtFull(n.date)
   ].filter(Boolean).join(' • ').toLowerCase();
 
-  const cardHTML = (n) => `
-    <article class="news-card">
-      <div class="news-date-badge">
-        <span class="day">${fmtDay(n.date)}</span>
-        <span class="month">${fmtMon(n.date)}</span>
+  // News card mirrors the event-card layout: cover image with overlaid
+  // date badge + category pill, body with title + summary + meta, and a
+  // Read more / Share button row that triggers the modal.
+  const cardHTML = (n, idx) => `
+    <article class="event-card news-card-event-style">
+      <div class="event-media">
+        ${safeImg(n.image, n.title, FALLBACK_PHOTO)}
+        <div class="event-date-badge">
+          <span class="day">${fmtDay(n.date)}</span>
+          <span class="month">${fmtMon(n.date)}</span>
+          <span class="year">${yearOf(n.date)}</span>
+        </div>
+        <span class="event-status">${n.category || 'News'}</span>
       </div>
-      <div class="news-body">
-        <span class="news-category">${n.category || 'News'}</span>
+      <div class="event-body">
         <h3>${n.title}</h3>
         ${n.titleGu ? `<div class="news-title-gu">${n.titleGu}</div>` : ''}
-        <p class="news-summary">${n.summary || ''}</p>
-        <div class="news-meta">
+        <div class="event-meta">
           <span><i class="fas fa-calendar"></i> ${fmtFull(n.date)}</span>
           ${n.city ? `<span><i class="fas fa-location-dot"></i> ${n.city}</span>` : ''}
           ${n.publishedIn ? `<span><i class="fas fa-book-open"></i> ${n.publishedIn}</span>` : ''}
         </div>
-        ${n.link && n.link !== '#' ? `<a class="btn btn-outline" href="${n.link}" target="_blank" rel="noopener" style="margin-top:6px; padding:8px 16px; font-size:0.85rem;"><i class="fas fa-arrow-right"></i> Read more</a>` : ''}
+        <p class="event-desc">${n.summary || ''}</p>
+        <div class="event-actions">
+          <button type="button" class="btn" data-news-readmore="${idx}">
+            <i class="fas fa-arrow-right"></i> Read more
+          </button>
+          <button type="button" class="btn btn-outline" data-news-share="${idx}">
+            <i class="fas fa-share-nodes"></i> Share
+          </button>
+        </div>
       </div>
     </article>
   `;
@@ -1221,7 +1240,7 @@ function loadNews() {
       return;
     }
 
-    // Group by year of news date
+    // Group by year of news date so the page reads as a chronological feed
     const grouped = filtered.reduce((acc, n) => {
       const y = yearOf(n.date);
       (acc[y] = acc[y] || []).push(n);
@@ -1233,15 +1252,135 @@ function loadNews() {
       .map((y) => `
         <div class="news-year">
           <h2 class="news-year-head">${y}</h2>
-          <div class="news-grid">${grouped[y].map(cardHTML).join('')}</div>
+          <div class="event-grid">${grouped[y].map((n) => cardHTML(n, sorted.indexOf(n))).join('')}</div>
         </div>
       `).join('');
+
+    // Wire up Read more buttons -> open the news modal
+    wrap.querySelectorAll('[data-news-readmore]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const n = sorted[+btn.dataset.newsReadmore];
+        if (n) openNewsModal(n);
+      });
+    });
+
+    // Wire up Share buttons -> Web Share API or fallback popover
+    wrap.querySelectorAll('[data-news-share]').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const n = sorted[+btn.dataset.newsShare];
+        if (n) shareData(buildNewsShareData(n), btn);
+      });
+    });
   };
 
   categoryFilter?.addEventListener('change', render);
   cityFilter?.addEventListener('change', render);
   searchInput?.addEventListener('input', render);
   render();
+
+  // Deep-link: open a specific news item from the URL hash (#news-<slug>)
+  // so shared links land directly on the relevant story.
+  const openFromHash = () => {
+    const m = (location.hash || '').match(/^#news-(.+)$/);
+    if (!m) return;
+    const target = sorted.find((n) => slugify(n.title) === m[1]);
+    if (target) openNewsModal(target);
+  };
+  openFromHash();
+  window.addEventListener('hashchange', openFromHash);
+}
+
+/** Build {url, text, title} payload for sharing a news item via the
+ *  shared shareEvent() helper. URL deep-links to #news-<slug>. */
+function buildNewsShareData(n) {
+  const slug = slugify(n.title);
+  const url  = `${location.origin}${location.pathname}#news-${slug}`;
+  const text = `${n.title} · Brahmakshatriya Hitechchhu`;
+  return { url, text, title: n.title };
+}
+
+/** Open the singleton event modal populated with NEWS content
+ *  (about, photo gallery, share). Reuses the event modal's DOM
+ *  shell so we don't duplicate close-handlers / lightbox code. */
+function openNewsModal(n) {
+  const backdrop = ensureEventModal();
+  const body = backdrop.querySelector('.event-modal-body');
+  const lightbox = backdrop.querySelector('.event-lightbox');
+
+  const fmtFull = new Date(n.date).toLocaleDateString('en-IN',
+    { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
+  // Normalise gallery items (string|object) into {src,caption} rows
+  const galleryItems = (n.gallery || []).map(normaliseGalleryItem);
+  const galleryHTML = galleryItems.length ? `
+    <section class="event-modal-section">
+      <h3>Photos <span class="muted-count">(${galleryItems.length})</span></h3>
+      <div class="event-gallery">
+        ${galleryItems.map((g, i) => `
+          <figure class="event-gallery-thumb">
+            <button type="button" class="event-gallery-btn" data-gallery-index="${i}" aria-label="Open photo ${i + 1}${g.caption ? ': ' + g.caption : ''}">
+              ${safeImg(g.src, g.caption || ('Photo ' + (i + 1)), FALLBACK_PHOTO)}
+            </button>
+            ${g.caption ? `<figcaption>${g.caption}</figcaption>` : ''}
+          </figure>
+        `).join('')}
+      </div>
+    </section>
+  ` : '';
+
+  body.innerHTML = `
+    <div class="event-modal-hero">
+      ${safeImg(n.image, n.title, FALLBACK_PHOTO)}
+      <span class="event-status">${n.category || 'News'}</span>
+      <div class="event-modal-hero-text">
+        <h2 id="eventModalTitle">${n.title}</h2>
+        ${n.titleGu ? `<div class="news-title-gu" style="color:rgba(255,255,255,0.85); margin:0 0 6px;">${n.titleGu}</div>` : ''}
+        <div class="event-modal-meta">
+          <span><i class="fas fa-calendar"></i> ${fmtFull}</span>
+          ${n.city ? `<span><i class="fas fa-location-dot"></i> ${n.city}</span>` : ''}
+          ${n.publishedIn ? `<span><i class="fas fa-book-open"></i> ${n.publishedIn}</span>` : ''}
+        </div>
+      </div>
+    </div>
+
+    <section class="event-modal-section">
+      <h3>The story</h3>
+      <p>${n.details || n.summary || ''}</p>
+    </section>
+
+    ${galleryHTML}
+
+    <div class="event-modal-cta">
+      ${n.link && n.link !== '#' ? `
+        <a href="${n.link}" class="btn" target="_blank" rel="noopener">
+          <i class="fas fa-arrow-up-right-from-square"></i> Open full story
+        </a>` : ''}
+      <button type="button" class="btn btn-outline" data-modal-share>
+        <i class="fas fa-share-nodes"></i> Share
+      </button>
+    </div>
+  `;
+
+  // Wire gallery thumbnails to lightbox with prev/next support
+  _galleryItems = galleryItems;
+  body.querySelectorAll('.event-gallery-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.dataset.galleryIndex, 10) || 0;
+      showLightbox(idx);
+    });
+  });
+
+  // Share button inside the modal (uses same shareEvent helper)
+  body.querySelector('[data-modal-share]')?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    shareData(buildNewsShareData(n), e.currentTarget);
+  });
+
+  backdrop.classList.add('open');
+  backdrop.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+  body.scrollTop = 0;
 }
 
 /* =============================================================
@@ -1666,6 +1805,37 @@ function injectTrusteesStructuredData() {
   });
 }
 
+/** SEO: emit a schema.org NewsArticle entry for every news item.
+ *  Helps the page surface in Google News and rich result cards. */
+function injectNewsStructuredData() {
+  if (typeof newsData === 'undefined' || !newsData.length) return;
+  const items = newsData.map((n) => ({
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    "headline": n.title,
+    "datePublished": n.date,
+    "dateModified": n.date,
+    "image": n.image ? [n.image] : undefined,
+    "articleBody": n.details || n.summary || '',
+    "articleSection": n.category || 'News',
+    "url": `${SITE_BASE}/news.html#news-${slugify(n.title)}`,
+    "inLanguage": ["en", "gu"],
+    "publisher": {
+      "@type": "NGO",
+      "name": "Brahmakshatriya Hitechchhu Trust",
+      "logo": {
+        "@type": "ImageObject",
+        "url": `${SITE_BASE}/images/logo.png`
+      }
+    },
+    "author": {
+      "@type": "Organization",
+      "name": "Brahmakshatriya Hitechchhu"
+    }
+  }));
+  injectJsonLd('jsonld-news', { "@context": "https://schema.org", "@graph": items });
+}
+
 /** SEO: emit a schema.org ItemList of Place entries for every regional contact. */
 function injectNetworkStructuredData() {
   if (typeof networkData === 'undefined' || !networkData.length) return;
@@ -1758,4 +1928,5 @@ document.addEventListener('DOMContentLoaded', () => {
   safely('injectEventStructuredData',    injectEventStructuredData);
   safely('injectTrusteesStructuredData', injectTrusteesStructuredData);
   safely('injectNetworkStructuredData',  injectNetworkStructuredData);
+  safely('injectNewsStructuredData',     injectNewsStructuredData);
 });

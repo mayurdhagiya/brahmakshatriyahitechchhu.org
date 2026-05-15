@@ -1738,6 +1738,25 @@ main { flex: 1; padding-bottom: 64px; }
   grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
   gap: 18px;
 }
+
+/* News cards now share the .event-card layout (image-top + date badge +
+   body + buttons). The tweaks below adapt the look slightly for news:
+   the status pill uses the gold "category" treatment instead of the
+   gold/dark "status" treatment used for event upcoming/past.            */
+.news-card-event-style .event-status {
+  background: var(--gold);
+  color: var(--navy);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+.news-card-event-style .news-title-gu {
+  font-family: 'Noto Sans Gujarati', 'Shruti', sans-serif;
+  color: var(--ink);
+  opacity: 0.78;
+  font-size: 0.92rem;
+  margin-top: -2px;
+  margin-bottom: 4px;
+}
 .news-card {
   background: var(--paper);
   border: 1px solid var(--line);
