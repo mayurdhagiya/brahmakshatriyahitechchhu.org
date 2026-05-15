@@ -73,16 +73,18 @@ p  { margin: 0 0 1em; }
 .brand {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   font-family: var(--serif);
-  font-size: 1.25rem;
+  font-size: 1.15rem;          /* slightly smaller so it fits next to long nav */
   color: var(--navy);
   font-weight: 700;
   letter-spacing: 0.2px;
+  flex-shrink: 0;              /* keep brand intact when nav grows */
+  text-decoration: none;
 }
 .brand-mark {
-  width: 44px;
-  height: 44px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--navy) 0%, var(--navy-deep) 100%);
   color: var(--gold);
@@ -91,24 +93,32 @@ p  { margin: 0 0 1em; }
   justify-content: center;
   font-family: var(--serif);
   font-weight: 700;
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   box-shadow: inset 0 0 0 2px var(--gold-soft);
+  flex-shrink: 0;
 }
-.brand-text { display: flex; flex-direction: column; line-height: 1.1; }
-.brand-text small { font-size: 0.7rem; color: var(--muted); font-family: var(--sans); font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; }
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+  white-space: nowrap;          /* don't wrap "Brahmakshatriya Hitechchhu" */
+}
+.brand-text small { font-size: 0.68rem; color: var(--muted); font-family: var(--sans); font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; }
 
 .nav {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 2px;
+  flex-wrap: nowrap;
 }
 .nav a {
-  padding: 10px 14px;
+  padding: 9px 11px;
   border-radius: var(--radius-sm);
   font-weight: 500;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: var(--ink);
   position: relative;
+  white-space: nowrap;          /* never wrap "In Memoriam" mid-link */
 }
 .nav a:hover { background: var(--cream); color: var(--navy); }
 .nav a.active {
@@ -118,10 +128,35 @@ p  { margin: 0 0 1em; }
 .nav a.active::after {
   content: '';
   position: absolute;
-  left: 14px; right: 14px; bottom: 4px;
+  left: 11px; right: 11px; bottom: 4px;
   height: 2px;
   background: var(--gold);
   border-radius: 2px;
+}
+
+/* Switch to hamburger earlier — 10 nav items don't fit comfortably
+   below ~1080px even with reduced padding. */
+@media (max-width: 1080px) {
+  .site-header .container { position: relative; }
+  .nav-toggle { display: block; }
+  .nav {
+    position: absolute;
+    top: 100%;
+    right: 16px;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-md);
+    padding: 8px;
+    flex-direction: column;
+    align-items: stretch;
+    min-width: 220px;
+    display: none;
+    z-index: 50;
+  }
+  .nav.open { display: flex; }
+  .nav a { padding: 12px 14px; font-size: 0.95rem; }
+  .nav a.active::after { display: none; }
 }
 
 .nav-toggle {
@@ -657,9 +692,17 @@ main { flex: 1; padding-bottom: 64px; }
 }
 
 .trustee-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  /* Flex so that single-trustee groups (President, Editor, Co-Editor)
+     centre cleanly instead of left-aligning into a fr-track. */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 24px;
+}
+.trustee-card {
+  flex: 1 1 260px;
+  max-width: 320px;
+  min-width: 240px;
 }
 .trustee-card {
   background: var(--paper);
@@ -693,7 +736,28 @@ main { flex: 1; padding-bottom: 64px; }
   margin-bottom: 6px;
   opacity: 0.78;
 }
-.trustee-card .role { color: var(--gold); font-weight: 600; font-size: 0.85rem; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px; }
+.trustee-card .role {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+  color: var(--gold);
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.trustee-card .role .role-sep { opacity: 0.6; }
+.trustee-card .role .role-gu {
+  font-family: 'Noto Sans Gujarati', 'Shruti', sans-serif;
+  font-weight: 500;
+  font-size: 0.95rem;          /* slightly larger so Gujarati glyphs read clearly */
+  letter-spacing: 0;            /* Gujarati doesn't want letter-spacing */
+  text-transform: none;
+  opacity: 0.92;
+}
 .trustee-card .bio { color: var(--muted); font-size: 0.9rem; min-height: 42px; }
 
 .trustee-actions {
@@ -1887,6 +1951,40 @@ main { flex: 1; padding-bottom: 64px; }
 }
 .contact-grid .info-card .social-row a:hover { background: var(--navy); color: var(--gold); }
 
+/* Publication Particulars: stacked label + value (handles long labels) */
+.pub-list {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px 0;
+}
+.pub-list dt {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--navy);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  line-height: 1.3;
+}
+.pub-list dt i {
+  width: 18px;
+  text-align: center;
+  color: var(--gold);
+  font-size: 0.95rem;
+}
+.pub-list dd {
+  margin: 2px 0 0 26px;          /* aligned under the label text, past the icon */
+  font-size: 0.95rem;
+  color: var(--ink);
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+.pub-list .muted { color: var(--muted); font-size: 0.88em; }
+
 .contact-form { display: grid; gap: 14px; }
 .contact-form .field { display: flex; flex-direction: column; gap: 6px; }
 .contact-form label { font-size: 0.85rem; font-weight: 600; color: var(--navy); }
@@ -1970,6 +2068,50 @@ main { flex: 1; padding-bottom: 64px; }
   margin: 6px 0 14px;
   font-style: italic;
 }
+
+/* File input — keep it on-brand (the default <input type=file> looks ugly) */
+.submit-form .file-input {
+  padding: 10px 12px;
+  cursor: pointer;
+}
+.submit-form .file-input::file-selector-button {
+  background: var(--navy);
+  color: #fff;
+  border: 0;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  margin-right: 12px;
+  transition: background 0.2s;
+}
+.submit-form .file-input::file-selector-button:hover { background: var(--gold); color: var(--navy); }
+
+/* Friendly placeholder shown when no submission type is selected yet */
+.submit-form .submit-hint {
+  margin-top: 6px;
+  padding: 18px 22px;
+  background: rgba(201, 165, 90, 0.08);
+  border: 1px dashed rgba(201, 165, 90, 0.45);
+  border-radius: var(--radius);
+  color: var(--muted);
+  font-size: 0.92rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-style: italic;
+}
+.submit-form .submit-hint i {
+  color: var(--gold);
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+/* JS toggles each .field-group via inline `style.display` after page load.
+   Initial state is hidden by an inline style on each block in the markup
+   (see submit.html), so there's no flash-of-all-fields before JS runs. */
 
 @media (max-width: 720px) {
   .submit-form { padding: 24px 22px; }

@@ -358,12 +358,10 @@ function loadTrustees() {
   sortedKeys.forEach((designation) => {
     const group = document.createElement('section');
     group.className = 'trustee-group';
-    const gu = designationGu[designation];
+    // Group heading shows English only — the Gujarati designation
+    // appears inline on each card's role pill instead.
     group.innerHTML = `
-      <h3 class="designation-title">
-        ${designation}
-        ${gu ? `<span class="designation-gu">${gu}</span>` : ''}
-      </h3>
+      <h3 class="designation-title">${designation}</h3>
       <div class="trustee-grid"></div>
     `;
     const grid = group.querySelector('.trustee-grid');
@@ -387,11 +385,20 @@ function loadTrustees() {
         </div>
       ` : '';
 
+      // Render the designation pill bilingually: "PRESIDENT · પ્રમુખ"
+      const guRole = designationGu[t.designation];
+      const roleHTML = `
+        <div class="role">
+          <span class="role-en">${t.designation}</span>
+          ${guRole ? `<span class="role-sep">·</span><span class="role-gu">${guRole}</span>` : ''}
+        </div>
+      `;
+
       card.innerHTML = `
         <div class="trustee-photo">${safeImg(t.image, t.name, FALLBACK_PHOTO)}</div>
         <h4>${t.name}</h4>
         ${t.nameGu ? `<div class="trustee-name-gu">${t.nameGu}</div>` : ''}
-        <div class="role">${t.designation}</div>
+        ${roleHTML}
         <p class="bio">${t.bio || ''}</p>
         ${actionsHTML}
       `;
@@ -1001,17 +1008,26 @@ function initSubmitForm() {
 
   const typeSel  = form.querySelector('select[name="submission_type"]');
   const blocks   = form.querySelectorAll('[data-show-for]');
+  const hint     = form.querySelector('[data-show-for="__none"]');
   const status   = form.querySelector('[data-status]');
   const button   = form.querySelector('button[type="submit"]');
   const subjectEl = form.querySelector('input[name="subject"]');
 
   // Show only the field-blocks that match the chosen submission type.
+  // Important: when nothing is chosen yet (type = ''), hide ALL conditional
+  // blocks so visitors first pick a type and then see only the relevant fields.
   const refresh = () => {
     const type = typeSel?.value || '';
     blocks.forEach((block) => {
       const showFor = (block.dataset.showFor || '').split(',').map((s) => s.trim());
-      const visible = !type || showFor.includes(type);
-      block.style.display = visible ? '' : 'none';
+      // The "__none" hint is special: shown only when nothing is picked.
+      const visible = showFor.includes('__none')
+        ? !type
+        : (!!type && showFor.includes(type));
+      // Use explicit 'block' so it overrides any default `display: none`
+      // inline style on the markup (which prevents a flash of all sections
+      // before JS runs).
+      block.style.display = visible ? 'block' : 'none';
       // Disable hidden required fields so they don't block submission
       block.querySelectorAll('input, textarea, select').forEach((el) => {
         if (el.dataset.origRequired === undefined) {

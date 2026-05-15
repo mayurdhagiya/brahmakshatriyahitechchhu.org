@@ -10,7 +10,7 @@
   <title>Submit Your Content | Brahmakshatriya Hitechchhu</title>
   <meta name="description" content="Submit content for the next edition of Brahmakshatriya Hitechchhu — book a display or classified ad, share community news, submit an in-memoriam tribute, propose an article or report a member achievement." />
   <meta name="keywords" content="Brahmakshatriya submit ad, submit news, submit tribute, submit article, Hitechchhu contribute" />
-  <script src="js/redirects.js?v=2026-05-15-09"></script>
+  <script src="js/redirects.js?v=2026-05-15-11"></script>
   <link rel="canonical" href="https://brahmakshatriyahitechchhu.org/submit.html" />
 
   <link rel="icon" href="images/logo.png" type="image/png" />
@@ -35,7 +35,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Gujarati:wght@400;500;600&family=Playfair+Display:wght@500;600;700&display=swap" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-  <link rel="stylesheet" href="css/style.css?v=2026-05-15-09" />
+  <link rel="stylesheet" href="css/style.css?v=2026-05-15-11" />
 
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-P3QXRQTHMW"></script>
   <script>
@@ -100,7 +100,8 @@
         <form id="submitForm"
               class="contact-form submit-form"
               action="https://api.web3forms.com/submit"
-              method="POST">
+              method="POST"
+              enctype="multipart/form-data">
           <!-- Web3Forms config (replace the placeholder access key — see CONTACT-FORM.md) -->
           <input type="hidden" name="access_key" value="YOUR-WEB3FORMS-ACCESS-KEY-HERE" />
           <input type="hidden" name="subject"    value="New submission from website" />
@@ -139,10 +140,17 @@
             <input id="sPhone" name="phone" type="tel" required placeholder="+91 …" />
           </div>
 
+          <!-- Friendly hint that appears only when no submission type is chosen.
+               JS hides this once the visitor picks a type (data-show-for=__none). -->
+          <div class="submit-hint" data-show-for="__none">
+            <i class="fas fa-arrow-up"></i>
+            <span>Pick a submission type above to see the relevant fields.</span>
+          </div>
+
           <!-- ===== Conditional sections ===== -->
 
           <!-- ADVERTISEMENT -->
-          <div class="field-group" data-show-for="advertisement">
+          <div class="field-group" style="display:none" data-show-for="advertisement">
             <h4 class="field-group-title"><i class="fas fa-bullhorn"></i> Ad details</h4>
             <div class="form-row">
               <div class="field">
@@ -179,7 +187,7 @@
           </div>
 
           <!-- COMMUNITY NEWS -->
-          <div class="field-group" data-show-for="news">
+          <div class="field-group" style="display:none" data-show-for="news">
             <h4 class="field-group-title"><i class="fas fa-newspaper"></i> News details</h4>
             <div class="form-row">
               <div class="field">
@@ -206,7 +214,7 @@
           </div>
 
           <!-- IN MEMORIAM TRIBUTE -->
-          <div class="field-group" data-show-for="tribute">
+          <div class="field-group" style="display:none" data-show-for="tribute">
             <h4 class="field-group-title"><i class="fas fa-feather"></i> Tribute details</h4>
             <div class="form-row">
               <div class="field">
@@ -240,7 +248,7 @@
           </div>
 
           <!-- ARTICLE / STORY -->
-          <div class="field-group" data-show-for="article">
+          <div class="field-group" style="display:none" data-show-for="article">
             <h4 class="field-group-title"><i class="fas fa-pen-nib"></i> Article details</h4>
             <div class="field">
               <label for="sArticleTitle">Article title</label>
@@ -271,7 +279,7 @@
           </div>
 
           <!-- ACHIEVEMENT -->
-          <div class="field-group" data-show-for="achievement">
+          <div class="field-group" style="display:none" data-show-for="achievement">
             <h4 class="field-group-title"><i class="fas fa-trophy"></i> Achievement details</h4>
             <div class="form-row">
               <div class="field">
@@ -300,6 +308,25 @@
             <div class="field">
               <label for="sAchDetails">Achievement details</label>
               <textarea id="sAchDetails" name="achievement_details" required placeholder="What was accomplished, where, with whom, and any link or proof we can verify?"></textarea>
+            </div>
+          </div>
+
+          <!-- ===== Attachment (always visible) =====
+               Web3Forms accepts files up to 10 MB. Common uses:
+                 • Display ad → JPG/PNG/PDF artwork
+                 • Tribute    → JPG/PNG portrait photo
+                 • Article    → DOC / DOCX / TXT manuscript
+                 • Achievement → JPG/PNG photo or proof PDF -->
+          <div class="field-group always-visible" style="display:none" data-show-for="advertisement,news,tribute,article,achievement">
+            <h4 class="field-group-title"><i class="fas fa-paperclip"></i> Attach a file (optional)</h4>
+            <div class="field">
+              <label for="sAttachment">Photo, artwork, document or any supporting file</label>
+              <input id="sAttachment"
+                     name="attachment"
+                     type="file"
+                     accept=".jpg,.jpeg,.png,.gif,.webp,.pdf,.doc,.docx,.txt,.rtf,.heic"
+                     class="file-input" />
+              <p class="form-note" style="margin:8px 0 0;">Accepted: JPG, PNG, PDF, DOC/DOCX, TXT. Max 10 MB. For multiple files, please email them separately.</p>
             </div>
           </div>
 
@@ -362,6 +389,6 @@
     </div>
   </footer>
 
-  <script src="js/app.js?v=2026-05-15-09"></script>
+  <script src="js/app.js?v=2026-05-15-11"></script>
 </body>
 </html>
