@@ -1,19 +1,30 @@
 /* ============================================================
    Brahmakshatriya Hitechchhu — Community Network
-   Regional point-of-contact directory for the Network page.
+
+   Edit by pasting tab-separated rows from Excel directly into the
+   table below.
+
+   Columns (in order):
+     state          — Indian state name (drives the State filter)
+     city           — city / town
+     contactPerson  — name of regional contact
+     mobile         — 10-digit mobile (no country code)
+     whatsapp       — WhatsApp number (digits, with country code)
+     address        — full street address
 ============================================================ */
 
-const networkData = [
-  { state: "Gujarat",     city: "Ahmedabad", contactPerson: "Rajesh Patel",   mobile: "9876543210", whatsapp: "9876543210", address: "123 Gandhi Road, Ahmedabad, Gujarat" },
-  { state: "Gujarat",     city: "Ahmedabad", contactPerson: "Pritesh Patel",  mobile: "9876500000", whatsapp: "9876500000", address: "B-19 Popular Centre, Satellite, Ahmedabad" },
-  { state: "Gujarat",     city: "Surat",     contactPerson: "Hiren Shah",     mobile: "9879876543", whatsapp: "9879876543", address: "21 Athwa Lines, Surat, Gujarat" },
-  { state: "Gujarat",     city: "Vadodara",  contactPerson: "Bhavesh Joshi",  mobile: "9979123456", whatsapp: "9979123456", address: "45 Alkapuri, Vadodara, Gujarat" },
-  { state: "Gujarat",     city: "Rajkot",    contactPerson: "Mehul Trivedi",  mobile: "9099887766", whatsapp: "9099887766", address: "7 Race Course Road, Rajkot, Gujarat" },
-  { state: "Maharashtra", city: "Mumbai",    contactPerson: "Anita Desai",    mobile: "9123456789", whatsapp: "9123456789", address: "456 Marine Drive, Mumbai, Maharashtra" },
-  { state: "Maharashtra", city: "Pune",      contactPerson: "Sandeep Kothari",mobile: "9823456789", whatsapp: "9823456789", address: "12 FC Road, Pune, Maharashtra" },
-  { state: "Karnataka",   city: "Bengaluru", contactPerson: "Rohit Shah",     mobile: "9845123456", whatsapp: "9845123456", address: "88 MG Road, Bengaluru, Karnataka" },
-  { state: "Delhi",       city: "New Delhi", contactPerson: "Vinay Mehta",    mobile: "9810012345", whatsapp: "9810012345", address: "32 Connaught Place, New Delhi" },
-  { state: "Tamil Nadu",  city: "Chennai",   contactPerson: "Arvind Iyer",    mobile: "9444056789", whatsapp: "9444056789", address: "9 Anna Nagar, Chennai, Tamil Nadu" },
-  { state: "Telangana",   city: "Hyderabad", contactPerson: "Manish Bhatt",   mobile: "9849012345", whatsapp: "9849012345", address: "21 Banjara Hills, Hyderabad, Telangana" },
-  { state: "Rajasthan",   city: "Jaipur",    contactPerson: "Deepak Sharma",  mobile: "9414012345", whatsapp: "9414012345", address: "C-Scheme, Jaipur, Rajasthan" }
-];
+const networkData = parseTSV(`
+state	city	contactPerson	mobile	whatsapp	address
+Gujarat	Ahmedabad	Rajesh Patel	9876543210	9876543210	123 Gandhi Road, Ahmedabad, Gujarat
+Gujarat	Ahmedabad	Pritesh Patel	9876500000	9876500000	B-19 Popular Centre, Satellite, Ahmedabad
+Gujarat	Surat	Hiren Shah	9879876543	9879876543	21 Athwa Lines, Surat, Gujarat
+Gujarat	Vadodara	Bhavesh Joshi	9979123456	9979123456	45 Alkapuri, Vadodara, Gujarat
+Gujarat	Rajkot	Mehul Trivedi	9099887766	9099887766	7 Race Course Road, Rajkot, Gujarat
+Maharashtra	Mumbai	Anita Desai	9123456789	9123456789	456 Marine Drive, Mumbai, Maharashtra
+Maharashtra	Pune	Sandeep Kothari	9823456789	9823456789	12 FC Road, Pune, Maharashtra
+Karnataka	Bengaluru	Rohit Shah	9845123456	9845123456	88 MG Road, Bengaluru, Karnataka
+Delhi	New Delhi	Vinay Mehta	9810012345	9810012345	32 Connaught Place, New Delhi
+Tamil Nadu	Chennai	Arvind Iyer	9444056789	9444056789	9 Anna Nagar, Chennai, Tamil Nadu
+Telangana	Hyderabad	Manish Bhatt	9849012345	9849012345	21 Banjara Hills, Hyderabad, Telangana
+Rajasthan	Jaipur	Deepak Sharma	9414012345	9414012345	C-Scheme, Jaipur, Rajasthan
+`);

@@ -1,87 +1,35 @@
 /* ============================================================
    Brahmakshatriya Hitechchhu — Trustees
-   Cards on the Trustees page are auto-grouped by `designation`.
+
+   Edit by pasting tab-separated rows from Excel directly into the
+   table below. Cards are auto-grouped by `designation` in this
+   preferred order: President → Vice President → Secretary →
+   Treasurer → Trustee → others.
+
+   Columns (in order):
+     name         — full name
+     designation  — President / Vice President / Secretary / Treasurer / Trustee
+     bio          — one-line bio shown on the card
+     image        — square portrait URL
+     phone        — full international phone (e.g. +919876543210)
+     whatsapp     — WhatsApp number (digits only, with country code)
+     email        — email address
+     facebook     — full Facebook profile URL (or # for none)
+     twitter      — full Twitter / X profile URL (or # for none)
+     linkedin     — full LinkedIn profile URL (or # for none)
 ============================================================ */
 
-const trusteesData = [
-  {
-    name: "Rajesh Patel",
-    designation: "President",
-    bio: "Visionary leader guiding the trust's mission and direction.",
-    image: "https://placehold.co/300x300/1a2a4f/c9a55a?text=RP",
-    phone: "+919876543210",
-    whatsapp: "919876543210",
-    email: "rajesh.patel@example.com",
-    social: { facebook: "#", twitter: "#", linkedin: "#" }
-  },
-  {
-    name: "Anjali Mehta",
-    designation: "Vice President",
-    bio: "Strategist focused on community growth and engagement.",
-    image: "https://placehold.co/300x300/1a2a4f/c9a55a?text=AM",
-    phone: "+919123456780",
-    whatsapp: "919123456780",
-    email: "anjali.mehta@example.com",
-    social: { facebook: "#", twitter: "#", linkedin: "#" }
-  },
-  {
-    name: "Suresh Joshi",
-    designation: "Secretary",
-    bio: "Coordinates trust operations, communications and records.",
-    image: "https://placehold.co/300x300/1a2a4f/c9a55a?text=SJ",
-    phone: "+919812345678",
-    whatsapp: "919812345678",
-    email: "suresh.joshi@example.com",
-    social: { facebook: "#", twitter: "#", linkedin: "#" }
-  },
-  {
-    name: "Meera Shah",
-    designation: "Treasurer",
-    bio: "Oversees financial planning, audits and donor relations.",
-    image: "https://placehold.co/300x300/1a2a4f/c9a55a?text=MS",
-    phone: "+919898989898",
-    whatsapp: "919898989898",
-    email: "meera.shah@example.com",
-    social: { facebook: "#", twitter: "#", linkedin: "#" }
-  },
-  {
-    name: "Hitesh Trivedi",
-    designation: "Trustee",
-    bio: "Active contributor to community welfare initiatives.",
-    image: "https://placehold.co/300x300/1a2a4f/c9a55a?text=HT",
-    phone: "+919900112233",
-    whatsapp: "919900112233",
-    email: "hitesh.trivedi@example.com",
-    social: { facebook: "#", twitter: "#", linkedin: "#" }
-  },
-  {
-    name: "Nisha Desai",
-    designation: "Trustee",
-    bio: "Champions youth and women empowerment programmes.",
-    image: "https://placehold.co/300x300/1a2a4f/c9a55a?text=ND",
-    phone: "+919811223344",
-    whatsapp: "919811223344",
-    email: "nisha.desai@example.com",
-    social: { facebook: "#", twitter: "#", linkedin: "#" }
-  },
-  {
-    name: "Pritesh Pandya",
-    designation: "Trustee",
-    bio: "Leads regional outreach and chapter development.",
-    image: "https://placehold.co/300x300/1a2a4f/c9a55a?text=PP",
-    phone: "+919855667788",
-    whatsapp: "919855667788",
-    email: "pritesh.pandya@example.com",
-    social: { facebook: "#", twitter: "#", linkedin: "#" }
-  },
-  {
-    name: "Kavita Bhatt",
-    designation: "Trustee",
-    bio: "Curates editorial content and cultural programming.",
-    image: "https://placehold.co/300x300/1a2a4f/c9a55a?text=KB",
-    phone: "+919844556677",
-    whatsapp: "919844556677",
-    email: "kavita.bhatt@example.com",
-    social: { facebook: "#", twitter: "#", linkedin: "#" }
-  }
-];
+const trusteesData = parseTSV(`
+name	designation	bio	image	phone	whatsapp	email	facebook	twitter	linkedin
+Rajesh Patel	President	Visionary leader guiding the trust's mission and direction.	https://placehold.co/300x300/1a2a4f/c9a55a?text=RP	+919876543210	919876543210	rajesh.patel@example.com	#	#	#
+Anjali Mehta	Vice President	Strategist focused on community growth and engagement.	https://placehold.co/300x300/1a2a4f/c9a55a?text=AM	+919123456780	919123456780	anjali.mehta@example.com	#	#	#
+Suresh Joshi	Secretary	Coordinates trust operations, communications and records.	https://placehold.co/300x300/1a2a4f/c9a55a?text=SJ	+919812345678	919812345678	suresh.joshi@example.com	#	#	#
+Meera Shah	Treasurer	Oversees financial planning, audits and donor relations.	https://placehold.co/300x300/1a2a4f/c9a55a?text=MS	+919898989898	919898989898	meera.shah@example.com	#	#	#
+Hitesh Trivedi	Trustee	Active contributor to community welfare initiatives.	https://placehold.co/300x300/1a2a4f/c9a55a?text=HT	+919900112233	919900112233	hitesh.trivedi@example.com	#	#	#
+Nisha Desai	Trustee	Champions youth and women empowerment programmes.	https://placehold.co/300x300/1a2a4f/c9a55a?text=ND	+919811223344	919811223344	nisha.desai@example.com	#	#	#
+Pritesh Pandya	Trustee	Leads regional outreach and chapter development.	https://placehold.co/300x300/1a2a4f/c9a55a?text=PP	+919855667788	919855667788	pritesh.pandya@example.com	#	#	#
+Kavita Bhatt	Trustee	Curates editorial content and cultural programming.	https://placehold.co/300x300/1a2a4f/c9a55a?text=KB	+919844556677	919844556677	kavita.bhatt@example.com	#	#	#
+`).map((t) => ({
+  ...t,
+  social: { facebook: t.facebook, twitter: t.twitter, linkedin: t.linkedin }
+}));
