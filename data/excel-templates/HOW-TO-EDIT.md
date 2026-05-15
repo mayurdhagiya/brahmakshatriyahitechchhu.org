@@ -2,7 +2,7 @@
 
 You don't need to know JavaScript to edit any of the data on this site.
 Each section (Editions, Trustees, Network, Events) has a corresponding
-**`.js`** file in `js/data/` — and inside each file is a tab-separated
+**`.js`** file in `js/data/` - and inside each file is a tab-separated
 table that mirrors a spreadsheet exactly.
 
 This folder (`data/excel-templates/`) holds **CSV starter files** with
@@ -41,7 +41,7 @@ your rows, then paste back into the matching `js/data/*.js` file.
    the last existing data row), then **Paste**. Save the file. Reload
    the site. Done.
 
-> **Tip — replacing all data instead of appending:**
+> **Tip - replacing all data instead of appending:**
 > Select the existing data lines (everything between the header row
 > and the closing backtick), delete them, then paste your new rows.
 
@@ -53,8 +53,8 @@ your rows, then paste back into the matching `js/data/*.js` file.
 
 | Column      | What to write                                                      |
 | ----------- | ------------------------------------------------------------------ |
-| `year`      | 4-digit calendar year (e.g. `2026`) — used to group cards on the archive |
-| `date`      | `YYYY-MM-DD` issue date — newest auto-becomes "Current Edition"    |
+| `year`      | 4-digit calendar year (e.g. `2026`) - used to group cards on the archive |
+| `date`      | `YYYY-MM-DD` issue date - newest auto-becomes "Current Edition"    |
 | `title`     | Display title (e.g. `May 2026`)                                    |
 | `volume`    | Publication-year label, formatted as `Year NN, Issue MM`           |
 | `editionNo` | Continuous edition number across the entire history (e.g. `609`)   |
@@ -82,13 +82,13 @@ homepage.
 | `nameGu`      | Gujarati name shown under the English one, e.g. `ધનસુખભાઈ એચ. બોસમીઆ`. Leave blank to hide. |
 | `designation` | One of: `President`, `Vice President`, `Hon. Secretary`, `Secretary`, `Treasurer`, `Trustee`, `Editor`, `Co-Editor`, `Executive Member`, `Advisory Committee Member` |
 | `bio`         | One-line bio shown on the card                               |
-| `image`       | Square portrait URL — leave blank for the default placeholder |
-| `phone`       | Full international phone (e.g. `+919876543210`) — leave blank to hide the Call button |
-| `whatsapp`    | WhatsApp digits with country code — leave blank to hide      |
-| `email`       | Email address — leave blank to hide                          |
-| `facebook`    | Full Facebook profile URL — leave blank to hide              |
-| `twitter`     | Full Twitter / X profile URL — leave blank to hide           |
-| `linkedin`    | Full LinkedIn profile URL — leave blank to hide              |
+| `image`       | Square portrait URL - leave blank for the default placeholder |
+| `phone`       | Full international phone (e.g. `+919876543210`) - leave blank to hide the Call button |
+| `whatsapp`    | WhatsApp digits with country code - leave blank to hide      |
+| `email`       | Email address - leave blank to hide                          |
+| `facebook`    | Full Facebook profile URL - leave blank to hide              |
+| `twitter`     | Full Twitter / X profile URL - leave blank to hide           |
+| `linkedin`    | Full LinkedIn profile URL - leave blank to hide              |
 
 > **Tip:** if a person has no contact info at all, the contact-button
 > row is hidden completely so the card doesn't look unfinished.
@@ -106,14 +106,14 @@ homepage.
 
 ### `events.csv`
 
-The first nine columns are simple text — just fill them in:
+The first nine columns are simple text - just fill them in:
 
 | Column         | What to write                                     |
 | -------------- | ------------------------------------------------- |
 | `title`        | Event name                                        |
-| `date`         | `YYYY-MM-DD` — drives Upcoming vs Past automatically |
+| `date`         | `YYYY-MM-DD` - drives Upcoming vs Past automatically |
 | `gujaratiDate` | Vikram Samvat tithi (e.g. `Maha Sud 8, V.S. 2081`) |
-| `time`         | Display time (e.g. `10:00 AM – 6:00 PM`)          |
+| `time`         | Display time (e.g. `10:00 AM - 6:00 PM`)          |
 | `city`         | Used by the Location filter                       |
 | `venue`        | Full venue + street (used to render the embedded map) |
 | `description`  | Short blurb for the card                          |
@@ -123,13 +123,13 @@ The first nine columns are simple text — just fill them in:
 
 The last three columns hold **lists** packed into a single cell:
 
-- `highlights` — `number||label;;number||label;;...`
+- `highlights` - `number||label;;number||label;;...`
   Example: `500+||Attendees;;12||Speakers;;Free||Open to all`
 
-- `agenda` — `time||title;;time||title;;...`
+- `agenda` - `time||title;;time||title;;...`
   Example: `10:00 AM||Registration;;11:00 AM||Keynote`
 
-- `gallery` — `imageURL||caption;;imageURL||caption;;...`
+- `gallery` - `imageURL||caption;;imageURL||caption;;...`
   Example: `https://...img1.jpg||Felicitation;;https://...img2.jpg||Group photo`
 
 > Use `;;` (two semicolons) to separate list items, and `||` (two pipes)
@@ -145,29 +145,29 @@ The last three columns hold **lists** packed into a single cell:
 | `title`         | Short headline shown on the card                              |
 | `description`   | Body text / ad copy                                           |
 | `advertiser`    | Name of person or business placing the ad                     |
-| `city`          | City — drives the City filter dropdown                        |
+| `city`          | City - drives the City filter dropdown                        |
 | `image`         | Image URL (only for `type=display`; leave blank for classifieds) |
 | `publishedDate` | `YYYY-MM-DD` when the ad was published (newest sorts first)   |
-| `validUntil`    | `YYYY-MM-DD` — the ad **auto-hides** after this date passes   |
+| `validUntil`    | `YYYY-MM-DD` - the ad **auto-hides** after this date passes   |
 | `phone`         | Full international phone for the Call button                  |
 | `whatsapp`      | WhatsApp number, digits only, country code first              |
 | `email`         | Email address for the Email button                            |
 
 > Visitors get one-tap **Call**, **WhatsApp** and **Email** buttons on
 > every ad. The WhatsApp link pre-fills a polite message referencing
-> the ad title — they just need to hit send.
+> the ad title - they just need to hit send.
 
 ---
 
 ## Common pitfalls
 
-- **Don't paste the header row** when adding new data — the JS file
+- **Don't paste the header row** when adding new data - the JS file
   already has its own header row.
-- **Avoid tab and newline characters inside cells** — they break the
+- **Avoid tab and newline characters inside cells** - they break the
   table structure. If you really need a line break inside the long
   `details` field, type `\n` (backslash + n, two characters) and the
   parser will turn it into a real line break.
-- **Save the `.js` file as plain UTF-8 text** — most editors do this
+- **Save the `.js` file as plain UTF-8 text** - most editors do this
   by default. Don't save it as RTF or Word format.
 - **Test locally** by opening `index.html` in a browser, or by running
   `python3 -m http.server` from the project root and visiting

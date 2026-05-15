@@ -1,16 +1,16 @@
 /* ============================================================
-   Brahmakshatriya Hitechchhu — Community Network
+   Brahmakshatriya Hitechchhu - Community Network
 
    Edit by pasting tab-separated rows from Excel directly into the
    table below.
 
    Columns (in order):
-     state          — Indian state name (drives the State filter)
-     city           — city / town
-     contactPerson  — name of regional contact
-     mobile         — 10-digit mobile (no country code)
-     whatsapp       — WhatsApp number (digits, with country code)
-     address        — full street address
+     state          - Indian state name (drives the State filter)
+     city           - city / town
+     contactPerson  - name of regional contact
+     mobile         - 10-digit mobile (no country code)
+     whatsapp       - WhatsApp number (digits, with country code)
+     address        - full street address
 ============================================================ */
 
 const networkData = parseTSV(`

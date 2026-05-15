@@ -1,5 +1,5 @@
 /* ============================================================
-   Brahmakshatriya Hitechchhu — Monthly Editions
+   Brahmakshatriya Hitechchhu - Monthly Editions
    ============================================================
 
    📋 HOW TO ADD A NEW EDITION
@@ -8,7 +8,7 @@
         listed below (in the same order).
      2. Copy that row (Cmd-C / Ctrl-C).
      3. Open this file in any text editor.
-     4. Paste the row at the bottom of the table — just before
+     4. Paste the row at the bottom of the table - just before
         the closing backtick (`).
      5. Save. Done. The home page picks it up automatically.
 
@@ -23,7 +23,7 @@
                   formatted as "Year NN, Issue MM".
                   • Publication year (NN) starts at 1 in May 1976,
                     so May 2026 is Year 51.
-                  • Issue (MM) is 1–12 within each publication
+                  • Issue (MM) is 1-12 within each publication
                     year, starting in May.
                   • The publication year rolls over every May.
      editionNo  → continuous edition number across the entire
@@ -32,7 +32,7 @@
                   May 2026 = 609, June 2026 = 610.
      cover      → cover thumbnail URL (relative or absolute)
                   e.g. /editions/May-2026/files/thumb/1.png
-     link       → full-issue URL — convention matches your folder
+     link       → full-issue URL - convention matches your folder
                   layout on the server:
                     /editions/<MonthShort>-<Year>/
                   where MonthShort is the 3-letter abbreviation,
@@ -58,7 +58,7 @@
        "Current Edition" hero on the home page.
      • Past editions are grouped by `year` in the archive.
      • The "Editions Published" stat on the home page reads the
-       highest editionNo in this table — so it's always correct.
+       highest editionNo in this table - so it's always correct.
      • If you leave `link` blank, it's auto-derived from `title`
        using the convention above.
      • If you leave `cover` blank, the card shows a navy SVG
@@ -66,7 +66,7 @@
 
    ✏️  SECTION MARKERS
    --------------------------------------------------------------
-     Lines starting with `#` are comments — the parser ignores
+     Lines starting with `#` are comments - the parser ignores
      them. Use `# === Year 2026 ===` style headers to organise
      the table by year.
 ============================================================ */
@@ -112,7 +112,7 @@ year	date	title	volume	editionNo	cover	link
     February: 'Feb',
     March:    'Mar',
     April:    'Apr',
-    May:      'May',     // already 3 letters — kept as is
+    May:      'May',     // already 3 letters - kept as is
     June:     'June',    // editors prefer the full word
     July:     'July',    // editors prefer the full word
     August:   'Aug',

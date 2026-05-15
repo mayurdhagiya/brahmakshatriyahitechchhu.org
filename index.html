@@ -9,11 +9,11 @@
   <meta name="author" content="Brahmakshatriya Hitechchhu Trust" />
   <meta name="publisher" content="Brahmakshatriya Hitechchhu Trust" />
 
-  <title>Brahmakshatriya Hitechchhu — Monthly Community Magazine of the Brahmakshatriya Trust</title>
+  <title>Brahmakshatriya Hitechchhu - Monthly Community Magazine of the Brahmakshatriya Trust</title>
   <meta name="description" content="Brahmakshatriya Hitechchhu is the monthly publication of the Brahmakshatriya Hitechchhu Trust, serving the Brahmakshatriya community since 1976. Read the latest edition, browse decades of archives and connect with the community." />
   <meta name="keywords" content="Brahmakshatriya Hitechchhu, Brahmakshatriya community, Brahmkshatriya magazine, Hitechchhu monthly, Gujarati community magazine, Brahmakshatriya Trust, Ahmedabad community" />
   <!-- Client-side redirect manager (loads first, before paint) -->
-  <script src="js/redirects.js?v=2026-05-15-12"></script>
+  <script src="js/redirects.js?v=2026-05-15-13"></script>
 
   <link rel="canonical" href="https://brahmakshatriyahitechchhu.org/" />
 
@@ -28,25 +28,32 @@
   <!-- ===== Open Graph ===== -->
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Brahmakshatriya Hitechchhu" />
-  <meta property="og:title" content="Brahmakshatriya Hitechchhu — Monthly Community Magazine" />
-  <meta property="og:description" content="The monthly publication of the Brahmakshatriya Hitechchhu Trust — community news, achievements and culture, every month since 1976." />
+  <meta property="og:title" content="Brahmakshatriya Hitechchhu - Monthly Community Magazine" />
+  <meta property="og:description" content="The monthly publication of the Brahmakshatriya Hitechchhu Trust - community news, achievements and culture, every month since 1976." />
   <meta property="og:url" content="https://brahmakshatriyahitechchhu.org/" />
   <meta property="og:image" content="https://brahmakshatriyahitechchhu.org/images/logo.png" />
-  <meta property="og:image:alt" content="Brahmakshatriya Hitechchhu — Monthly Community Magazine" />
+  <meta property="og:image:alt" content="Brahmakshatriya Hitechchhu - Monthly Community Magazine" />
   <meta property="og:locale" content="en_IN" />
 
   <!-- ===== Twitter Card ===== -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Brahmakshatriya Hitechchhu — Monthly Community Magazine" />
-  <meta name="twitter:description" content="The monthly publication of the Brahmakshatriya Hitechchhu Trust — read the latest edition and browse the archive." />
+  <meta name="twitter:title" content="Brahmakshatriya Hitechchhu - Monthly Community Magazine" />
+  <meta name="twitter:description" content="The monthly publication of the Brahmakshatriya Hitechchhu Trust - read the latest edition and browse the archive." />
   <meta name="twitter:image" content="https://brahmakshatriyahitechchhu.org/images/logo.png" />
 
   <!-- ===== Resources ===== -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <!-- DNS prefetch for third-party services we'll request later -->
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+  <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+  <link rel="dns-prefetch" href="https://www.clarity.ms" />
+  <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com" />
+  <link rel="dns-prefetch" href="https://www.google.com" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Gujarati:wght@400;500;600&family=Playfair+Display:wght@500;600;700&display=swap" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-  <link rel="stylesheet" href="css/style.css?v=2026-05-15-12" />
+  <link rel="stylesheet" href="css/style.css?v=2026-05-15-13" />
 
   <!-- ===== Analytics: GA4 ===== -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-P3QXRQTHMW"></script>
@@ -173,7 +180,7 @@
           <span class="eyebrow">Current Edition</span>
           <h1 data-current-title>May 2025</h1>
           <p data-current-volume>Vol. 47, Issue 5</p>
-          <p>Stories, achievements and announcements from the Brahmakshatriya community — delivered every month, freshly curated for our readers.</p>
+          <p>Stories, achievements and announcements from the Brahmakshatriya community - delivered every month, freshly curated for our readers.</p>
           <div class="hero-actions">
             <a class="btn" href="#" data-current-link target="_blank" rel="noopener">
               <i class="fas fa-book-open"></i> Read this edition
@@ -182,12 +189,15 @@
           </div>
         </div>
         <div class="hero-cover">
-          <div class="cover-frame">
+          <!-- Wrapper anchor so clicking anywhere on the cover opens the
+               current edition. data-current-link is filled in by app.js. -->
+          <a class="cover-frame" href="#" data-current-link target="_blank" rel="noopener"
+             aria-label="Open the current edition">
             <div class="cover-image">
               <img data-current-cover src="https://placehold.co/300x400/1a2a4f/c9a55a?text=Current" alt="Current edition cover" />
             </div>
             <span class="badge">NEW</span>
-          </div>
+          </a>
         </div>
       </div>
     </section>
@@ -199,7 +209,7 @@
              and edit the visible number AND the data-founded attribute on the
              <section> tag below (used by the auto-computation).
            • "Editions published" auto-counts rows in js/data/editions.js.
-           • "Community members" is a manual number — edit the text below
+           • "Community members" is a manual number - edit the text below
              whenever the membership figure changes.
     -->
     <section class="section stats-section" data-founded="1976">
@@ -219,13 +229,13 @@
 
           <article class="stat-tile">
             <div class="stat-icon"><i class="fas fa-clock-rotate-left"></i></div>
-            <div class="stat-num" data-stat="years">—</div>
+            <div class="stat-num" data-stat="years">-</div>
             <div class="stat-label">Years of Publishing</div>
           </article>
 
           <article class="stat-tile">
             <div class="stat-icon"><i class="fas fa-book-open"></i></div>
-            <div class="stat-num" data-stat="editions">—</div>
+            <div class="stat-num" data-stat="editions">-</div>
             <div class="stat-label">Editions Published</div>
           </article>
 
@@ -258,7 +268,7 @@
             <h2 class="editor-headline">"સમય બદલાય છે, મૂલ્યો અકબંધ રહે છે."</h2>
             <p class="editor-excerpt">
               In this month's column, our editor reflects on five decades of
-              the magazine — and what it has taught us about the small,
+              the magazine - and what it has taught us about the small,
               steady acts of community service that hold us together. Read
               the full piece in the current edition.
             </p>
@@ -330,7 +340,7 @@
             <span class="brand-mark">B</span>
             <span class="brand-text">Brahmakshatriya Hitechchhu<small>Trust Publication</small></span>
           </a>
-          <p style="margin-top:14px; max-width:340px;">A monthly magazine dedicated to the Brahmakshatriya community — preserving heritage, celebrating achievements, building connections.</p>
+          <p style="margin-top:14px; max-width:340px;">A monthly magazine dedicated to the Brahmakshatriya community - preserving heritage, celebrating achievements, building connections.</p>
           <div class="footer-social">
             <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
             <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
@@ -368,8 +378,8 @@
     </div>
   </footer>
 
-  <script src="js/parse-data.js?v=2026-05-15-12"></script>
-  <script src="js/data/editions.js?v=2026-05-15-12"></script>
-  <script src="js/app.js?v=2026-05-15-12"></script>
+  <script src="js/parse-data.js?v=2026-05-15-13" defer></script>
+  <script src="js/data/editions.js?v=2026-05-15-13" defer></script>
+  <script src="js/app.js?v=2026-05-15-13" defer></script>
 </body>
 </html>

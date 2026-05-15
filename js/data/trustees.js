@@ -1,5 +1,5 @@
 /* ============================================================
-   Brahmakshatriya Hitechchhu — Trustees & Leadership
+   Brahmakshatriya Hitechchhu - Trustees & Leadership
 
    Edit by pasting tab-separated rows from Excel directly into the
    table below. Cards are auto-grouped by `designation` in this

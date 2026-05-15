@@ -1,26 +1,26 @@
 /* ============================================================
-   Brahmakshatriya Hitechchhu — App Logic
+   Brahmakshatriya Hitechchhu - App Logic
    ------------------------------------------------------------
    ONE script powers every page. Each loader (loadEditions,
    loadTrustees, loadNetwork, loadEvents, loadAds) checks for
    the data file's presence and silently no-ops if it isn't on
-   the current page — so this single file is safe to include
+   the current page - so this single file is safe to include
    on every HTML document.
 
    Defensive philosophy:
      • If a data file is missing or empty, log a console warning
-       and gracefully render an empty state — never throw.
+       and gracefully render an empty state - never throw.
      • If a date string is malformed, fall back to "Invalid date"
        text rather than crashing the sort/filter pipeline.
      • If an image URL 404s in the browser, swap to an inline
        SVG placeholder so the layout doesn't collapse.
-     • Every event listener is null-guarded — missing DOM nodes
+     • Every event listener is null-guarded - missing DOM nodes
        are normal because not every page has every widget.
 ============================================================ */
 
 
 /* =============================================================
-   ⚙️  Defensive helpers — reused everywhere
+   ⚙️  Defensive helpers - reused everywhere
 ============================================================= */
 
 /* Inline SVG placeholders (data: URIs so they need no HTTP request) */
@@ -49,7 +49,7 @@ const FALLBACK_PHOTO =
  *   safeImg('cover.jpg', 'May 2025', 'cover-img')
  *
  * @param {string} src       The intended image URL.
- * @param {string} alt       Alt text — required for accessibility/SEO.
+ * @param {string} alt       Alt text - required for accessibility/SEO.
  * @param {string} [fb]      Fallback URL (defaults to FALLBACK_COVER).
  * @param {string} [extra]   Extra HTML attrs (e.g. 'class="x"').
  * @return {string} HTML string ready to drop into innerHTML.
@@ -63,7 +63,7 @@ function safeImg(src, alt, fb, extra) {
 }
 
 /**
- * Safe date parser — returns a real Date or `null` for bad input.
+ * Safe date parser - returns a real Date or `null` for bad input.
  * Avoids the JavaScript "Invalid Date" trap that breaks sorts.
  */
 function safeDate(iso) {
@@ -158,7 +158,7 @@ function loadEditions() {
   const archive = document.getElementById('archive');
   if (!archive) return;
 
-  // Filter controls (optional — only present on index.html)
+  // Filter controls (optional - only present on index.html)
   const yearSel  = document.getElementById('editionYearFilter');
   const monthSel = document.getElementById('editionMonthFilter');
   const resetBtn = document.getElementById('editionFilterReset');
@@ -172,18 +172,20 @@ function loadEditions() {
     });
   }
 
-  // Each archive card shows: cover, title, "Year 51, Issue 1" + small "#609"
-  // pill, and a Read button.
+  // Each archive card is wrapped in an <a> so clicking ANYWHERE on the
+  // card (cover, title, volume label, badge) opens the edition.
+  // The "Read" pill at the bottom stays as a visual cue.
   const cardHTML = (ed) => `
-    <div class="edition-card">
+    <a class="edition-card" href="${ed.link}" target="_blank" rel="noopener"
+       aria-label="Read ${ed.title}, ${ed.volume || ''}${ed.editionNo ? ', edition #' + ed.editionNo : ''}">
       <div class="cover">${safeImg(ed.cover, ed.title + ' cover', FALLBACK_COVER)}</div>
       <h4 class="title">${ed.title}</h4>
       <p class="date">${ed.volume || ''}</p>
       ${ed.editionNo ? `<span class="edition-no">#${ed.editionNo}</span>` : ''}
-      <a class="btn" href="${ed.link}" target="_blank" rel="noopener">
+      <span class="btn edition-card-btn">
         <i class="fas fa-book-open"></i> Read
-      </a>
-    </div>
+      </span>
+    </a>
   `;
 
   const renderGrouped = (items) => {
@@ -327,7 +329,7 @@ function loadTrustees() {
   ];
 
   // Map each designation to a Gujarati subtitle shown under the group heading
-  // — purely cosmetic; an unknown designation just hides the subtitle.
+  // - purely cosmetic; an unknown designation just hides the subtitle.
   const designationGu = {
     'President':                 'પ્રમુખ',
     'Vice President':            'ઉપપ્રમુખ',
@@ -358,7 +360,7 @@ function loadTrustees() {
   sortedKeys.forEach((designation) => {
     const group = document.createElement('section');
     group.className = 'trustee-group';
-    // Group heading shows English only — the Gujarati designation
+    // Group heading shows English only - the Gujarati designation
     // appears inline on each card's role pill instead.
     group.innerHTML = `
       <h3 class="designation-title">${designation}</h3>
@@ -491,27 +493,31 @@ function normaliseGalleryItem(item, i) {
   return { src: item.src, caption: item.caption || '' };
 }
 
-/* Google Maps helpers — derive search + embed URLs from venue + city,
+/* Google Maps helpers - derive search + embed URLs from venue + city,
    unless the event explicitly provides mapUrl / mapEmbed overrides. */
 function mapsQuery(ev) {
   return [ev.venue, ev.city].filter(Boolean).join(', ');
 }
+/** Build a Google Maps "search" URL for an event's venue + city. */
 function mapsLinkFor(ev) {
   if (ev.mapUrl) return ev.mapUrl;
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapsQuery(ev))}`;
 }
+/** Build a Google Maps embed iframe URL for the event's venue. */
 function mapsEmbedFor(ev) {
   if (ev.mapEmbed) return ev.mapEmbed;
   return `https://www.google.com/maps?q=${encodeURIComponent(mapsQuery(ev))}&output=embed`;
 }
 
+/** Build the {url, text, title} object passed to navigator.share / fallback popover. */
 function buildShareData(ev) {
   const slug = slugify(ev.title);
   const url = `${location.origin}${location.pathname}#event-${slug}`;
-  const text = `${ev.title} — ${new Date(ev.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })} at ${ev.venue}, ${ev.city}`;
+  const text = `${ev.title} - ${new Date(ev.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })} at ${ev.venue}, ${ev.city}`;
   return { url, text, title: ev.title };
 }
 
+/** Trigger native Web Share if available; otherwise open the share popover anchored to the clicked button. */
 async function shareEvent(ev, anchorEl) {
   const data = buildShareData(ev);
   if (navigator.share) {
@@ -526,6 +532,7 @@ async function shareEvent(ev, anchorEl) {
   showSharePopover(anchorEl, data);
 }
 
+/** Render the fallback share popover (WhatsApp / FB / Twitter / Email / Copy) anchored to a button. */
 function showSharePopover(anchorEl, data) {
   closeSharePopover();
   const enc = encodeURIComponent;
@@ -576,6 +583,7 @@ function showSharePopover(anchorEl, data) {
     document.addEventListener('keydown', _shareEsc);
   }, 0);
 }
+/** Internal: dismiss the share popover when the user clicks anywhere else. */
 function _shareDismiss(e) {
   const pop = document.getElementById('sharePopover');
   if (!pop) return;
@@ -583,7 +591,9 @@ function _shareDismiss(e) {
   if (e.target.closest('[data-event-share],[data-modal-share]')) return;
   closeSharePopover();
 }
+/** Internal: dismiss the share popover when the user presses Escape. */
 function _shareEsc(e) { if (e.key === 'Escape') closeSharePopover(); }
+/** Tear down the share popover and detach its global listeners. */
 function closeSharePopover() {
   const pop = document.getElementById('sharePopover');
   if (pop) pop.remove();
@@ -595,6 +605,7 @@ function closeSharePopover() {
 let _galleryItems = [];
 let _galleryIndex = 0;
 
+/** Lazy-create the singleton event modal + lightbox DOM (one per page) and wire global key handlers. */
 function ensureEventModal() {
   let backdrop = document.getElementById('eventModal');
   if (backdrop) return backdrop;
@@ -654,6 +665,7 @@ function ensureEventModal() {
   return backdrop;
 }
 
+/** Render the lightbox at a given gallery index, with prev/next buttons and a counter. */
 function showLightbox(idx) {
   const backdrop = document.getElementById('eventModal');
   if (!backdrop || !_galleryItems.length) return;
@@ -676,8 +688,10 @@ function showLightbox(idx) {
   lightbox.querySelector('.event-lightbox-nav.next').style.display = showNav ? '' : 'none';
   lightbox.hidden = false;
 }
+/** Advance the lightbox by `delta` images (use 1 for next, -1 for prev). */
 function stepLightbox(delta) { showLightbox(_galleryIndex + delta); }
 
+/** Populate the singleton event modal with one event's details and reveal it. */
 function openEventModal(ev) {
   const backdrop = ensureEventModal();
   const body = backdrop.querySelector('.event-modal-body');
@@ -813,6 +827,7 @@ function openEventModal(ev) {
   body.scrollTop = 0;
 }
 
+/** Hide the event modal, restore body scroll, and reset the lightbox. */
 function closeEventModal() {
   const backdrop = document.getElementById('eventModal');
   if (!backdrop) return;
@@ -1110,7 +1125,7 @@ function initSubmitForm() {
 /* =============================================================
    📰  Community News (સમાચાર)
    -------------------------------------------------------------
-   Renders short news items on news.html — district elections,
+   Renders short news items on news.html - district elections,
    awards, marriages, achievements, announcements. Sorted
    newest-first, grouped by year, with Category + City filters
    and a free-text search.
@@ -1155,7 +1170,7 @@ function loadNews() {
     const d = safeDate(iso);
     return d ? d.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
   };
-  const yearOf  = (iso) => { const d = safeDate(iso); return d ? d.getFullYear() : '—'; };
+  const yearOf  = (iso) => { const d = safeDate(iso); return d ? d.getFullYear() : '-'; };
   const fmtDay  = (iso) => { const d = safeDate(iso); return d ? d.toLocaleDateString('en-IN', { day: '2-digit' }) : ''; };
   const fmtMon  = (iso) => { const d = safeDate(iso); return d ? d.toLocaleDateString('en-IN', { month: 'short' }).toUpperCase() : ''; };
 
@@ -1268,7 +1283,7 @@ function loadMemorials() {
   };
   const yearOf = (iso) => {
     const d = safeDate(iso);
-    return d ? d.getFullYear() : '—';
+    return d ? d.getFullYear() : '-';
   };
 
   // Build the search corpus per row so editors can find by anything
@@ -1432,6 +1447,7 @@ function loadAds() {
     </article>
   `;
 
+  /** Build the Call / WhatsApp / Email button row shown on each ad card. */
   function contactRowHTML(a) {
     const c = a.contact || {};
     return `
@@ -1489,7 +1505,7 @@ function loadAds() {
    📬  Contact form
    -------------------------------------------------------------
    Submits via fetch() to whatever URL the form's `action`
-   attribute points to (Web3Forms by default — see contact.html
+   attribute points to (Web3Forms by default - see contact.html
    and CONTACT-FORM.md).
 
    Behaviour:
@@ -1498,7 +1514,7 @@ function loadAds() {
      • Falls back to a friendly demo message if the access key
        hasn't been configured yet (so you can test the UI before
        wiring Web3Forms)
-     • Honours the honeypot — if a bot ticks the hidden checkbox,
+     • Honours the honeypot - if a bot ticks the hidden checkbox,
        the form silently "succeeds" without sending anything
 ============================================================= */
 function initContactForm() {
@@ -1518,7 +1534,7 @@ function initContactForm() {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    // Honeypot — bots fill every field, including hidden ones
+    // Honeypot - bots fill every field, including hidden ones
     const honeypot = form.querySelector('input[name="botcheck"]');
     if (honeypot && honeypot.checked) {
       setStatus('✓ Thank you! Your message has been received.', 'var(--navy)');
@@ -1571,6 +1587,7 @@ function initContactForm() {
 /* ---------- SEO: inject JSON-LD structured data dynamically ---------- */
 const SITE_BASE = 'https://brahmakshatriyahitechchhu.org';
 
+/** Inject (or replace) one <script type="application/ld+json"> tag in the page head. */
 function injectJsonLd(id, data) {
   const existing = document.getElementById(id);
   if (existing) existing.remove();
@@ -1581,6 +1598,7 @@ function injectJsonLd(id, data) {
   document.head.appendChild(s);
 }
 
+/** SEO: emit a schema.org Event JSON-LD entry for every row in eventsData. */
 function injectEventStructuredData() {
   if (typeof eventsData === 'undefined' || !eventsData.length) return;
   const today = new Date(); today.setHours(0, 0, 0, 0);
@@ -1620,6 +1638,7 @@ function injectEventStructuredData() {
   injectJsonLd('jsonld-events', { "@context": "https://schema.org", "@graph": items });
 }
 
+/** SEO: emit a schema.org ItemList of Person entries for every trustee. */
 function injectTrusteesStructuredData() {
   if (typeof trusteesData === 'undefined' || !trusteesData.length) return;
   injectJsonLd('jsonld-trustees', {
@@ -1642,18 +1661,19 @@ function injectTrusteesStructuredData() {
   });
 }
 
+/** SEO: emit a schema.org ItemList of Place entries for every regional contact. */
 function injectNetworkStructuredData() {
   if (typeof networkData === 'undefined' || !networkData.length) return;
   injectJsonLd('jsonld-network', {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    "name": "Brahmakshatriya Community Network — regional contacts",
+    "name": "Brahmakshatriya Community Network - regional contacts",
     "itemListElement": networkData.map((n, i) => ({
       "@type": "ListItem",
       "position": i + 1,
       "item": {
         "@type": "Place",
-        "name": `${n.contactPerson} — ${n.city} chapter`,
+        "name": `${n.contactPerson} - ${n.city} chapter`,
         "address": {
           "@type": "PostalAddress",
           "streetAddress": n.address,
@@ -1675,7 +1695,7 @@ function injectNetworkStructuredData() {
      • Editions published   =  count of rows in editionsData
    The founded year is read from the section's data-founded
    attribute so editors can change it in one place (the HTML).
-   The "Community members" tile is plain HTML — edit the number
+   The "Community members" tile is plain HTML - edit the number
    directly in index.html when membership changes.
 ============================================================= */
 function loadStats() {
@@ -1683,13 +1703,13 @@ function loadStats() {
   const section = document.querySelector('.stats-section');
   if (!section) return;
 
-  // Years of publishing — read founded year from data-founded (default 1976)
+  // Years of publishing - read founded year from data-founded (default 1976)
   const founded = parseInt(section.dataset.founded, 10) || 1976;
   const years   = Math.max(0, new Date().getFullYear() - founded);
   const yearsEl = section.querySelector('[data-stat="years"]');
   if (yearsEl) yearsEl.innerHTML = years + '<span class="stat-plus">+</span>';
 
-  // Editions published — use the HIGHEST editionNo across all rows
+  // Editions published - use the HIGHEST editionNo across all rows
   // (since edition numbers are continuous across the entire history).
   // Falls back to the row count if no editionNo is set anywhere.
   const editionsEl = section.querySelector('[data-stat="editions"]');
@@ -1709,7 +1729,7 @@ function setFooterYear() {
 }
 
 /* =============================================================
-   🚀  Bootstrap — runs once the DOM is parsed.
+   🚀  Bootstrap - runs once the DOM is parsed.
    Each call is wrapped in `safely()` so a runtime error in one
    loader (e.g. a malformed event row) can't break the others.
 ============================================================= */
@@ -1728,7 +1748,7 @@ document.addEventListener('DOMContentLoaded', () => {
   safely('initSubmitForm',    initSubmitForm);
 
   // SEO: emit JSON-LD for any data sets present on this page.
-  // Each injector is also self-guarded — it only emits markup
+  // Each injector is also self-guarded - it only emits markup
   // when the matching data file is loaded.
   safely('injectEventStructuredData',    injectEventStructuredData);
   safely('injectTrusteesStructuredData', injectTrusteesStructuredData);

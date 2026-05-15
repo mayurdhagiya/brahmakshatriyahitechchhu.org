@@ -4,18 +4,18 @@ Your contact form is live at [contact.html](contact.html), but until
 you complete a 3-step setup, it shows a "Form not yet configured"
 warning instead of sending submissions anywhere.
 
-This is because **GitHub Pages serves only static files** — there's
+This is because **GitHub Pages serves only static files** - there's
 no server to receive the POST request. So the form needs a free
 third-party "form relay" that catches submissions and forwards them
 to your inbox.
 
-Three good options below — pick whichever fits. **Web3Forms is
+Three good options below - pick whichever fits. **Web3Forms is
 recommended** because it's free with no signup, and submissions land
 straight in your email.
 
 ---
 
-## ✅ Option 1 — Web3Forms (recommended, free, no signup)
+## ✅ Option 1 - Web3Forms (recommended, free, no signup)
 
 ### Setup (3 minutes, one-time)
 
@@ -23,7 +23,7 @@ straight in your email.
 2. Scroll to "Get your Access Key", enter **`info@brahmkshatriya.org`**
    (or whichever inbox you want submissions delivered to), and click
    *Create Access Key*.
-3. Check that inbox for the access key — a long string like
+3. Check that inbox for the access key - a long string like
    `a1b2c3d4-e5f6-7890-abcd-ef1234567890`.
 4. Open [contact.html](contact.html) and find this line:
    ```html
@@ -44,7 +44,7 @@ straight in your email.
 - Each submission arrives in `info@brahmkshatriya.org` within seconds.
 - The email subject is "New message from brahmakshatriyahitechchhu.org".
 - The body contains the visitor's name, email, phone (if any) and message.
-- You can reply directly from your email client — the visitor's email
+- You can reply directly from your email client - the visitor's email
   is set as the Reply-To address.
 
 ### Costs and limits
@@ -56,13 +56,13 @@ straight in your email.
 
 ### Bonus features already wired in
 
-- **Spam honeypot** — a hidden checkbox that real users won't tick;
+- **Spam honeypot** - a hidden checkbox that real users won't tick;
   bots that fill every field get silently rejected.
 - **Auto subject line** so your inbox stays organised.
 
 ---
 
-## 🔵 Option 2 — Formspree (more dashboard features, free tier)
+## 🔵 Option 2 - Formspree (more dashboard features, free tier)
 
 Use this if you want to view all submissions in a web dashboard,
 forward them to multiple emails, or set up email autoresponders.
@@ -71,7 +71,7 @@ forward them to multiple emails, or set up email autoresponders.
 
 1. Sign up at **[formspree.io](https://formspree.io)** (free tier).
 2. *Verify your email* and create a new form.
-3. Copy the form's unique endpoint URL — looks like
+3. Copy the form's unique endpoint URL - looks like
    `https://formspree.io/f/abcdwxyz`.
 4. Open [contact.html](contact.html) and:
    - Change the form's `action` from
@@ -88,10 +88,10 @@ forward them to multiple emails, or set up email autoresponders.
 
 ---
 
-## 🟢 Option 3 — Google Forms (responses in a Google Sheet)
+## 🟢 Option 3 - Google Forms (responses in a Google Sheet)
 
 Use this if you want responses in a **Google Sheet** for sorting,
-filtering and bulk export — handy if you handle many enquiries.
+filtering and bulk export - handy if you handle many enquiries.
 
 ### Setup
 
@@ -109,7 +109,7 @@ filtering and bulk export — handy if you handle many enquiries.
 
 - Submissions are visible in a Sheet (great for data work).
 - Visitors see a Google-branded form (less custom-feeling).
-- No email notification by default — you can add one via Google
+- No email notification by default - you can add one via Google
   Apps Script if needed.
 
 ---
@@ -130,7 +130,7 @@ filtering and bulk export — handy if you handle many enquiries.
 - The **honeypot field** (`name="botcheck"`) is hidden from humans
   but visible to dumb bots. Bots that tick it get a fake "thank you"
   with no actual submission.
-- Add a CAPTCHA if spam slips through — Web3Forms supports
+- Add a CAPTCHA if spam slips through - Web3Forms supports
   hCaptcha out of the box (one extra hidden field).
 - Set up an inbox filter on `info@brahmkshatriya.org` for emails
   from `noreply@web3forms.com` so submissions go to a dedicated
@@ -145,7 +145,7 @@ filtering and bulk export — handy if you handle many enquiries.
 2. Fill the form with your own details and a test message.
 3. Click Send. You should see "✓ Thank you! Your message has been
    received."
-4. Check your inbox — the test message should arrive within a minute.
+4. Check your inbox - the test message should arrive within a minute.
 
 If you see the "⚠️  Form not yet configured" warning instead, the
 access key in `contact.html` still has the placeholder value. Edit

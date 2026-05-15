@@ -1,5 +1,5 @@
 /* ============================================================
-   Brahmakshatriya Hitechchhu — Client-side redirect manager
+   Brahmakshatriya Hitechchhu - Client-side redirect manager
    ------------------------------------------------------------
    THE ONE FILE TO EDIT when you want to add a URL alias.
 
@@ -19,7 +19,7 @@
      • You're on Apache hosting (most cPanel-based shared hosts).
        Server-side 301s are faster and SEO-correct.
 
-   Both files can coexist — server redirects fire first, this is
+   Both files can coexist - server redirects fire first, this is
    the safety net.
 
    ============================================================
@@ -29,7 +29,7 @@
 
      '/old-path/': '/new-path/'
 
-   Trailing slashes are normalised — both `/foo` and `/foo/`
+   Trailing slashes are normalised - both `/foo` and `/foo/`
    match the same key. Query strings (?x=1) and hash fragments
    (#section) are preserved through the redirect.
 
@@ -48,7 +48,7 @@
   'use strict';
 
   /* ----------------------------------------------------------
-     ⬇️  EDIT THIS MAP — your redirect rules live here
+     ⬇️  EDIT THIS MAP - your redirect rules live here
      Format: 'old path (with leading slash)': 'new path or full URL'
   ---------------------------------------------------------- */
   const REDIRECTS = {
@@ -81,7 +81,7 @@
 
 
   /* ----------------------------------------------------------
-     ⚙️  Match + redirect logic — you shouldn't need to edit
+     ⚙️  Match + redirect logic - you shouldn't need to edit
                                     anything below this line
   ---------------------------------------------------------- */
   try {
@@ -101,7 +101,7 @@
       // Preserve query string + hash through the redirect so users
       // landing on /old?utm=email#bio still get to /new?utm=email#bio.
       const dest = target + window.location.search + window.location.hash;
-      // location.replace() — back-button still works as expected
+      // location.replace() - back-button still works as expected
       // because the old URL doesn't get pushed onto history.
       window.location.replace(dest);
     }

@@ -1,4 +1,4 @@
-# Cache management — the easy way
+# Cache management - the easy way
 
 > **You're hosted on GitHub Pages.** GitHub Pages doesn't let you
 > set custom server cache headers (`.htaccess` is ignored), so this
@@ -19,7 +19,7 @@ You don't need to think about any of this manually. There's a
 
 ---
 
-## After every update — run this command
+## After every update - run this command
 
 ```bash
 ./bump-version.sh
@@ -34,8 +34,8 @@ That's it. The script:
    in **every** HTML file
 3. Reports how many files / references it updated
 
-Push to GitHub. GitHub Pages rebuilds in ~1 minute. Every visitor —
-including ones with old copies cached — will fetch the latest CSS/JS
+Push to GitHub. GitHub Pages rebuilds in ~1 minute. Every visitor -
+including ones with old copies cached - will fetch the latest CSS/JS
 the next time they visit. **No more "tell users to hard-refresh."**
 
 ---
@@ -87,7 +87,7 @@ short-lived HTML + long-lived versioned assets.
 ## When NOT to bump
 
 You don't need to bump after:
-- Editing data files in `js/data/*.js` — wait, **yes, you do**.
+- Editing data files in `js/data/*.js` - wait, **yes, you do**.
   Those are JS files referenced from HTML, so visitors' browsers
   cache them too. Always bump after any update.
 
@@ -104,6 +104,6 @@ When in doubt: **just bump**. There's no downside.
 
 The HTML meta tag works everywhere. The `?v=…` version stamps work
 everywhere. The `.htaccess` (currently ignored by GitHub Pages) takes
-effect the moment you move to an Apache host — no edits needed.
+effect the moment you move to an Apache host - no edits needed.
 
 So your cache strategy is portable across hosts.

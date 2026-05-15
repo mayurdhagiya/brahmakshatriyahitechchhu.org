@@ -1,5 +1,5 @@
 /* ============================================================
-   Brahmakshatriya Hitechchhu — Spreadsheet → JS data parser
+   Brahmakshatriya Hitechchhu - Spreadsheet → JS data parser
    ------------------------------------------------------------
    Lets every data file in js/data/ keep its data in a copy-paste
    friendly tab-separated block (exactly the format Excel puts on
@@ -11,7 +11,7 @@
    ============================================================
      1. Open the matching js/data/<file>.js in any text editor.
      2. In Excel / Google Sheets, select the row(s) you want to
-        add — including ONLY data rows, not the header — and copy.
+        add - including ONLY data rows, not the header - and copy.
      3. Paste at the bottom of the table (just before the closing
         backtick `).
      4. Save. Reload the site.
@@ -22,7 +22,7 @@
      • One row per line. One TAB between cells.
      • Empty cells are allowed (just leave nothing between tabs).
      • Cell text cannot contain a real tab or newline. To force a
-       line break inside a cell, write \n (two characters) — the
+       line break inside a cell, write \n (two characters) - the
        parser converts it to a real newline.
      • Lines starting with `#` are treated as comments and skipped.
 
@@ -33,7 +33,7 @@
      • parseList(cell, [fields])     → array of {field: value, …}
 
    Both helpers are ULTRA-defensive:
-     • Bad/missing input never throws — they return [] instead.
+     • Bad/missing input never throws - they return [] instead.
      • Errors are logged to the browser console (with the data
        file's name) so you can debug without the site crashing.
 ============================================================ */
@@ -42,7 +42,7 @@
   'use strict';
 
   /**
-   * parseTSV — turn a tab-separated template literal into an array
+   * parseTSV - turn a tab-separated template literal into an array
    * of objects keyed by the header row.
    *
    * @param  {string} tsv   The raw template-literal block.
@@ -91,25 +91,25 @@
           row[h] = val;
         });
 
-        // Helpful warning if a row has more cells than headers — usually
+        // Helpful warning if a row has more cells than headers - usually
         // means a stray tab in someone's pasted text.
         if (cells.length > headers.length) {
           console.warn(
-            `[parseTSV${tag ? ' ' + tag : ''}] row ${rowIdx + 1} has ${cells.length} cells but only ${headers.length} headers — extra cells ignored`
+            `[parseTSV${tag ? ' ' + tag : ''}] row ${rowIdx + 1} has ${cells.length} cells but only ${headers.length} headers - extra cells ignored`
           );
         }
 
         return row;
       });
     } catch (err) {
-      // Catastrophic failure — log it but never break the page.
+      // Catastrophic failure - log it but never break the page.
       console.error(`[parseTSV${tag ? ' ' + tag : ''}] failed:`, err);
       return [];
     }
   }
 
   /**
-   * parseList — turn a single cell that holds an array of objects
+   * parseList - turn a single cell that holds an array of objects
    * into a real JS array. Items are separated by `;;`, fields within
    * an item by `||`.
    *

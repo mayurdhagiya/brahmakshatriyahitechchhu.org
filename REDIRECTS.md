@@ -3,11 +3,11 @@
 > **You're hosted on GitHub Pages.** GitHub Pages **does not** read
 > `.htaccess`, so the file in this repo is just kept for reference
 > (in case you ever migrate to Apache hosting). Your live redirects
-> live in **`js/redirects.js`** — that's the file to edit.
+> live in **`js/redirects.js`** - that's the file to edit.
 
 ---
 
-## ✅ Add a redirect — `js/redirects.js`
+## ✅ Add a redirect - `js/redirects.js`
 
 Open [`js/redirects.js`](js/redirects.js) and add a key/value pair
 inside the `REDIRECTS` object. Save, commit, push.
@@ -23,7 +23,7 @@ const REDIRECTS = {
 **How it works:**
 - Loaded synchronously at the very top of every page's `<head>` so
   it redirects **before** the page paints.
-- Trailing slashes are normalised — both `/foo` and `/foo/` match.
+- Trailing slashes are normalised - both `/foo` and `/foo/` match.
 - Query strings (`?utm=…`) and hash fragments (`#section`) are
   preserved through the redirect.
 - Wrapped in `try/catch` so a typo can never break the page.
@@ -64,7 +64,7 @@ never look broken to a visitor.
 | Speed                        | ~5ms after load   | Instant (server-side)     |
 | Works without JavaScript     | ❌                | ✅                         |
 
-For most use cases on GitHub Pages, the JS approach is good enough —
+For most use cases on GitHub Pages, the JS approach is good enough -
 search engines now execute JavaScript when crawling, and visitors
 notice no delay.
 
@@ -87,11 +87,11 @@ Each platform has its own redirect file format:
 | Nginx (VPS) | `nginx.conf` | `rewrite ^/old$ /new permanent;` |
 
 In all those cases the JS file (`js/redirects.js`) keeps working
-too — they just coexist as belt-and-braces.
+too - they just coexist as belt-and-braces.
 
 ---
 
-## URL case sensitivity — important reminder
+## URL case sensitivity - important reminder
 
 GitHub Pages serves URLs **case-sensitively**, like most servers:
 

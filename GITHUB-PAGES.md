@@ -4,7 +4,7 @@ This site is hosted on **GitHub Pages** at
 **[brahmakshatriyahitechchhu.org](https://brahmakshatriyahitechchhu.org)**.
 
 This document covers everything you need to know about that
-deployment — the files in this repo that exist *because* of GitHub
+deployment - the files in this repo that exist *because* of GitHub
 Pages, the day-to-day workflow, and a checklist for first-time setup.
 
 ---
@@ -23,7 +23,7 @@ git commit -m "describe what you changed"
 git push
 ```
 
-GitHub Pages typically rebuilds in 30–90 seconds. Visit your domain
+GitHub Pages typically rebuilds in 30-90 seconds. Visit your domain
 to see the change, or refresh once if you had it open.
 
 ---
@@ -32,8 +32,8 @@ to see the change, or refresh once if you had it open.
 
 | File | Why it's here |
 |------|---------------|
-| **`CNAME`** | Tells GitHub Pages your custom domain is `brahmakshatriyahitechchhu.org`. **Do not delete this** — if you do, your site will revert to `<username>.github.io/<repo>`. |
-| **`.nojekyll`** | Tells GitHub Pages **not** to run Jekyll. Without this, GH Pages tries to process the site through Jekyll, which can ignore folders starting with `_` and cause confusing errors. The file is empty — its mere presence is the signal. |
+| **`CNAME`** | Tells GitHub Pages your custom domain is `brahmakshatriyahitechchhu.org`. **Do not delete this** - if you do, your site will revert to `<username>.github.io/<repo>`. |
+| **`.nojekyll`** | Tells GitHub Pages **not** to run Jekyll. Without this, GH Pages tries to process the site through Jekyll, which can ignore folders starting with `_` and cause confusing errors. The file is empty - its mere presence is the signal. |
 | **`404.html`** | GitHub Pages automatically serves this file when a visitor requests a path that doesn't exist. Branded to match the rest of the site, with quick-links to every section + a GA event so you can see broken paths in your dashboard. |
 | **`js/redirects.js`** | Client-side redirects (since `.htaccess` is ignored on GH Pages). See [REDIRECTS.md](REDIRECTS.md). |
 | **`bump-version.sh`** | Cache-busts every CSS/JS reference in one command. See [CACHE.md](CACHE.md). |
@@ -43,10 +43,10 @@ to see the change, or refresh once if you had it open.
 
 ## 🛠 First-time setup checklist
 
-Already done if you're seeing this — kept here in case you (or your
+Already done if you're seeing this - kept here in case you (or your
 successor) needs to redeploy from scratch.
 
-1. **Create the GitHub repo** — public repo named after your project.
+1. **Create the GitHub repo** - public repo named after your project.
 2. **Push these files** to the repo's `main` branch.
 3. **Enable Pages**: Repo → Settings → Pages → Source = `main` branch,
    folder = `/` (root).
@@ -69,7 +69,7 @@ successor) needs to redeploy from scratch.
 6. **Enforce HTTPS**: back in Repo → Settings → Pages, tick
    "Enforce HTTPS" once your certificate is provisioned (takes a few
    minutes after DNS propagates).
-7. **Verify**: visit `https://brahmakshatriyahitechchhu.org/` — site
+7. **Verify**: visit `https://brahmakshatriyahitechchhu.org/` - site
    should load with a valid SSL padlock.
 
 ---
@@ -80,12 +80,12 @@ If you hit one of these, the workaround is in the parens:
 
 - **Server-side redirects** (use [`js/redirects.js`](js/redirects.js))
 - **Custom HTTP headers** like `Cache-Control` (use the meta tags +
-  `?v=…` versioning — see [CACHE.md](CACHE.md))
+  `?v=…` versioning - see [CACHE.md](CACHE.md))
 - **Server-side scripting** like PHP / Node (this site is fully
-  static; the contact form just shows a "thank you" — wire it to a
+  static; the contact form just shows a "thank you" - wire it to a
   service like Formspree or Web3Forms when you need real submissions)
 - **Pretty URLs without `.html`** (you can't make `/about` serve
-  `/about.html` on GH Pages — keep the `.html` in nav links)
+  `/about.html` on GH Pages - keep the `.html` in nav links)
 - **Files larger than 100 MB** (split or move large PDFs to a CDN)
 - **More than 100,000 page views per day** (rarely a concern for a
   community site, but be aware)
@@ -95,7 +95,7 @@ If you hit one of these, the workaround is in the parens:
 ## 🩺 Common issues + fixes
 
 **"My change isn't showing up"**
-1. Check the **Actions** tab on GitHub — there should be a green
+1. Check the **Actions** tab on GitHub - there should be a green
    ✅ on the most recent commit. If it's red, click in to see why.
 2. Hard-refresh once (`Cmd+Shift+R` / `Ctrl+Shift+R`).
 3. If still stale, did you forget to run `./bump-version.sh`?
@@ -113,9 +113,9 @@ If you hit one of these, the workaround is in the parens:
 - Toggle "Enforce HTTPS" off, wait 60 seconds, toggle it back on.
   This forces GitHub to re-provision the certificate.
 
-**"I broke something — how do I revert?"**
+**"I broke something - how do I revert?"**
 - `git log` to see recent commits. `git revert <commit-sha>` makes
-  a new commit that undoes a previous one. Push as normal — site
+  a new commit that undoes a previous one. Push as normal - site
   rebuilds in a minute.
 
 ---
@@ -164,5 +164,5 @@ jobs:
           git push
 ```
 
-That's optional — many sites prefer to bump manually so they control
+That's optional - many sites prefer to bump manually so they control
 exactly when each deploy is "official". Pick whichever fits your team.

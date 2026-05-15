@@ -1,5 +1,5 @@
 /* ============================================================
-   Brahmakshatriya Hitechchhu — Unified Stylesheet
+   Brahmakshatriya Hitechchhu - Unified Stylesheet
    Design tokens: navy + gold on cream, Playfair + Inter
 ============================================================ */
 
@@ -54,7 +54,7 @@ p  { margin: 0 0 1em; }
   padding: 0 24px;
 }
 
-/* Skip-to-content link — invisible until focused via Tab key.
+/* Skip-to-content link - invisible until focused via Tab key.
    Lets keyboard / screen-reader users jump past the nav. */
 .skip-link {
   position: absolute;
@@ -151,7 +151,7 @@ p  { margin: 0 0 1em; }
   border-radius: 2px;
 }
 
-/* Switch to hamburger earlier — 10 nav items don't fit comfortably
+/* Switch to hamburger earlier - 10 nav items don't fit comfortably
    below ~1080px even with reduced padding. */
 @media (max-width: 1080px) {
   .site-header .container { position: relative; }
@@ -546,6 +546,8 @@ main { flex: 1; padding-bottom: 64px; }
 .scroll-btn.left  { left: -16px; }
 .scroll-btn.right { right: -16px; }
 
+/* The whole edition card is now an <a> so clicking anywhere opens
+   the edition. Reset link styling and add a clearer hover state. */
 .edition-card {
   flex: 0 0 200px;
   background: var(--paper);
@@ -554,12 +556,26 @@ main { flex: 1; padding-bottom: 64px; }
   padding: 14px;
   text-align: center;
   box-shadow: var(--shadow-sm);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
 }
-.edition-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+.edition-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--gold);
+}
+/* The "Read" pill is now decorative; the parent <a> captures the click. */
+.edition-card-btn {
+  align-self: center;
+  pointer-events: none;
+}
+/* Hero cover is also an anchor - keep it visually identical, no underline. */
+.hero-cover .cover-frame { text-decoration: none; color: inherit; cursor: pointer; display: block; }
 .edition-card .cover {
   width: 100%;
   aspect-ratio: 3 / 4;
@@ -571,7 +587,7 @@ main { flex: 1; padding-bottom: 64px; }
 .edition-card .title { font-family: var(--serif); font-weight: 700; color: var(--navy); margin: 0; font-size: 1.05rem; }
 .edition-card .date { font-size: 0.8rem; color: var(--muted); margin: 0; }
 .edition-card .btn { padding: 8px 16px; font-size: 0.82rem; align-self: center; margin-top: 4px; }
-/* Continuous edition number — small gold pill under the title */
+/* Continuous edition number - small gold pill under the title */
 .edition-card .edition-no {
   display: inline-block;
   align-self: center;
@@ -1147,7 +1163,7 @@ main { flex: 1; padding-bottom: 64px; }
 .event-map-link.on-dark i { color: var(--gold-soft); }
 .event-map-link.on-dark:hover { color: #fff; border-bottom-color: var(--gold-soft); }
 
-/* "How to reach" — embedded map + directions CTA inside the modal */
+/* "How to reach" - embedded map + directions CTA inside the modal */
 .event-location-line {
   margin: 0 0 14px;
   font-size: 0.95rem;
@@ -2090,7 +2106,7 @@ main { flex: 1; padding-bottom: 64px; }
   font-style: italic;
 }
 
-/* File input — keep it on-brand (the default <input type=file> looks ugly) */
+/* File input - keep it on-brand (the default <input type=file> looks ugly) */
 .submit-form .file-input {
   padding: 10px 12px;
   cursor: pointer;
@@ -2190,10 +2206,10 @@ main { flex: 1; padding-bottom: 64px; }
 }
 
 /* ============================================================
-   Responsive — desktop / tablet / mobile / small-mobile
+   Responsive - desktop / tablet / mobile / small-mobile
 ============================================================ */
 
-/* Tablet (≤ 880px) — stack two-column grids */
+/* Tablet (≤ 880px) - stack two-column grids */
 @media (max-width: 880px) {
   .hero-grid { grid-template-columns: 1fr; text-align: center; gap: 36px; }
   .hero-copy p { margin-left: auto; margin-right: auto; }
@@ -2209,7 +2225,7 @@ main { flex: 1; padding-bottom: 64px; }
   .site-footer .brand { display: inline-flex; }
 }
 
-/* Mobile (≤ 720px) — collapse nav, simplify spacing */
+/* Mobile (≤ 720px) - collapse nav, simplify spacing */
 @media (max-width: 720px) {
   :root { --container: 100%; }
   .container { padding: 0 18px; }
@@ -2287,14 +2303,14 @@ main { flex: 1; padding-bottom: 64px; }
   .event-map { aspect-ratio: 4 / 3; }
 }
 
-/* Small mobile (≤ 480px) — extra compaction */
+/* Small mobile (≤ 480px) - extra compaction */
 @media (max-width: 480px) {
   .container { padding: 0 14px; }
   h1 { font-size: 1.65rem; }
   h2 { font-size: 1.35rem; }
   .section-head .eyebrow { font-size: 0.7rem; }
 
-  /* Hero — text-first, card scales down further */
+  /* Hero - text-first, card scales down further */
   .hero { padding: 24px 0 28px; }
   .hero-grid { gap: 28px; }
   .hero-copy p { font-size: 0.95rem; }
@@ -2332,7 +2348,7 @@ main { flex: 1; padding-bottom: 64px; }
 html, body { overflow-x: hidden; }
 
 /* ============================================================
-   <noscript> fallback — shown only when JavaScript is disabled.
+   <noscript> fallback - shown only when JavaScript is disabled.
    Keeps content readable + invites users to enable JS.
 ============================================================ */
 .noscript-banner {
