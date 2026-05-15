@@ -987,6 +987,344 @@ function loadEvents() {
   window.addEventListener('hashchange', openFromHash);
 }
 
+/* =============================================================
+   📨  Submit Your Content form (submit.html)
+   -------------------------------------------------------------
+   The submission type dropdown drives which extra fields are
+   visible. Submission flows through the same Web3Forms relay
+   as the contact form, with a hidden field telling the office
+   what type of submission it is.
+============================================================= */
+function initSubmitForm() {
+  const form = document.getElementById('submitForm');
+  if (!form) return;
+
+  const typeSel  = form.querySelector('select[name="submission_type"]');
+  const blocks   = form.querySelectorAll('[data-show-for]');
+  const status   = form.querySelector('[data-status]');
+  const button   = form.querySelector('button[type="submit"]');
+  const subjectEl = form.querySelector('input[name="subject"]');
+
+  // Show only the field-blocks that match the chosen submission type.
+  const refresh = () => {
+    const type = typeSel?.value || '';
+    blocks.forEach((block) => {
+      const showFor = (block.dataset.showFor || '').split(',').map((s) => s.trim());
+      const visible = !type || showFor.includes(type);
+      block.style.display = visible ? '' : 'none';
+      // Disable hidden required fields so they don't block submission
+      block.querySelectorAll('input, textarea, select').forEach((el) => {
+        if (el.dataset.origRequired === undefined) {
+          el.dataset.origRequired = el.required ? '1' : '0';
+        }
+        el.required = visible && el.dataset.origRequired === '1';
+        el.disabled = !visible;
+      });
+    });
+
+    // Update the email subject so the office can see what kind it is
+    if (subjectEl && type) {
+      const map = {
+        advertisement: 'Ad submission',
+        news:          'Community news submission',
+        tribute:       'In Memoriam tribute',
+        article:       'Article / story submission',
+        achievement:   'Achievement submission'
+      };
+      subjectEl.value = `[${map[type] || type}] from website`;
+    }
+  };
+  typeSel?.addEventListener('change', refresh);
+  refresh();
+
+  // Helper to set status text + colour
+  const setStatus = (msg, color) => {
+    if (!status) return;
+    status.textContent = msg;
+    status.style.color = color || 'var(--muted)';
+  };
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    // Honeypot
+    const honeypot = form.querySelector('input[name="botcheck"]');
+    if (honeypot && honeypot.checked) {
+      setStatus('✓ Thank you! Your submission has been received.', 'var(--navy)');
+      form.reset(); refresh();
+      return;
+    }
+
+    // Demo mode if access key isn't configured
+    const accessKey = form.querySelector('input[name="access_key"]')?.value;
+    if (!accessKey || accessKey.startsWith('YOUR-')) {
+      setStatus(
+        '⚠️  Form not yet configured. See CONTACT-FORM.md for the 3-step setup. (Submission was NOT sent.)',
+        '#b54708'
+      );
+      return;
+    }
+
+    if (button) button.disabled = true;
+    setStatus('Sending…', 'var(--muted)');
+
+    try {
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { Accept: 'application/json' }
+      });
+      let data = {};
+      try { data = await response.json(); } catch (_) {}
+      if (response.ok) {
+        setStatus('✓ Thank you! Your submission has been received. Our editorial team will review it shortly.', 'var(--navy)');
+        form.reset(); refresh();
+      } else {
+        throw new Error((data && data.message) || ('Server returned ' + response.status));
+      }
+    } catch (err) {
+      console.error('[submitForm] failed:', err);
+      setStatus('✗ Sorry, something went wrong. Please email info@brahmkshatriya.org with your submission.', '#c00000');
+    } finally {
+      if (button) button.disabled = false;
+    }
+  });
+}
+
+/* =============================================================
+   📰  Community News (સમાચાર)
+   -------------------------------------------------------------
+   Renders short news items on news.html — district elections,
+   awards, marriages, achievements, announcements. Sorted
+   newest-first, grouped by year, with Category + City filters
+   and a free-text search.
+============================================================= */
+function loadNews() {
+  if (typeof newsData === 'undefined') return;
+  const wrap = document.getElementById('news');
+  if (!wrap) return;
+  if (!Array.isArray(newsData) || !newsData.length) {
+    wrap.innerHTML = `<div class="empty-state"><i class="fas fa-newspaper"></i> No news yet.</div>`;
+    return;
+  }
+
+  const categoryFilter = document.getElementById('newsCategoryFilter');
+  const cityFilter     = document.getElementById('newsCityFilter');
+  const searchInput    = document.getElementById('newsSearchInput');
+
+  // Sort newest-first; rows with bad dates sink to the bottom
+  const sorted = [...newsData].sort((a, b) => {
+    const da = safeDate(a.date), db = safeDate(b.date);
+    if (!da && !db) return 0;
+    if (!da) return 1;
+    if (!db) return -1;
+    return db - da;
+  });
+
+  // Populate filter dropdowns
+  if (categoryFilter) {
+    [...new Set(sorted.map((n) => n.category).filter(Boolean))].sort().forEach((c) => {
+      const o = document.createElement('option'); o.value = c; o.textContent = c;
+      categoryFilter.appendChild(o);
+    });
+  }
+  if (cityFilter) {
+    [...new Set(sorted.map((n) => n.city).filter(Boolean))].sort().forEach((c) => {
+      const o = document.createElement('option'); o.value = c; o.textContent = c;
+      cityFilter.appendChild(o);
+    });
+  }
+
+  const fmtFull = (iso) => {
+    const d = safeDate(iso);
+    return d ? d.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
+  };
+  const yearOf  = (iso) => { const d = safeDate(iso); return d ? d.getFullYear() : '—'; };
+  const fmtDay  = (iso) => { const d = safeDate(iso); return d ? d.toLocaleDateString('en-IN', { day: '2-digit' }) : ''; };
+  const fmtMon  = (iso) => { const d = safeDate(iso); return d ? d.toLocaleDateString('en-IN', { month: 'short' }).toUpperCase() : ''; };
+
+  const corpus = (n) => [
+    n.title, n.titleGu, n.summary, n.category, n.city, n.publishedIn, fmtFull(n.date)
+  ].filter(Boolean).join(' • ').toLowerCase();
+
+  const cardHTML = (n) => `
+    <article class="news-card">
+      <div class="news-date-badge">
+        <span class="day">${fmtDay(n.date)}</span>
+        <span class="month">${fmtMon(n.date)}</span>
+      </div>
+      <div class="news-body">
+        <span class="news-category">${n.category || 'News'}</span>
+        <h3>${n.title}</h3>
+        ${n.titleGu ? `<div class="news-title-gu">${n.titleGu}</div>` : ''}
+        <p class="news-summary">${n.summary || ''}</p>
+        <div class="news-meta">
+          <span><i class="fas fa-calendar"></i> ${fmtFull(n.date)}</span>
+          ${n.city ? `<span><i class="fas fa-location-dot"></i> ${n.city}</span>` : ''}
+          ${n.publishedIn ? `<span><i class="fas fa-book-open"></i> ${n.publishedIn}</span>` : ''}
+        </div>
+        ${n.link && n.link !== '#' ? `<a class="btn btn-outline" href="${n.link}" target="_blank" rel="noopener" style="margin-top:6px; padding:8px 16px; font-size:0.85rem;"><i class="fas fa-arrow-right"></i> Read more</a>` : ''}
+      </div>
+    </article>
+  `;
+
+  const render = () => {
+    const cat = categoryFilter?.value || '';
+    const cty = cityFilter?.value     || '';
+    const q   = (searchInput?.value || '').toLowerCase().trim();
+
+    const filtered = sorted.filter((n) => {
+      const catOk = !cat || n.category === cat;
+      const ctyOk = !cty || n.city     === cty;
+      const qOk   = !q   || corpus(n).includes(q);
+      return catOk && ctyOk && qOk;
+    });
+
+    if (!filtered.length) {
+      wrap.innerHTML = `<div class="empty-state"><i class="fas fa-search"></i> No news matches your filters.</div>`;
+      return;
+    }
+
+    // Group by year of news date
+    const grouped = filtered.reduce((acc, n) => {
+      const y = yearOf(n.date);
+      (acc[y] = acc[y] || []).push(n);
+      return acc;
+    }, {});
+
+    wrap.innerHTML = Object.keys(grouped)
+      .sort((a, b) => Number(b) - Number(a))
+      .map((y) => `
+        <div class="news-year">
+          <h2 class="news-year-head">${y}</h2>
+          <div class="news-grid">${grouped[y].map(cardHTML).join('')}</div>
+        </div>
+      `).join('');
+  };
+
+  categoryFilter?.addEventListener('change', render);
+  cityFilter?.addEventListener('change', render);
+  searchInput?.addEventListener('input', render);
+  render();
+}
+
+/* =============================================================
+   🕯  Memorial / In Memoriam (શ્રદ્ધાંજલિ)
+   -------------------------------------------------------------
+   Renders tribute cards on memorial.html. Cards are sorted
+   newest-first by `passedDate` and grouped by year of passing.
+   A City filter and a free-text search narrow the list.
+============================================================= */
+function loadMemorials() {
+  if (typeof memorialsData === 'undefined') return;
+  const wrap = document.getElementById('memorials');
+  if (!wrap) return;
+  if (!Array.isArray(memorialsData) || !memorialsData.length) {
+    wrap.innerHTML = `<div class="empty-state"><i class="fas fa-feather"></i> No tributes recorded yet.</div>`;
+    return;
+  }
+
+  const cityFilter   = document.getElementById('memorialCityFilter');
+  const searchInput  = document.getElementById('memorialSearchInput');
+
+  // Newest-first; rows with bad/missing passedDate sink to the bottom
+  const sorted = [...memorialsData].sort((a, b) => {
+    const da = safeDate(a.passedDate), db = safeDate(b.passedDate);
+    if (!da && !db) return 0;
+    if (!da) return 1;
+    if (!db) return -1;
+    return db - da;
+  });
+
+  // Populate City filter dropdown from the data
+  if (cityFilter) {
+    const cities = [...new Set(sorted.map((m) => m.city).filter(Boolean))].sort();
+    cities.forEach((c) => {
+      const o = document.createElement('option');
+      o.value = c; o.textContent = c;
+      cityFilter.appendChild(o);
+    });
+  }
+
+  const fmtDay = (iso) => {
+    const d = safeDate(iso);
+    return d ? d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
+  };
+  const yearOf = (iso) => {
+    const d = safeDate(iso);
+    return d ? d.getFullYear() : '—';
+  };
+
+  // Build the search corpus per row so editors can find by anything
+  const corpus = (m) => [
+    m.name, m.nameGu, m.city, m.tribute, m.publishedIn,
+    fmtDay(m.bornDate), fmtDay(m.passedDate), m.family
+  ].filter(Boolean).join(' • ').toLowerCase();
+
+  const cardHTML = (m) => `
+    <article class="memorial-card">
+      <div class="memorial-photo">
+        ${safeImg(m.photo, m.name, FALLBACK_PHOTO)}
+        <span class="memorial-flame" aria-hidden="true">🕯</span>
+      </div>
+      <div class="memorial-body">
+        <h3>${m.name}</h3>
+        ${m.nameGu ? `<div class="memorial-name-gu">${m.nameGu}</div>` : ''}
+        <div class="memorial-dates">
+          ${m.bornDate ? `<span><i class="fas fa-circle"></i> Born ${fmtDay(m.bornDate)}</span>` : ''}
+          ${m.passedDate ? `<span><i class="fas fa-cross"></i> Passed ${fmtDay(m.passedDate)}</span>` : ''}
+        </div>
+        ${m.city ? `<div class="memorial-city"><i class="fas fa-location-dot"></i> ${m.city}</div>` : ''}
+        ${m.tribute ? `<p class="memorial-tribute">${m.tribute}</p>` : ''}
+        ${m.publishedIn ? `<div class="memorial-pub"><i class="fas fa-book-open"></i> Tribute first appeared in <strong>${m.publishedIn}</strong></div>` : ''}
+        ${(m.family || m.phone) ? `
+          <div class="memorial-family">
+            ${m.family ? `<span><i class="fas fa-users"></i> ${m.family}</span>` : ''}
+            ${m.phone  ? `<a href="tel:${m.phone}" class="ad-contact-btn"><i class="fas fa-phone"></i> Condolences</a>` : ''}
+          </div>` : ''}
+      </div>
+    </article>
+  `;
+
+  const render = () => {
+    const cty = cityFilter?.value || '';
+    const q   = (searchInput?.value || '').toLowerCase().trim();
+
+    const filtered = sorted.filter((m) => {
+      const cityOk = !cty || m.city === cty;
+      const qOk    = !q   || corpus(m).includes(q);
+      return cityOk && qOk;
+    });
+
+    if (!filtered.length) {
+      wrap.innerHTML = `<div class="empty-state"><i class="fas fa-search"></i> No tributes match your filters.</div>`;
+      return;
+    }
+
+    // Group by year of passing
+    const grouped = filtered.reduce((acc, m) => {
+      const y = yearOf(m.passedDate);
+      (acc[y] = acc[y] || []).push(m);
+      return acc;
+    }, {});
+
+    wrap.innerHTML = Object.keys(grouped)
+      .sort((a, b) => Number(b) - Number(a))
+      .map((y) => `
+        <div class="memorial-year">
+          <h2 class="memorial-year-head">${y}</h2>
+          <div class="memorial-grid">
+            ${grouped[y].map(cardHTML).join('')}
+          </div>
+        </div>
+      `).join('');
+  };
+
+  cityFilter?.addEventListener('change', render);
+  searchInput?.addEventListener('input', render);
+  render();
+}
+
 /* ---------- Ads: type tabs + category + search + contact actions ---------- */
 function loadAds() {
   if (typeof adsData === 'undefined') return;
@@ -1368,7 +1706,10 @@ document.addEventListener('DOMContentLoaded', () => {
   safely('loadNetwork',       loadNetwork);
   safely('loadEvents',        loadEvents);
   safely('loadAds',           loadAds);
+  safely('loadMemorials',     loadMemorials);
+  safely('loadNews',          loadNews);
   safely('initContactForm',   initContactForm);
+  safely('initSubmitForm',    initSubmitForm);
 
   // SEO: emit JSON-LD for any data sets present on this page.
   // Each injector is also self-guarded — it only emits markup

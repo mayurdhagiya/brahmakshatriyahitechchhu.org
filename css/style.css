@@ -332,6 +332,107 @@ main { flex: 1; padding-bottom: 64px; }
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
+/* ---------- "From the Editor" excerpt (home page) ---------- */
+.editor-section {
+  background:
+    radial-gradient(circle at 100% 0%, rgba(201, 165, 90, 0.10), transparent 45%),
+    var(--cream);
+  border-bottom: 1px solid var(--line);
+}
+.editor-grid {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 32px;
+  align-items: start;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 36px 40px;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+.editor-grid::before {
+  content: '“';
+  position: absolute;
+  top: -32px; right: 24px;
+  font-family: var(--serif);
+  font-size: 12rem;
+  color: rgba(201, 165, 90, 0.16);
+  line-height: 1;
+  pointer-events: none;
+}
+.editor-mark {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-deep) 100%);
+  color: var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  box-shadow: var(--shadow-md);
+}
+.editor-body { position: relative; z-index: 1; }
+.editor-headline {
+  font-family: var(--serif);
+  color: var(--navy);
+  font-size: clamp(1.5rem, 2.6vw, 2rem);
+  margin: 8px 0 14px;
+  font-weight: 700;
+  font-style: italic;
+}
+.editor-excerpt {
+  color: var(--ink);
+  font-size: 1.02rem;
+  line-height: 1.6;
+  margin: 0 0 22px;
+  max-width: 620px;
+}
+.editor-meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+.editor-photo {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid var(--gold-soft);
+  flex-shrink: 0;
+}
+.editor-photo img { width: 100%; height: 100%; object-fit: cover; }
+.editor-name {
+  font-family: var(--serif);
+  font-weight: 700;
+  color: var(--navy);
+  font-size: 1.05rem;
+  line-height: 1.1;
+}
+.editor-name-gu {
+  font-family: 'Noto Sans Gujarati', 'Shruti', sans-serif;
+  color: var(--ink);
+  opacity: 0.78;
+  font-size: 0.9rem;
+}
+.editor-role {
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 600;
+  margin-top: 2px;
+}
+.editor-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+@media (max-width: 720px) {
+  .editor-grid { grid-template-columns: 1fr; padding: 28px 22px; gap: 18px; }
+  .editor-mark { width: 56px; height: 56px; font-size: 1.2rem; }
+  .editor-grid::before { font-size: 8rem; top: -20px; right: 16px; }
+}
+
 /* ---------- Editions archive ---------- */
 .year-block { margin-bottom: 40px; }
 .year-block .year-head {
@@ -1452,6 +1553,307 @@ main { flex: 1; padding-bottom: 64px; }
   .ad-contact-btn { flex: 1 1 calc(33% - 6px); padding: 8px 8px; font-size: 0.78rem; }
 }
 
+/* ---------- Community News (સમાચાર) ---------- */
+.news-filter-bar {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px;
+  display: grid;
+  grid-template-columns: 200px 200px 1fr;
+  gap: 12px;
+  margin-bottom: 32px;
+  box-shadow: var(--shadow-sm);
+}
+.news-filter-bar select,
+.news-filter-bar input {
+  padding: 12px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  background: var(--cream);
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+.news-filter-bar select:focus,
+.news-filter-bar input:focus { border-color: var(--gold); background: #fff; }
+
+.news-year { margin-bottom: 36px; }
+.news-year-head {
+  font-family: var(--serif);
+  text-align: left;
+  color: var(--navy);
+  font-size: 1.6rem;
+  margin: 0 0 18px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 18px;
+}
+.news-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 22px 22px 22px 88px;
+  position: relative;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.news-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.news-date-badge {
+  position: absolute;
+  top: 22px; left: 18px;
+  width: 56px;
+  background: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 8px 4px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.05;
+}
+.news-date-badge .day {
+  font-family: var(--serif);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--navy);
+}
+.news-date-badge .month {
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  color: var(--gold);
+  margin-top: 2px;
+}
+.news-category {
+  display: inline-block;
+  align-self: flex-start;
+  background: rgba(201, 165, 90, 0.18);
+  color: var(--navy);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+.news-body h3 {
+  font-family: var(--serif);
+  color: var(--navy);
+  margin: 0;
+  font-size: 1.1rem;
+}
+.news-title-gu {
+  font-family: 'Noto Sans Gujarati', 'Shruti', sans-serif;
+  color: var(--ink);
+  font-size: 0.92rem;
+  opacity: 0.78;
+  margin-top: -2px;
+}
+.news-summary {
+  margin: 4px 0 0;
+  color: var(--ink);
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+.news-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-top: 4px;
+}
+.news-meta span { display: inline-flex; align-items: center; gap: 5px; }
+.news-meta i { color: var(--gold); }
+
+@media (max-width: 720px) {
+  .news-filter-bar { grid-template-columns: 1fr; }
+  .news-grid { grid-template-columns: 1fr; }
+  .news-card { padding: 18px 18px 18px 78px; }
+  .news-date-badge { left: 14px; top: 18px; width: 50px; }
+}
+
+/* ---------- Memorial / In Memoriam (શ્રદ્ધાંજલિ) ---------- */
+.memorial-intro {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 28px;
+  color: var(--muted);
+  font-style: italic;
+}
+.memorials-filter-bar {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px;
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 12px;
+  margin-bottom: 32px;
+  box-shadow: var(--shadow-sm);
+}
+.memorials-filter-bar select,
+.memorials-filter-bar input {
+  padding: 12px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  background: var(--cream);
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+.memorials-filter-bar select:focus,
+.memorials-filter-bar input:focus { border-color: var(--gold); background: #fff; }
+
+.memorial-year { margin-bottom: 40px; }
+.memorial-year-head {
+  font-family: var(--serif);
+  text-align: center;
+  color: var(--gold);
+  font-size: 1.6rem;
+  margin: 0 0 24px;
+  position: relative;
+  padding-bottom: 14px;
+}
+.memorial-year-head::after {
+  content: '';
+  position: absolute;
+  left: 50%; bottom: 0;
+  transform: translateX(-50%);
+  width: 60px; height: 1px;
+  background: var(--gold);
+  opacity: 0.5;
+}
+
+.memorial-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 22px;
+}
+
+.memorial-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.memorial-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+
+.memorial-photo {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: linear-gradient(180deg, var(--navy) 0%, var(--navy-deep) 100%);
+  overflow: hidden;
+}
+.memorial-photo img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: grayscale(0.15) contrast(0.96);
+}
+.memorial-flame {
+  position: absolute;
+  bottom: 12px; right: 12px;
+  background: rgba(0, 0, 0, 0.55);
+  color: var(--gold);
+  font-size: 1.2rem;
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(2px);
+}
+
+.memorial-body {
+  padding: 18px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+.memorial-body h3 {
+  font-family: var(--serif);
+  color: var(--navy);
+  margin: 0;
+  font-size: 1.15rem;
+}
+.memorial-name-gu {
+  font-family: 'Noto Sans Gujarati', 'Shruti', sans-serif;
+  color: var(--ink);
+  font-size: 0.95rem;
+  margin-top: -4px;
+  opacity: 0.78;
+}
+.memorial-dates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+.memorial-dates span { display: inline-flex; align-items: center; gap: 6px; }
+.memorial-dates i { color: var(--gold); font-size: 0.7em; }
+
+.memorial-city {
+  font-size: 0.82rem;
+  color: var(--muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.memorial-city i { color: var(--gold); }
+
+.memorial-tribute {
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--ink);
+  margin: 0;
+  padding-left: 14px;
+  border-left: 3px solid rgba(201, 165, 90, 0.4);
+  font-style: italic;
+}
+
+.memorial-pub {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-top: 4px;
+}
+.memorial-pub i { color: var(--gold); margin-right: 4px; }
+
+.memorial-family {
+  margin-top: 6px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 0.85rem;
+}
+.memorial-family span { color: var(--muted); display: inline-flex; align-items: center; gap: 6px; }
+.memorial-family i { color: var(--gold); }
+
+@media (max-width: 720px) {
+  .memorials-filter-bar { grid-template-columns: 1fr; }
+  .memorial-grid { grid-template-columns: 1fr; }
+}
+
 /* ---------- Contact ---------- */
 .contact-grid {
   display: grid;
@@ -1504,6 +1906,75 @@ main { flex: 1; padding-bottom: 64px; }
 .contact-form textarea:focus { border-color: var(--gold); background: #fff; }
 .contact-form textarea { resize: vertical; min-height: 120px; }
 .contact-form .btn { justify-self: flex-start; }
+
+/* ---------- Submit Your Content form ---------- */
+.submit-form {
+  max-width: 760px;
+  margin: 0 auto;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 32px 36px;
+  box-shadow: var(--shadow-sm);
+}
+.submit-form .form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.submit-form .field-group {
+  margin-top: 6px;
+  padding: 22px 22px 6px;
+  background: var(--cream);
+  border: 1px dashed rgba(201, 165, 90, 0.45);
+  border-radius: var(--radius);
+}
+.submit-form .field-group-title {
+  font-family: var(--serif);
+  color: var(--navy);
+  margin: 0 0 14px;
+  font-size: 1.05rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.submit-form .field-group-title i {
+  width: 30px; height: 30px;
+  background: rgba(201, 165, 90, 0.18);
+  color: var(--gold);
+  border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 0.85rem;
+}
+.submit-form select,
+.submit-form input,
+.submit-form textarea {
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  background: var(--paper);
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+.submit-form .field-group select,
+.submit-form .field-group input,
+.submit-form .field-group textarea {
+  background: var(--paper);
+}
+.submit-form .form-note {
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin: 6px 0 14px;
+  font-style: italic;
+}
+
+@media (max-width: 720px) {
+  .submit-form { padding: 24px 22px; }
+  .submit-form .form-row { grid-template-columns: 1fr; }
+}
 
 /* ---------- Footer ---------- */
 .site-footer {
