@@ -112,6 +112,23 @@ function loadEditions() {
         right.addEventListener('click', () => track.scrollBy({ left:  step(), behavior: 'smooth' }));
 
         archive.appendChild(block);
+
+        // Show arrows only when the track actually overflows, and hide
+        // each side when there's nothing more to scroll in that direction.
+        const updateArrows = () => {
+          const overflow = track.scrollWidth - track.clientWidth;
+          if (overflow <= 1) {
+            left.style.display  = 'none';
+            right.style.display = 'none';
+            return;
+          }
+          left.style.display  = track.scrollLeft > 4 ? '' : 'none';
+          right.style.display = track.scrollLeft < overflow - 4 ? '' : 'none';
+        };
+        track.addEventListener('scroll', updateArrows, { passive: true });
+        window.addEventListener('resize', updateArrows);
+        // Defer one frame so layout is settled before measuring.
+        requestAnimationFrame(updateArrows);
       });
   };
 

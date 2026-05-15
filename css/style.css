@@ -218,31 +218,36 @@ main { flex: 1; padding-bottom: 64px; }
 }
 .hero-cover .cover-frame {
   position: relative;
-  width: 280px;
+  width: clamp(200px, 36vw, 280px);
   aspect-ratio: 3 / 4;
-  border-radius: var(--radius);
-  overflow: hidden;
-  box-shadow: var(--shadow-lg);
-  background: var(--navy);
   transform: rotate(-2deg);
   transition: transform 0.4s ease;
 }
 .hero-cover .cover-frame:hover { transform: rotate(0deg) scale(1.02); }
-.hero-cover .cover-frame img { width: 100%; height: 100%; object-fit: cover; }
+.hero-cover .cover-image {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--navy);
+  box-shadow: var(--shadow-lg);
+}
+.hero-cover .cover-image img { width: 100%; height: 100%; object-fit: cover; }
 .hero-cover .badge {
   position: absolute;
-  top: -14px;
-  right: -14px;
+  top: -12px;
+  right: -12px;
   background: var(--gold);
   color: var(--navy);
-  padding: 8px 14px;
+  padding: 7px 14px;
   border-radius: 999px;
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   box-shadow: var(--shadow-md);
   z-index: 2;
+  white-space: nowrap;
 }
 
 /* ---------- Editions archive ---------- */
@@ -1260,17 +1265,32 @@ main { flex: 1; padding-bottom: 64px; }
   color: #97a0b3;
 }
 
-/* ---------- Responsive ---------- */
+/* ============================================================
+   Responsive — desktop / tablet / mobile / small-mobile
+============================================================ */
+
+/* Tablet (≤ 880px) — stack two-column grids */
 @media (max-width: 880px) {
   .hero-grid { grid-template-columns: 1fr; text-align: center; gap: 36px; }
   .hero-copy p { margin-left: auto; margin-right: auto; }
   .hero-actions { justify-content: center; }
+  .hero-cover { order: -1; }                 /* cover above text on tablet+down */
   .contact-grid { grid-template-columns: 1fr; }
   .filter-bar { grid-template-columns: 1fr; }
-  .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+  .events-filter-bar { grid-template-columns: 1fr; }
+  .archive-filter-bar { grid-template-columns: 1fr; }
+  .archive-filter-bar .btn { justify-self: stretch; justify-content: center; }
+  .footer-grid { grid-template-columns: 1fr; gap: 28px; text-align: center; }
+  .footer-social, .site-footer .brand { justify-content: center; }
+  .site-footer .brand { display: inline-flex; }
 }
 
+/* Mobile (≤ 720px) — collapse nav, simplify spacing */
 @media (max-width: 720px) {
+  :root { --container: 100%; }
+  .container { padding: 0 18px; }
+
+  /* Hamburger nav */
   .nav-toggle { display: block; }
   .nav {
     position: absolute;
@@ -1289,8 +1309,100 @@ main { flex: 1; padding-bottom: 64px; }
   .nav.open { display: flex; }
   .nav a { padding: 12px 14px; }
   .nav a.active::after { display: none; }
+
+  /* Brand text reduces */
+  .brand { font-size: 1.05rem; gap: 10px; }
+  .brand-mark { width: 38px; height: 38px; font-size: 1rem; }
+  .brand-text small { display: none; }
+
+  /* Vertical rhythm */
+  .section { padding: 36px 0; }
+  .section-head { margin-bottom: 28px; }
+  .hero { padding: 32px 0; }
+  main { padding-bottom: 40px; }
+
+  /* Hero */
+  .hero-cover .cover-frame { width: clamp(180px, 60vw, 240px); }
+  .hero-actions { gap: 10px; }
+  .hero-actions .btn { padding: 10px 18px; font-size: 0.9rem; }
+
+  /* Carousel arrows pull in */
   .scroll-btn.left  { left: 4px; }
   .scroll-btn.right { right: 4px; }
-  .section { padding: 40px 0; }
-  .hero { padding: 40px 0; }
+  .scroller-track { padding-left: 0; padding-right: 0; }
+
+  /* Edition cards */
+  .edition-card { flex: 0 0 170px; padding: 12px; }
+  .editions-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
+
+  /* About + trustees + network grids → single column on small phones */
+  .about-grid { grid-template-columns: 1fr; }
+  .trustee-grid { grid-template-columns: 1fr; }
+  .directory-grid { grid-template-columns: 1fr; }
+  .event-grid { grid-template-columns: 1fr; }
+
+  /* Modal */
+  .event-modal { max-height: 96vh; border-radius: var(--radius); }
+  .event-modal-section { padding: 20px 18px; }
+  .event-modal-hero { aspect-ratio: 16 / 10; }
+  .event-modal-hero-text { left: 16px; right: 16px; bottom: 14px; }
+  .event-modal-hero-text h2 { font-size: 1.25rem; }
+  .event-modal-meta { gap: 6px 12px; font-size: 0.82rem; flex-direction: column; align-items: flex-start; }
+  .event-agenda li { grid-template-columns: 1fr; gap: 4px; }
+  .event-modal-cta { padding: 18px 18px 22px; }
+
+  /* Events filter bar gap tighter */
+  .events-filter-bar { padding: 12px; gap: 8px; }
+  .filter-bar { padding: 12px; gap: 8px; }
+
+  /* Tabs scroll horizontally if too wide */
+  .event-tabs { width: 100%; justify-content: center; }
+  .event-tabs button { padding: 9px 16px; font-size: 0.86rem; }
+
+  /* Map embeds shorter */
+  .event-map { aspect-ratio: 4 / 3; }
 }
+
+/* Small mobile (≤ 480px) — extra compaction */
+@media (max-width: 480px) {
+  .container { padding: 0 14px; }
+  h1 { font-size: 1.65rem; }
+  h2 { font-size: 1.35rem; }
+  .section-head .eyebrow { font-size: 0.7rem; }
+
+  /* Hero — text-first, card scales down further */
+  .hero { padding: 24px 0 28px; }
+  .hero-grid { gap: 28px; }
+  .hero-copy p { font-size: 0.95rem; }
+  .hero-cover .cover-frame { width: clamp(160px, 56vw, 200px); }
+  .hero-cover .badge { font-size: 0.68rem; padding: 6px 11px; top: -10px; right: -10px; }
+  .hero-actions { flex-direction: column; align-items: stretch; }
+  .hero-actions .btn { justify-content: center; }
+
+  /* Buttons stretch full-width on cards */
+  .event-actions { flex-direction: column; align-items: stretch; }
+  .event-actions .btn { justify-content: center; }
+
+  /* Stat tiles get smaller */
+  .event-highlights { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .event-stat { padding: 14px 12px; }
+  .event-stat-num { font-size: 1.4rem; }
+
+  /* Trustee actions wrap nicely */
+  .trustee-actions { gap: 8px; }
+  .trustee-actions a { width: 34px; height: 34px; font-size: 0.85rem; }
+
+  /* Modal close button doesn't overlap title */
+  .event-modal-close { top: 10px; right: 10px; width: 34px; height: 34px; }
+
+  /* Lightbox arrows tighter */
+  .event-lightbox-nav.prev { left: 6px; }
+  .event-lightbox-nav.next { right: 6px; }
+  .event-lightbox-nav { width: 40px; height: 40px; }
+
+  /* Footer pulls icons + links closer */
+  .site-footer { padding: 30px 0 16px; }
+}
+
+/* Prevent horizontal overflow on any device */
+html, body { overflow-x: hidden; }
