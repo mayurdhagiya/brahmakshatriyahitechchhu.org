@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="About Brahmakshatriya Hitechchhu — our mission, vision, and what we offer the community." />
-  <title>About | Brahmakshatriya Hitechchhu</title>
+  <meta name="description" content="Upcoming and past events of the Brahmakshatriya Hitechchhu community — filter by year, location or search." />
+  <title>Events | Brahmakshatriya Hitechchhu</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -35,10 +35,10 @@
       <button class="nav-toggle" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
       <nav class="nav">
         <a href="index.html">Home</a>
-        <a href="about.html" class="active">About</a>
+        <a href="about.html">About</a>
         <a href="trustees.html">Trustees</a>
         <a href="network.html">Network</a>
-        <a href="events.html">Events</a>
+        <a href="events.html" class="active">Events</a>
         <a href="contact.html">Contact</a>
       </nav>
     </div>
@@ -48,53 +48,36 @@
     <section class="section">
       <div class="container">
         <div class="section-head">
-          <span class="eyebrow">About Us</span>
-          <h2>Connecting a community across generations</h2>
-          <p>Brahmakshatriya Hitechchhu is more than a magazine — it is the shared voice of our community, carrying our heritage forward and celebrating the people who shape it.</p>
+          <span class="eyebrow">Community Events</span>
+          <h2>What's happening in the community</h2>
+          <p>From cultural evenings and felicitations to youth summits and health camps — explore upcoming gatherings and revisit past events.</p>
         </div>
 
-        <div class="about-grid">
-          <article class="info-card">
-            <div class="icon"><i class="fas fa-book-open"></i></div>
-            <h3>Who We Are</h3>
-            <p>A trust-led monthly publication dedicated to preserving and promoting the rich cultural heritage of the Brahmakshatriya community, in print and online.</p>
-          </article>
-
-          <article class="info-card">
-            <div class="icon"><i class="fas fa-bullseye"></i></div>
-            <h3>Our Mission</h3>
-            <p>To inform, inspire and connect — sharing stories, achievements and traditions that keep the community informed and bonded across cities and generations.</p>
-          </article>
-
-          <article class="info-card">
-            <div class="icon"><i class="fas fa-eye"></i></div>
-            <h3>Our Vision</h3>
-            <p>A vibrant, well-networked community where every member feels seen, supported and proud of their roots — and where our youth carry the legacy forward with confidence.</p>
-          </article>
-
-          <article class="info-card">
-            <div class="icon"><i class="fas fa-list-check"></i></div>
-            <h3>What We Offer</h3>
-            <ul>
-              <li>Monthly editions covering community news</li>
-              <li>Interviews with leaders and changemakers</li>
-              <li>Cultural insights and historical features</li>
-              <li>A platform for member achievements</li>
-            </ul>
-          </article>
-
-          <article class="info-card">
-            <div class="icon"><i class="fas fa-handshake"></i></div>
-            <h3>Join Us</h3>
-            <p>Whether as a reader, contributor or supporter, you are welcome in our journey. <a href="contact.html">Get in touch</a> to subscribe or contribute a story.</p>
-          </article>
-
-          <article class="info-card">
-            <div class="icon"><i class="fas fa-clock"></i></div>
-            <h3>Our Heritage</h3>
-            <p>Published continuously since 1978, the magazine has chronicled decades of community life — celebrations, milestones, and the people who built our institutions.</p>
-          </article>
+        <!-- Upcoming / Past tabs -->
+        <div class="event-tabs-wrap">
+          <div class="event-tabs" role="tablist">
+            <button data-event-tab="upcoming" class="active" role="tab">
+              <i class="fas fa-calendar-day"></i> Upcoming <span class="count">0</span>
+            </button>
+            <button data-event-tab="past" role="tab">
+              <i class="fas fa-clock-rotate-left"></i> Past <span class="count">0</span>
+            </button>
+          </div>
         </div>
+
+        <!-- Filters -->
+        <div class="events-filter-bar">
+          <select id="eventYearFilter" aria-label="Filter by year">
+            <option value="">All Years</option>
+          </select>
+          <select id="eventLocationFilter" aria-label="Filter by location">
+            <option value="">All Locations</option>
+          </select>
+          <input type="text" id="eventSearchInput" placeholder="Search any event detail — title, city, venue, date, agenda…" aria-label="Search events" />
+        </div>
+
+        <!-- Event grid -->
+        <div id="events"></div>
       </div>
     </section>
   </main>
@@ -141,6 +124,7 @@
     </div>
   </footer>
 
+  <script src="js/data/events.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
