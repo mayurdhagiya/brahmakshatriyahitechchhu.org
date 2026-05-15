@@ -45,6 +45,7 @@ year	date	title	volume	cover	link
 2026	2026-03-15	March 2026	Vol. 50, Issue 11	/editions/Mar-2026/files/thumb/1.png	/editions/Mar-2026/
 2026	2026-04-15	April 2026	Vol. 50, Issue 12	/editions/Apr-2026/files/thumb/1.png	/editions/Apr-2026/
 2026	2026-05-15	May 2026	Vol. 51, Issue 1	/editions/May-2026/files/thumb/1.png	/editions/May-2026/
+`).map((e) => {
   // Map full month names → folder-name form. May/June/July stay full.
   const SHORT = {
     January: 'Jan', February: 'Feb', March: 'Mar', April: 'Apr',
