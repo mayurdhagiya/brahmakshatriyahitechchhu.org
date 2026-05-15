@@ -822,6 +822,105 @@ function initContactForm() {
   });
 }
 
+/* ---------- SEO: inject JSON-LD structured data dynamically ---------- */
+const SITE_BASE = 'https://brahmakshatriyahitechchhu.org';
+
+function injectJsonLd(id, data) {
+  const existing = document.getElementById(id);
+  if (existing) existing.remove();
+  const s = document.createElement('script');
+  s.type = 'application/ld+json';
+  s.id = id;
+  s.textContent = JSON.stringify(data);
+  document.head.appendChild(s);
+}
+
+function injectEventStructuredData() {
+  if (typeof eventsData === 'undefined' || !eventsData.length) return;
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+
+  const items = eventsData.map((e) => {
+    const isPast = new Date(e.date) < today;
+    return {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "name": e.title,
+      "startDate": e.date,
+      "eventStatus": "https://schema.org/EventScheduled",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "location": {
+        "@type": "Place",
+        "name": e.venue || e.city,
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": e.city || '',
+          "addressCountry": "IN",
+          "streetAddress": e.venue || ''
+        }
+      },
+      "image": e.image ? [e.image] : undefined,
+      "description": e.details || e.description || '',
+      "url": `${SITE_BASE}/events.html#event-${slugify(e.title)}`,
+      "organizer": {
+        "@type": "NGO",
+        "name": "Brahmakshatriya Hitechchhu Trust",
+        "url": SITE_BASE + '/'
+      },
+      "isAccessibleForFree": true,
+      "performer": { "@type": "Organization", "name": "Brahmakshatriya Hitechchhu Trust" }
+    };
+  });
+
+  injectJsonLd('jsonld-events', { "@context": "https://schema.org", "@graph": items });
+}
+
+function injectTrusteesStructuredData() {
+  if (typeof trusteesData === 'undefined' || !trusteesData.length) return;
+  injectJsonLd('jsonld-trustees', {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Trustees of Brahmakshatriya Hitechchhu Trust",
+    "itemListElement": trusteesData.map((t, i) => ({
+      "@type": "ListItem",
+      "position": i + 1,
+      "item": {
+        "@type": "Person",
+        "name": t.name,
+        "jobTitle": t.designation,
+        "image": t.image,
+        "telephone": t.phone,
+        "email": t.email,
+        "worksFor": { "@type": "NGO", "name": "Brahmakshatriya Hitechchhu Trust" }
+      }
+    }))
+  });
+}
+
+function injectNetworkStructuredData() {
+  if (typeof networkData === 'undefined' || !networkData.length) return;
+  injectJsonLd('jsonld-network', {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Brahmakshatriya Community Network — regional contacts",
+    "itemListElement": networkData.map((n, i) => ({
+      "@type": "ListItem",
+      "position": i + 1,
+      "item": {
+        "@type": "Place",
+        "name": `${n.contactPerson} — ${n.city} chapter`,
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": n.address,
+          "addressLocality": n.city,
+          "addressRegion": n.state,
+          "addressCountry": "IN"
+        },
+        "telephone": n.mobile
+      }
+    }))
+  });
+}
+
 /* ---------- Footer year ---------- */
 function setFooterYear() {
   const el = document.querySelector('[data-year]');
@@ -837,4 +936,9 @@ document.addEventListener('DOMContentLoaded', () => {
   loadNetwork();
   loadEvents();
   initContactForm();
+
+  // SEO: emit JSON-LD for any data sets present on this page
+  injectEventStructuredData();
+  injectTrusteesStructuredData();
+  injectNetworkStructuredData();
 });
