@@ -311,8 +311,36 @@ function loadTrustees() {
   const container = document.getElementById('trustees');
   if (!container) return;
 
-  // Define preferred ordering of designations; anything else falls to the end
-  const order = ['President', 'Vice President', 'Secretary', 'Treasurer', 'Trustee'];
+  // Preferred ordering of designations from board-most to advisory.
+  // Anything not in this list falls to the end alphabetically.
+  const order = [
+    'President',
+    'Vice President',
+    'Hon. Secretary',
+    'Secretary',
+    'Treasurer',
+    'Trustee',
+    'Editor',
+    'Co-Editor',
+    'Executive Member',
+    'Advisory Committee Member'
+  ];
+
+  // Map each designation to a Gujarati subtitle shown under the group heading
+  // — purely cosmetic; an unknown designation just hides the subtitle.
+  const designationGu = {
+    'President':                 'પ્રમુખ',
+    'Vice President':            'ઉપપ્રમુખ',
+    'Hon. Secretary':            'મા. મંત્રી',
+    'Secretary':                 'મંત્રી',
+    'Treasurer':                 'કોષાધ્યક્ષ',
+    'Trustee':                   'ટ્રસ્ટી',
+    'Editor':                    'તંત્રી',
+    'Co-Editor':                 'સહતંત્રી',
+    'Executive Member':          'કારોબારી સભ્ય',
+    'Advisory Committee Member': 'સલાહકાર સમિતિ સભ્ય'
+  };
+
   const grouped = trusteesData.reduce((acc, t) => {
     (acc[t.designation] = acc[t.designation] || []).push(t);
     return acc;
@@ -330,8 +358,12 @@ function loadTrustees() {
   sortedKeys.forEach((designation) => {
     const group = document.createElement('section');
     group.className = 'trustee-group';
+    const gu = designationGu[designation];
     group.innerHTML = `
-      <h3 class="designation-title">${designation}</h3>
+      <h3 class="designation-title">
+        ${designation}
+        ${gu ? `<span class="designation-gu">${gu}</span>` : ''}
+      </h3>
       <div class="trustee-grid"></div>
     `;
     const grid = group.querySelector('.trustee-grid');
@@ -339,11 +371,12 @@ function loadTrustees() {
       const card = document.createElement('article');
       card.className = 'trustee-card';
       const social = t.social || {};
-      card.innerHTML = `
-        <div class="trustee-photo">${safeImg(t.image, t.name, FALLBACK_PHOTO)}</div>
-        <h4>${t.name}</h4>
-        <div class="role">${t.designation}</div>
-        <p class="bio">${t.bio || ''}</p>
+
+      // Build the contact-action row only if at least one channel exists,
+      // so trustees with no contact info don't show an empty stub.
+      const hasContact = t.phone || t.whatsapp || t.email
+        || social.facebook || social.twitter || social.linkedin;
+      const actionsHTML = hasContact ? `
         <div class="trustee-actions">
           ${t.phone    ? `<a href="tel:${t.phone}" title="Call ${t.name}"><i class="fas fa-phone"></i></a>` : ''}
           ${t.whatsapp ? `<a href="https://wa.me/${t.whatsapp}" target="_blank" rel="noopener" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>` : ''}
@@ -352,6 +385,15 @@ function loadTrustees() {
           ${social.twitter  ? `<a href="${social.twitter}"  target="_blank" rel="noopener" title="Twitter"><i class="fab fa-twitter"></i></a>` : ''}
           ${social.linkedin ? `<a href="${social.linkedin}" target="_blank" rel="noopener" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>` : ''}
         </div>
+      ` : '';
+
+      card.innerHTML = `
+        <div class="trustee-photo">${safeImg(t.image, t.name, FALLBACK_PHOTO)}</div>
+        <h4>${t.name}</h4>
+        ${t.nameGu ? `<div class="trustee-name-gu">${t.nameGu}</div>` : ''}
+        <div class="role">${t.designation}</div>
+        <p class="bio">${t.bio || ''}</p>
+        ${actionsHTML}
       `;
       grid.appendChild(card);
     });

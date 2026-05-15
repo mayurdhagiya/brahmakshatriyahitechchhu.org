@@ -1,35 +1,63 @@
 /* ============================================================
-   Brahmakshatriya Hitechchhu — Trustees
+   Brahmakshatriya Hitechchhu — Trustees & Leadership
 
    Edit by pasting tab-separated rows from Excel directly into the
    table below. Cards are auto-grouped by `designation` in this
-   preferred order: President → Vice President → Secretary →
-   Treasurer → Trustee → others.
+   preferred order:
+     President → Vice President → Hon. Secretary → Secretary →
+     Treasurer → Trustee → Editor → Co-Editor →
+     Executive Member → Advisory Committee Member
+   (any other designation falls to the end alphabetically)
 
-   Columns (in order):
-     name         — full name
-     designation  — President / Vice President / Secretary / Treasurer / Trustee
-     bio          — one-line bio shown on the card
-     image        — square portrait URL
-     phone        — full international phone (e.g. +919876543210)
-     whatsapp     — WhatsApp number (digits only, with country code)
-     email        — email address
-     facebook     — full Facebook profile URL (or # for none)
-     twitter      — full Twitter / X profile URL (or # for none)
-     linkedin     — full LinkedIn profile URL (or # for none)
+   📐 COLUMN ORDER (must match the header row exactly)
+     name         → English name (e.g. "Dhanshukhbhai H. Bosamia")
+     nameGu       → Gujarati name (shown under the English name).
+                    Leave blank to hide.
+     designation  → One of:
+                      President / Vice President / Hon. Secretary /
+                      Secretary / Treasurer / Trustee / Editor /
+                      Co-Editor / Executive Member /
+                      Advisory Committee Member
+     bio          → One-line role description shown on the card
+     image        → Square portrait URL. Leave blank for placeholder.
+     phone        → Full international phone (e.g. +919876543210)
+     whatsapp     → WhatsApp digits with country code
+     email        → Email address
+     facebook     → Full Facebook profile URL (or blank)
+     twitter      → Full Twitter / X profile URL (or blank)
+     linkedin     → Full LinkedIn profile URL (or blank)
+
+   ✏️  Tip: leave any contact field blank to hide that button on
+       the card. If ALL contact fields are blank, the card hides
+       the contact-action row entirely.
 ============================================================ */
 
 const trusteesData = parseTSV(`
-name	designation	bio	image	phone	whatsapp	email	facebook	twitter	linkedin
-Rajesh Patel	President	Visionary leader guiding the trust's mission and direction.	https://placehold.co/300x300/1a2a4f/c9a55a?text=RP	+919876543210	919876543210	rajesh.patel@example.com	#	#	#
-Anjali Mehta	Vice President	Strategist focused on community growth and engagement.	https://placehold.co/300x300/1a2a4f/c9a55a?text=AM	+919123456780	919123456780	anjali.mehta@example.com	#	#	#
-Suresh Joshi	Secretary	Coordinates trust operations, communications and records.	https://placehold.co/300x300/1a2a4f/c9a55a?text=SJ	+919812345678	919812345678	suresh.joshi@example.com	#	#	#
-Meera Shah	Treasurer	Oversees financial planning, audits and donor relations.	https://placehold.co/300x300/1a2a4f/c9a55a?text=MS	+919898989898	919898989898	meera.shah@example.com	#	#	#
-Hitesh Trivedi	Trustee	Active contributor to community welfare initiatives.	https://placehold.co/300x300/1a2a4f/c9a55a?text=HT	+919900112233	919900112233	hitesh.trivedi@example.com	#	#	#
-Nisha Desai	Trustee	Champions youth and women empowerment programmes.	https://placehold.co/300x300/1a2a4f/c9a55a?text=ND	+919811223344	919811223344	nisha.desai@example.com	#	#	#
-Pritesh Pandya	Trustee	Leads regional outreach and chapter development.	https://placehold.co/300x300/1a2a4f/c9a55a?text=PP	+919855667788	919855667788	pritesh.pandya@example.com	#	#	#
-Kavita Bhatt	Trustee	Curates editorial content and cultural programming.	https://placehold.co/300x300/1a2a4f/c9a55a?text=KB	+919844556677	919844556677	kavita.bhatt@example.com	#	#	#
+name	nameGu	designation	bio	image	phone	whatsapp	email	facebook	twitter	linkedin
+# === Trustee Board (ટ્રસ્ટી મંડળ) ===
+Dhanshukhbhai H. Bosamia	ધનસુખભાઈ એચ. બોસમીઆ	President	Heads the Brahmakshatriya Hitechchhu Trust and oversees all activities.	https://placehold.co/300x300/1a2a4f/c9a55a?text=DB
+Atulbhai M. Veechi	અતુલભાઈ એમ. વીંછી	Vice President	Supports the President in trust governance and outreach.	https://placehold.co/300x300/1a2a4f/c9a55a?text=AV
+Bakulesh J. Padia	બકુલેશ જે. પડીઆ	Hon. Secretary	Coordinates trust operations, communications and records.	https://placehold.co/300x300/1a2a4f/c9a55a?text=BP
+Pradeepbhai V. Vadher	પ્રદિપભાઈ વી. વાઢેર	Trustee	Active trustee contributing to community welfare initiatives.	https://placehold.co/300x300/1a2a4f/c9a55a?text=PV
+Kirankumar I. Varde	કિરણકુમાર આઈ. વારડે	Trustee	Active trustee contributing to community welfare initiatives.	https://placehold.co/300x300/1a2a4f/c9a55a?text=KV
+
+# === Editorial Team (તંત્રી / સહતંત્રી) ===
+Praveen P. Dhagia	પ્રવીણ પી. ધગીઆ	Editor	Editor of the monthly Brahmakshatriya Hitechchhu magazine.	https://placehold.co/300x300/1a2a4f/c9a55a?text=PD
+Amrutlal B. Soneji	અમૃતલાલ બી. સોનેજી	Co-Editor	Co-editor supporting the magazine's monthly production.	https://placehold.co/300x300/1a2a4f/c9a55a?text=AS
+
+# === Executive Committee (કારોબારી સભ્યો) ===
+Sudhirbhai J. Chhatbar	સુધીરભાઈ જે. છાટબાર	Executive Member	Member of the executive committee.	https://placehold.co/300x300/1a2a4f/c9a55a?text=SC
+Maheshbhai S. Chhatbar	મહેશભાઈ એસ. છાટબાર	Executive Member	Member of the executive committee.	https://placehold.co/300x300/1a2a4f/c9a55a?text=MC
+Jagdishbhai K. Bosamia	જગદીશભાઈ કે. બોસમીઆ	Executive Member	Member of the executive committee.	https://placehold.co/300x300/1a2a4f/c9a55a?text=JB
+Dilipkumar D. Bagaria	દિલીપકુમાર ડી. બગરીઆ	Executive Member	Member of the executive committee.	https://placehold.co/300x300/1a2a4f/c9a55a?text=DK
+Nikhilbhai C. Madhu	નિખિલભાઈ સી. માધુ	Executive Member	Member of the executive committee.	https://placehold.co/300x300/1a2a4f/c9a55a?text=NM
+
+# === Advisory Committee (સલાહકાર સમિતિ) ===
+Jitendrabhai U. Mamtora	જીતેન્દ્રભાઈ યુ. મામતોરા	Advisory Committee Member	Provides strategic guidance to the trust.	https://placehold.co/300x300/1a2a4f/c9a55a?text=JM
+Bharatbhai P. Padia	ભરતભાઈ પી. પડીઆ	Advisory Committee Member	Provides strategic guidance to the trust.	https://placehold.co/300x300/1a2a4f/c9a55a?text=BP
+Ishwarlal V. Varde	ઈશ્વરલાલ વી. વારડે	Advisory Committee Member	Provides strategic guidance to the trust.	https://placehold.co/300x300/1a2a4f/c9a55a?text=IV
 `).map((t) => ({
   ...t,
+  // Build the social object the renderer expects from the flat columns
   social: { facebook: t.facebook, twitter: t.twitter, linkedin: t.linkedin }
 }));

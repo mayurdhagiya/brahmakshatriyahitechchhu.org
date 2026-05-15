@@ -78,16 +78,20 @@ homepage.
 
 | Column        | What to write                                                |
 | ------------- | ------------------------------------------------------------ |
-| `name`        | Full name                                                    |
-| `designation` | One of: `President`, `Vice President`, `Secretary`, `Treasurer`, `Trustee` |
+| `name`        | English (transliterated) name, e.g. `Dhanshukhbhai H. Bosamia` |
+| `nameGu`      | Gujarati name shown under the English one, e.g. `ધનસુખભાઈ એચ. બોસમીઆ`. Leave blank to hide. |
+| `designation` | One of: `President`, `Vice President`, `Hon. Secretary`, `Secretary`, `Treasurer`, `Trustee`, `Editor`, `Co-Editor`, `Executive Member`, `Advisory Committee Member` |
 | `bio`         | One-line bio shown on the card                               |
-| `image`       | Square portrait URL                                          |
-| `phone`       | Full international phone (e.g. `+919876543210`)              |
-| `whatsapp`    | WhatsApp number, digits only with country code               |
-| `email`       | Email address                                                |
-| `facebook`    | Full Facebook profile URL, or `#` for none                   |
-| `twitter`     | Full Twitter / X profile URL, or `#`                         |
-| `linkedin`    | Full LinkedIn profile URL, or `#`                            |
+| `image`       | Square portrait URL — leave blank for the default placeholder |
+| `phone`       | Full international phone (e.g. `+919876543210`) — leave blank to hide the Call button |
+| `whatsapp`    | WhatsApp digits with country code — leave blank to hide      |
+| `email`       | Email address — leave blank to hide                          |
+| `facebook`    | Full Facebook profile URL — leave blank to hide              |
+| `twitter`     | Full Twitter / X profile URL — leave blank to hide           |
+| `linkedin`    | Full LinkedIn profile URL — leave blank to hide              |
+
+> **Tip:** if a person has no contact info at all, the contact-button
+> row is hidden completely so the card doesn't look unfinished.
 
 ### `network.csv`
 
