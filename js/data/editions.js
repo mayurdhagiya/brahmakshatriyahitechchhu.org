@@ -30,25 +30,21 @@
 
 const editionsData = parseTSV(`
 year	date	title	volume	cover	link
-2024	2025-05-15	September 2024	Vol. 47, Issue 5	https://placehold.co/300x400/1a2a4f/c9a55a?text=Sep+2024	/editions/Sep-2024/
-2025	2025-05-01	May 2025	Vol. 47, Issue 5	https://placehold.co/300x400/1a2a4f/c9a55a?text=May+2025	/editions/May-2025/
-2025	2025-04-01	April 2025	Vol. 47, Issue 4	https://placehold.co/300x400/1a2a4f/c9a55a?text=Apr+2025	/editions/Apr-2025/
-2025	2025-03-01	March 2025	Vol. 47, Issue 3	https://placehold.co/300x400/1a2a4f/c9a55a?text=Mar+2025	/editions/Mar-2025/
-2025	2025-02-01	February 2025	Vol. 47, Issue 2	https://placehold.co/300x400/1a2a4f/c9a55a?text=Feb+2025	/editions/Feb-2025/
-2025	2025-01-01	January 2025	Vol. 47, Issue 1	https://placehold.co/300x400/1a2a4f/c9a55a?text=Jan+2025	/editions/Jan-2025/
-2024	2024-12-01	December 2024	Vol. 46, Issue 12	https://placehold.co/300x400/1a2a4f/c9a55a?text=Dec+2024	/editions/Dec-2024/
-2024	2024-11-01	November 2024	Vol. 46, Issue 11	https://placehold.co/300x400/1a2a4f/c9a55a?text=Nov+2024	/editions/Nov-2024/
-2024	2024-10-01	October 2024	Vol. 46, Issue 10	https://placehold.co/300x400/1a2a4f/c9a55a?text=Oct+2024	/editions/Oct-2024/
-2024	2024-09-01	September 2024	Vol. 46, Issue 9	https://placehold.co/300x400/1a2a4f/c9a55a?text=Sep+2024	/editions/Sep-2024/
-2024	2024-08-01	August 2024	Vol. 46, Issue 8	https://placehold.co/300x400/1a2a4f/c9a55a?text=Aug+2024	/editions/Aug-2024/
-2024	2024-07-01	July 2024	Vol. 46, Issue 7	https://placehold.co/300x400/1a2a4f/c9a55a?text=Jul+2024	/editions/July-2024/
-2024	2024-06-01	June 2024	Vol. 46, Issue 6	https://placehold.co/300x400/1a2a4f/c9a55a?text=Jun+2024	/editions/June-2024/
-2023	2023-12-01	December 2023	Vol. 45, Issue 12	https://placehold.co/300x400/1a2a4f/c9a55a?text=Dec+2023	/editions/Dec-2023/
-2023	2023-09-01	September 2023	Vol. 45, Issue 9	https://placehold.co/300x400/1a2a4f/c9a55a?text=Sep+2023	/editions/Sep-2023/
-2023	2023-06-01	June 2023	Vol. 45, Issue 6	https://placehold.co/300x400/1a2a4f/c9a55a?text=Jun+2023	/editions/June-2023/
-2023	2023-03-01	March 2023	Vol. 45, Issue 3	https://placehold.co/300x400/1a2a4f/c9a55a?text=Mar+2023	/editions/Mar-2023/
-2022	2022-11-01	November 2022	Vol. 44, Issue 11	https://placehold.co/300x400/1a2a4f/c9a55a?text=Nov+2022	/editions/Nov-2022/
-2022	2022-05-01	May 2022	Vol. 44, Issue 5	https://placehold.co/300x400/1a2a4f/c9a55a?text=May+2022	/editions/May-2022/
+2024	2024-09-15	September 2024	Vol. 49, Issue 5	https://placehold.co/300x400/1a2a4f/c9a55a?text=Sep+2024	/editions/Sep-2024/
+2025	2025-01-15	January 2025	Vol. 49, Issue 9	https://placehold.co/300x400/1a2a4f/c9a55a?text=Jan+2025	/editions/Jan-2025/
+2025	2025-03-15	March 2025	Vol. 49, Issue 11	https://placehold.co/300x400/1a2a4f/c9a55a?text=Mar+2025	/editions/Mar-2025/
+2025	2025-06-15	June 2025	Vol. 50, Issue 2	https://placehold.co/300x400/1a2a4f/c9a55a?text=Jun+2025	/editions/June-2025/
+2025	2025-07-15	July 2025	Vol. 50, Issue 3	https://placehold.co/300x400/1a2a4f/c9a55a?text=Jul+2025	/editions/July-2025/
+2025	2025-08-15	August 2025	Vol. 50, Issue 4	https://placehold.co/300x400/1a2a4f/c9a55a?text=Aug+2025	/editions/Aug-2025/
+2025	2025-09-15	September 2025	Vol. 50, Issue 5	https://placehold.co/300x400/1a2a4f/c9a55a?text=Sep+2025	/editions/Sep-2025/
+2025	2025-10-15	October 2025	Vol. 50, Issue 6	https://placehold.co/300x400/1a2a4f/c9a55a?text=Oct+2025	/editions/Oct-2025/
+2025	2025-11-15	November 2025	Vol. 50, Issue 7	https://placehold.co/300x400/1a2a4f/c9a55a?text=Nov+2025	/editions/Nov-2025/
+2025	2025-12-15	December 2025	Vol. 50, Issue 8	https://placehold.co/300x400/1a2a4f/c9a55a?text=Dec+2025	/editions/Dec-2025/
+2026	2026-01-15	January 2026	Vol. 50, Issue 9	https://placehold.co/300x400/1a2a4f/c9a55a?text=Jan+2026	/editions/Jan-2026/
+2026	2026-02-15	February 2026	Vol. 50, Issue 10	https://placehold.co/300x400/1a2a4f/c9a55a?text=Feb+2026	/editions/Feb-2026/
+2026	2026-03-15	March 2026	Vol. 50, Issue 11	https://placehold.co/300x400/1a2a4f/c9a55a?text=Mar+2026	/editions/Mar-2026/
+2026	2026-04-15	April 2026	Vol. 50, Issue 12	https://placehold.co/300x400/1a2a4f/c9a55a?text=Apr+2026	/editions/Apr-2026/
+2026	2026-05-15	May 2026	Vol. 51, Issue 1	https://placehold.co/300x400/1a2a4f/c9a55a?text=May+2026	/editions/May-2026/
 `).map((e) => {
   // Map full month names → folder-name form. May/June/July stay full.
   const SHORT = {
