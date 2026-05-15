@@ -824,6 +824,143 @@ function loadEvents() {
   window.addEventListener('hashchange', openFromHash);
 }
 
+/* ---------- Ads: type tabs + category + search + contact actions ---------- */
+function loadAds() {
+  if (typeof adsData === 'undefined') return;
+  const wrap = document.getElementById('ads');
+  if (!wrap) return;
+
+  const categoryFilter = document.getElementById('adCategoryFilter');
+  const cityFilter     = document.getElementById('adCityFilter');
+  const searchInput    = document.getElementById('adSearchInput');
+  const tabs           = document.querySelectorAll('[data-ad-tab]');
+
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+
+  // Drop expired ads if validUntil is in the past
+  const live = adsData.filter((a) => {
+    if (!a.validUntil) return true;
+    return new Date(a.validUntil) >= today;
+  });
+
+  // Sort newest-first by publishedDate
+  live.sort((a, b) => new Date(b.publishedDate || 0) - new Date(a.publishedDate || 0));
+
+  // Populate filter dropdowns
+  if (categoryFilter) {
+    [...new Set(live.map((a) => a.category).filter(Boolean))].sort().forEach((c) => {
+      const o = document.createElement('option'); o.value = c; o.textContent = c;
+      categoryFilter.appendChild(o);
+    });
+  }
+  if (cityFilter) {
+    [...new Set(live.map((a) => a.city).filter(Boolean))].sort().forEach((c) => {
+      const o = document.createElement('option'); o.value = c; o.textContent = c;
+      cityFilter.appendChild(o);
+    });
+  }
+
+  let currentTab = 'display';
+
+  const fmtDate = (iso) => iso
+    ? new Date(iso).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+    : '';
+
+  const corpus = (a) => [
+    a.title, a.description, a.advertiser, a.category, a.city,
+    fmtDate(a.publishedDate), fmtDate(a.validUntil)
+  ].filter(Boolean).join(' • ').toLowerCase();
+
+  const displayCardHTML = (a) => `
+    <article class="ad-card ad-display">
+      <div class="ad-media">
+        <img src="${a.image}" alt="${a.title}" loading="lazy" />
+        <span class="ad-category">${a.category}</span>
+      </div>
+      <div class="ad-body">
+        <h3>${a.title}</h3>
+        <p class="ad-desc">${a.description || ''}</p>
+        <div class="ad-meta">
+          <span><i class="fas fa-user"></i> ${a.advertiser}</span>
+          ${a.city ? `<span><i class="fas fa-location-dot"></i> ${a.city}</span>` : ''}
+          ${a.validUntil ? `<span><i class="fas fa-calendar-day"></i> Valid till ${fmtDate(a.validUntil)}</span>` : ''}
+        </div>
+        ${contactRowHTML(a)}
+      </div>
+    </article>
+  `;
+
+  const classifiedCardHTML = (a) => `
+    <article class="ad-card ad-classified">
+      <div class="ad-body">
+        <div class="ad-classified-head">
+          <span class="ad-category">${a.category}</span>
+          ${a.city ? `<span class="ad-city"><i class="fas fa-location-dot"></i> ${a.city}</span>` : ''}
+        </div>
+        <h3>${a.title}</h3>
+        <p class="ad-desc">${a.description || ''}</p>
+        <div class="ad-meta">
+          <span><i class="fas fa-user"></i> ${a.advertiser}</span>
+          ${a.validUntil ? `<span><i class="fas fa-calendar-day"></i> Valid till ${fmtDate(a.validUntil)}</span>` : ''}
+        </div>
+        ${contactRowHTML(a)}
+      </div>
+    </article>
+  `;
+
+  function contactRowHTML(a) {
+    const c = a.contact || {};
+    return `
+      <div class="ad-contact">
+        ${c.phone    ? `<a href="tel:${c.phone}" class="ad-contact-btn"><i class="fas fa-phone"></i> Call</a>` : ''}
+        ${c.whatsapp ? `<a href="https://wa.me/${c.whatsapp}?text=${encodeURIComponent('Hi, I saw your ad "' + a.title + '" on Brahmakshatriya Hitechchhu.')}" target="_blank" rel="noopener" class="ad-contact-btn whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</a>` : ''}
+        ${c.email    ? `<a href="mailto:${c.email}?subject=${encodeURIComponent('Enquiry about: ' + a.title)}" class="ad-contact-btn"><i class="fas fa-envelope"></i> Email</a>` : ''}
+      </div>
+    `;
+  }
+
+  const render = () => {
+    const cat = categoryFilter?.value || '';
+    const cty = cityFilter?.value     || '';
+    const q   = (searchInput?.value || '').toLowerCase().trim();
+
+    const filtered = live.filter((a) => {
+      const tabOk = a.type === currentTab;
+      const catOk = !cat || a.category === cat;
+      const ctyOk = !cty || a.city === cty;
+      const qOk   = !q   || corpus(a).includes(q);
+      return tabOk && catOk && ctyOk && qOk;
+    });
+
+    const cardFn = currentTab === 'display' ? displayCardHTML : classifiedCardHTML;
+    wrap.innerHTML = filtered.length
+      ? `<div class="ad-grid ${currentTab === 'classified' ? 'is-classified' : ''}">${filtered.map(cardFn).join('')}</div>`
+      : `<div class="empty-state"><i class="fas fa-search"></i> No ${currentTab} ads match your filters.</div>`;
+
+    // Counts on tab buttons
+    const dCount = live.filter((a) => a.type === 'display').length;
+    const cCount = live.filter((a) => a.type === 'classified').length;
+    const dEl = document.querySelector('[data-ad-tab="display"] .count');
+    const cEl = document.querySelector('[data-ad-tab="classified"] .count');
+    if (dEl) dEl.textContent = dCount;
+    if (cEl) cEl.textContent = cCount;
+  };
+
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      tabs.forEach((t) => t.classList.remove('active'));
+      tab.classList.add('active');
+      currentTab = tab.dataset.adTab;
+      render();
+    });
+  });
+  categoryFilter?.addEventListener('change', render);
+  cityFilter?.addEventListener('change', render);
+  searchInput?.addEventListener('input', render);
+
+  render();
+}
+
 /* ---------- Contact form ---------- */
 function initContactForm() {
   const form = document.getElementById('contactForm');
@@ -952,6 +1089,7 @@ document.addEventListener('DOMContentLoaded', () => {
   loadTrustees();
   loadNetwork();
   loadEvents();
+  loadAds();
   initContactForm();
 
   // SEO: emit JSON-LD for any data sets present on this page

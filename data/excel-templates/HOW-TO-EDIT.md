@@ -18,6 +18,7 @@ your rows, then paste back into the matching `js/data/*.js` file.
    - `trustees.csv` → trustee cards on the Trustees page
    - `network.csv`  → regional contacts on the Network page
    - `events.csv`   → community events page
+   - `ads.csv`      → display + classified ads on the Ads page
 
    Excel will preserve the header row. Add or edit data rows below it
    like you would any spreadsheet.
@@ -116,6 +117,27 @@ The last three columns hold **lists** packed into a single cell:
 > Use `;;` (two semicolons) to separate list items, and `||` (two pipes)
 > to separate fields inside one item. Leave the cell empty to skip the
 > section.
+
+### `ads.csv`
+
+| Column          | What to write                                                 |
+| --------------- | ------------------------------------------------------------- |
+| `type`          | `display` (with image) or `classified` (text-only)            |
+| `category`      | `Matrimonial`, `Property`, `Jobs`, `Business`, `Services`, `Education`, `Vehicles` or `Other` |
+| `title`         | Short headline shown on the card                              |
+| `description`   | Body text / ad copy                                           |
+| `advertiser`    | Name of person or business placing the ad                     |
+| `city`          | City — drives the City filter dropdown                        |
+| `image`         | Image URL (only for `type=display`; leave blank for classifieds) |
+| `publishedDate` | `YYYY-MM-DD` when the ad was published (newest sorts first)   |
+| `validUntil`    | `YYYY-MM-DD` — the ad **auto-hides** after this date passes   |
+| `phone`         | Full international phone for the Call button                  |
+| `whatsapp`      | WhatsApp number, digits only, country code first              |
+| `email`         | Email address for the Email button                            |
+
+> Visitors get one-tap **Call**, **WhatsApp** and **Email** buttons on
+> every ad. The WhatsApp link pre-fills a polite message referencing
+> the ad title — they just need to hit send.
 
 ---
 
