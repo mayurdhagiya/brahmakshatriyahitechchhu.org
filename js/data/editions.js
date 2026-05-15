@@ -30,6 +30,7 @@
 
 const editionsData = parseTSV(`
 year	date	title	volume	cover	link
+2024	2025-05-15	September 2024	Vol. 47, Issue 5	https://placehold.co/300x400/1a2a4f/c9a55a?text=Sep+2024	/editions/Sep-2024/
 2025	2025-05-01	May 2025	Vol. 47, Issue 5	https://placehold.co/300x400/1a2a4f/c9a55a?text=May+2025	/editions/May-2025/
 2025	2025-04-01	April 2025	Vol. 47, Issue 4	https://placehold.co/300x400/1a2a4f/c9a55a?text=Apr+2025	/editions/Apr-2025/
 2025	2025-03-01	March 2025	Vol. 47, Issue 3	https://placehold.co/300x400/1a2a4f/c9a55a?text=Mar+2025	/editions/Mar-2025/
