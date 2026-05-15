@@ -12,7 +12,7 @@
   <meta name="description" content="Contact the Brahmakshatriya Hitechchhu Trust office in Ahmedabad — phone, email, office address with map, subscription rates and bank details for donations. Send us a message anytime." />
   <meta name="keywords" content="Contact Brahmakshatriya Hitechchhu, Brahmakshatriya Trust Ahmedabad, magazine subscription, community donations, Hitechchhu bank details, trust office address" />
   <!-- Client-side redirect manager (loads first, before paint) -->
-  <script src="js/redirects.js?v=2026-05-15-05"></script>
+  <script src="js/redirects.js?v=2026-05-15-06"></script>
 
   <link rel="canonical" href="https://brahmakshatriyahitechchhu.org/contact.html" />
 
@@ -43,7 +43,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-  <link rel="stylesheet" href="css/style.css?v=2026-05-15-05" />
+  <link rel="stylesheet" href="css/style.css?v=2026-05-15-06" />
 
   <!-- ===== Analytics: GA4 + Microsoft Clarity ===== -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-P3QXRQTHMW"></script>
@@ -176,7 +176,27 @@
           <article class="info-card">
             <div class="icon"><i class="fas fa-paper-plane"></i></div>
             <h3>Send Us a Message</h3>
-            <form id="contactForm" class="contact-form" novalidate>
+            <!-- Contact form
+                 Submissions are relayed via Web3Forms (https://web3forms.com).
+                 To start receiving emails:
+                   1. Visit https://web3forms.com and enter info@brahmkshatriya.org
+                      to get a free access key (no signup required).
+                   2. Replace YOUR-WEB3FORMS-ACCESS-KEY-HERE below with the key.
+                   3. Push to GitHub. Done — submissions land in your inbox.
+                 See CONTACT-FORM.md for alternatives (Formspree, Google Forms). -->
+            <form id="contactForm"
+                  class="contact-form"
+                  action="https://api.web3forms.com/submit"
+                  method="POST">
+              <!-- Web3Forms hidden config -->
+              <input type="hidden" name="access_key"  value="7eb62325-8a24-43d5-8547-244e65dda997" />
+              <input type="hidden" name="subject"     value="New message from brahmakshatriyahitechchhu.org" />
+              <input type="hidden" name="from_name"   value="Brahmakshatriya Hitechchhu Website" />
+
+              <!-- Anti-spam honeypot (real users won't tick this; bots will) -->
+              <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off"
+                     style="position:absolute;left:-9999px" aria-hidden="true" />
+
               <div class="field">
                 <label for="cName">Your Name</label>
                 <input id="cName" name="name" type="text" required placeholder="Full name" />
@@ -186,11 +206,15 @@
                 <input id="cEmail" name="email" type="email" required placeholder="you@example.com" />
               </div>
               <div class="field">
+                <label for="cPhone">Phone (optional)</label>
+                <input id="cPhone" name="phone" type="tel" placeholder="+91 …" />
+              </div>
+              <div class="field">
                 <label for="cMsg">Message</label>
                 <textarea id="cMsg" name="message" required placeholder="How can we help?"></textarea>
               </div>
               <button type="submit" class="btn"><i class="fas fa-paper-plane"></i> Send Message</button>
-              <p data-status style="margin:6px 0 0; font-size:0.9rem;"></p>
+              <p data-status style="margin:6px 0 0; font-size:0.9rem; min-height:1.2em;"></p>
             </form>
           </article>
 
@@ -270,6 +294,6 @@
     </div>
   </footer>
 
-  <script src="js/app.js?v=2026-05-15-05"></script>
+  <script src="js/app.js?v=2026-05-15-06"></script>
 </body>
 </html>

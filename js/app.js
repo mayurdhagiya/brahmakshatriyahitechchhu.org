@@ -1089,18 +1089,86 @@ function loadAds() {
   render();
 }
 
-/* ---------- Contact form ---------- */
+/* =============================================================
+   📬  Contact form
+   -------------------------------------------------------------
+   Submits via fetch() to whatever URL the form's `action`
+   attribute points to (Web3Forms by default — see contact.html
+   and CONTACT-FORM.md).
+
+   Behaviour:
+     • Disables the submit button while the request is in flight
+     • Shows a "Sending…" status, then "Thank you" or an error
+     • Falls back to a friendly demo message if the access key
+       hasn't been configured yet (so you can test the UI before
+       wiring Web3Forms)
+     • Honours the honeypot — if a bot ticks the hidden checkbox,
+       the form silently "succeeds" without sending anything
+============================================================= */
 function initContactForm() {
   const form = document.getElementById('contactForm');
   if (!form) return;
-  form.addEventListener('submit', (e) => {
+
+  const status = form.querySelector('[data-status]');
+  const button = form.querySelector('button[type="submit"]');
+
+  // Helper to set status text + colour
+  const setStatus = (msg, color) => {
+    if (!status) return;
+    status.textContent = msg;
+    status.style.color = color || 'var(--muted)';
+  };
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const status = form.querySelector('[data-status]');
-    if (status) {
-      status.textContent = 'Thank you! Your message has been received.';
-      status.style.color = 'var(--navy)';
+
+    // Honeypot — bots fill every field, including hidden ones
+    const honeypot = form.querySelector('input[name="botcheck"]');
+    if (honeypot && honeypot.checked) {
+      setStatus('✓ Thank you! Your message has been received.', 'var(--navy)');
+      form.reset();
+      return;
     }
-    form.reset();
+
+    // Detect "demo mode": access key still has the placeholder value
+    const accessKey = form.querySelector('input[name="access_key"]')?.value;
+    if (!accessKey || accessKey.startsWith('YOUR-')) {
+      setStatus(
+        '⚠️  Form not yet configured. See CONTACT-FORM.md for the 3-step setup. (Submission was NOT sent.)',
+        '#b54708'
+      );
+      return;
+    }
+
+    if (button) button.disabled = true;
+    setStatus('Sending…', 'var(--muted)');
+
+    try {
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { Accept: 'application/json' }
+      });
+
+      let data = {};
+      try { data = await response.json(); } catch (_) { /* not JSON, that's ok */ }
+
+      if (response.ok) {
+        setStatus('✓ Thank you! Your message has been received. We will reply soon.', 'var(--navy)');
+        form.reset();
+      } else {
+        const msg = (data && data.message) || ('Server returned ' + response.status);
+        throw new Error(msg);
+      }
+    } catch (err) {
+      console.error('[contactForm] submission failed:', err);
+      setStatus(
+        '✗ Sorry, something went wrong. Please email us directly at info@brahmkshatriya.org',
+        '#c00000'
+      );
+    } finally {
+      if (button) button.disabled = false;
+    }
   });
 }
 
