@@ -36,10 +36,10 @@
                   layout on the server:
                     /editions/<MonthShort>-<Year>/
                   where MonthShort is the 3-letter abbreviation,
-                  EXCEPT for May / June / July which stay full.
-                  e.g. /editions/May-2026/
+                  EXCEPT for May / July which stay full.
+                  e.g. /editions/Jun-2026/
                        /editions/Jan-2025/
-                       /editions/June-2025/
+                       /editions/July-2025/
      goLive     → OPTIONAL. Exact publish date (YYYY-MM-DD) for this
                   edition. Leave it BLANK to use the automatic rule
                   (goes live on the last day of the cover month - see
@@ -127,8 +127,9 @@ year	date	title	volume	editionNo	cover	link	goLive
      while still building proper JS objects for the renderer.
   ---------------------------------------------------------- */
 
-  // Map full month names → folder-name form. May/June/July stay
-  // full (no good 3-letter abbreviation). Used only by derive()
+  // Map full month names → folder-name form. Most months use the
+  // standard 3-letter abbreviation; May & July are kept full by
+  // preference (May is already 3 letters). Used only by derive()
   // when an editor leaves the `link` cell blank.
   const SHORT = {
     January:  'Jan',
@@ -136,7 +137,7 @@ year	date	title	volume	editionNo	cover	link	goLive
     March:    'Mar',
     April:    'Apr',
     May:      'May',     // already 3 letters - kept as is
-    June:     'June',    // editors prefer the full word
+    June:     'Jun',     // folder convention is Jun-YYYY (e.g. Jun-2026)
     July:     'July',    // editors prefer the full word
     August:   'Aug',
     September:'Sep',
