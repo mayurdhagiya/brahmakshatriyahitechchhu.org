@@ -1146,7 +1146,7 @@ function initSubmitForm() {
       }
     } catch (err) {
       console.error('[submitForm] failed:', err);
-      setStatus('✗ Sorry, something went wrong. Please email info@brahmkshatriya.org with your submission.', '#c00000');
+      setStatus('✗ Sorry, something went wrong. Please email info@brahmakshatriyahitechchhu.org with your submission.', '#c00000');
     } finally {
       if (button) button.disabled = false;
     }
@@ -1740,7 +1740,7 @@ function initContactForm() {
     } catch (err) {
       console.error('[contactForm] submission failed:', err);
       setStatus(
-        '✗ Sorry, something went wrong. Please email us directly at info@brahmkshatriya.org',
+        '✗ Sorry, something went wrong. Please email us directly at info@brahmakshatriyahitechchhu.org',
         '#c00000'
       );
     } finally {

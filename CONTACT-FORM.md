@@ -20,7 +20,7 @@ straight in your email.
 ### Setup (3 minutes, one-time)
 
 1. Visit **[web3forms.com](https://web3forms.com)**.
-2. Scroll to "Get your Access Key", enter **`info@brahmkshatriya.org`**
+2. Scroll to "Get your Access Key", enter **`info@brahmakshatriyahitechchhu.org`**
    (or whichever inbox you want submissions delivered to), and click
    *Create Access Key*.
 3. Check that inbox for the access key - a long string like
@@ -41,7 +41,7 @@ straight in your email.
 
 ### How it feels for you
 
-- Each submission arrives in `info@brahmkshatriya.org` within seconds.
+- Each submission arrives in `info@brahmakshatriyahitechchhu.org` within seconds.
 - The email subject is "New message from brahmakshatriyahitechchhu.org".
 - The body contains the visitor's name, email, phone (if any) and message.
 - You can reply directly from your email client - the visitor's email
@@ -132,7 +132,7 @@ filtering and bulk export - handy if you handle many enquiries.
   with no actual submission.
 - Add a CAPTCHA if spam slips through - Web3Forms supports
   hCaptcha out of the box (one extra hidden field).
-- Set up an inbox filter on `info@brahmkshatriya.org` for emails
+- Set up an inbox filter on `info@brahmakshatriyahitechchhu.org` for emails
   from `noreply@web3forms.com` so submissions go to a dedicated
   folder.
 

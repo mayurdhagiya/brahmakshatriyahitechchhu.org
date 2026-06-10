@@ -262,7 +262,7 @@ arrive at your inbox.
 
 **3-step setup (one-time):**
 
-1. Visit web3forms.com, enter `info@brahmkshatriya.org`, click *Create
+1. Visit web3forms.com, enter `info@brahmakshatriyahitechchhu.org`, click *Create
    Access Key*.
 2. Open `contact.html` and `submit.html`, find the line:
    ```html
@@ -358,7 +358,7 @@ Open `js/data/editions.js`. Add one row to the bottom of the table
 (before the closing backtick), keeping column order:
 
 ```
-2026	2026-06-15	June 2026	Year 51, Issue 2	610	/editions/June-2026/files/thumb/1.png	/editions/June-2026/
+2026	2026-06-15	June 2026	Year 51, Issue 2	610	/editions/Jun-2026/files/thumb/1.png	/editions/Jun-2026/
 ```
 
 Anchor: May 2026 = Year 51, Issue 1, Edition #609. Each new month adds
