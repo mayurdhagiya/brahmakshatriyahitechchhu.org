@@ -134,10 +134,10 @@ final/
     └── … (15 month folders)
 ```
 
-> **Folder-naming rule for editions:** capitalised first letter, three-letter
-> abbreviation, **except** May / June / July which stay full. E.g. `Jan-2025`,
-> `Feb-2025`, `May-2025`, `June-2025`, `July-2025`, `Aug-2025`. URLs are
-> case-sensitive on most servers.
+> **Folder-naming rule for editions:** capitalised first letter, standard
+> three-letter abbreviation. E.g. `Jan-2025`, `Feb-2025`, `May-2025`,
+> `Jun-2025`, `Jul-2025`, `Aug-2025` (May is already three letters). URLs
+> are case-sensitive on most servers, so keep the capitalisation exact.
 
 ---
 
