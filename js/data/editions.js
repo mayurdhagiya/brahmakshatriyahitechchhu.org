@@ -35,11 +35,11 @@
      link       → full-issue URL - convention matches your folder
                   layout on the server:
                     /editions/<MonthShort>-<Year>/
-                  where MonthShort is the 3-letter abbreviation,
-                  EXCEPT for May / July which stay full.
+                  where MonthShort is the standard 3-letter
+                  abbreviation (May is already 3 letters).
                   e.g. /editions/Jun-2026/
                        /editions/Jan-2025/
-                       /editions/July-2025/
+                       /editions/Jul-2025/
      goLive     → OPTIONAL. Exact publish date (YYYY-MM-DD) for this
                   edition. Leave it BLANK to use the automatic rule
                   (goes live on the last day of the cover month - see
@@ -101,8 +101,8 @@ year	date	title	volume	editionNo	cover	link	goLive
 # === Year 2025 ===
 2025	2025-01-15	January 2025	Year 49, Issue 9	593	/editions/Jan-2025/files/thumb/1.jpg	/editions/Jan-2025/
 2025	2025-03-15	March 2025	Year 49, Issue 11	595	/editions/Mar-2025/files/thumb/1.jpg	/editions/Mar-2025/
-2025	2025-06-15	June 2025	Year 50, Issue 2	598	/editions/June-2025/files/thumb/1.jpg	/editions/June-2025/
-2025	2025-07-15	July 2025	Year 50, Issue 3	599	/editions/July-2025/files/thumb/1.jpg	/editions/July-2025/
+2025	2025-06-15	June 2025	Year 50, Issue 2	598	/editions/Jun-2025/files/thumb/1.jpg	/editions/Jun-2025/
+2025	2025-07-15	July 2025	Year 50, Issue 3	599	/editions/Jul-2025/files/thumb/1.jpg	/editions/Jul-2025/
 2025	2025-08-15	August 2025	Year 50, Issue 4	600	/editions/Aug-2025/files/thumb/1.jpg	/editions/Aug-2025/
 2025	2025-09-15	September 2025	Year 50, Issue 5	601	/editions/Sep-2025/files/thumb/1.jpg	/editions/Sep-2025/
 2025	2025-10-15	October 2025	Year 50, Issue 6	602	/editions/Oct-2025/files/thumb/1.jpg	/editions/Oct-2025/
@@ -127,10 +127,10 @@ year	date	title	volume	editionNo	cover	link	goLive
      while still building proper JS objects for the renderer.
   ---------------------------------------------------------- */
 
-  // Map full month names → folder-name form. Most months use the
-  // standard 3-letter abbreviation; May & July are kept full by
-  // preference (May is already 3 letters). Used only by derive()
-  // when an editor leaves the `link` cell blank.
+  // Map full month names → folder-name form: the standard 3-letter
+  // abbreviation, matching the /editions/<Mon>-<Year>/ folders on the
+  // server (May is already 3 letters). Used only by derive() when an
+  // editor leaves the `link` cell blank.
   const SHORT = {
     January:  'Jan',
     February: 'Feb',
@@ -138,7 +138,7 @@ year	date	title	volume	editionNo	cover	link	goLive
     April:    'Apr',
     May:      'May',     // already 3 letters - kept as is
     June:     'Jun',     // folder convention is Jun-YYYY (e.g. Jun-2026)
-    July:     'July',    // editors prefer the full word
+    July:     'Jul',     // folder convention is Jul-YYYY (e.g. Jul-2025)
     August:   'Aug',
     September:'Sep',
     October:  'Oct',
