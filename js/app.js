@@ -56,7 +56,7 @@ const FALLBACK_PHOTO =
  */
 function safeImg(src, alt, fb, extra) {
   const fallback = fb || FALLBACK_COVER;
-  const safeAlt  = (alt || '').replace(/"/g, '&quot;');
+  const safeAlt  = escapeHtml(alt);
   const safeSrc  = (src || fallback);
   // onerror disables itself first so a broken fallback can't loop forever
   return `<img src="${safeSrc}" alt="${safeAlt}" loading="lazy" ${extra || ''} onerror="this.onerror=null;this.src='${fallback}'" />`;
@@ -89,6 +89,27 @@ function formatDate(iso) {
 function safely(label, fn) {
   try { fn(); }
   catch (err) { console.error(`[${label}] failed:`, err); }
+}
+
+/**
+ * Escape a value for safe interpolation into innerHTML.
+ * Converts the five HTML-significant characters so a stray <, >, &,
+ * or quote in a data field (or a future auto-published submission)
+ * can't break the markup or inject script. Use on every data-derived
+ * string placed into a template literal - both element text and
+ * attribute values.
+ *
+ * Note: URLs are passed straight through elsewhere (we control them
+ * in the data files); this is for human-typed text like titles,
+ * names and bios.
+ */
+function escapeHtml(value) {
+  return String(value == null ? '' : value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
 
@@ -181,10 +202,10 @@ function loadEditions() {
   // duplicating the click target visually.
   const cardHTML = (ed) => `
     <a class="edition-card" href="${ed.link}" target="_blank" rel="noopener"
-       aria-label="Read ${ed.title}, ${ed.volume || ''}${ed.editionNo ? ', edition #' + ed.editionNo : ''}">
+       aria-label="Read ${escapeHtml(ed.title)}, ${escapeHtml(ed.volume || '')}${ed.editionNo ? ', edition #' + ed.editionNo : ''}">
       <div class="cover">${safeImg(ed.cover, ed.title + ' cover', FALLBACK_COVER)}</div>
-      <h4 class="title">${ed.title}</h4>
-      <p class="date">${ed.volume || ''}</p>
+      <h4 class="title">${escapeHtml(ed.title)}</h4>
+      <p class="date">${escapeHtml(ed.volume || '')}</p>
       ${ed.editionNo ? `<span class="edition-no">#${ed.editionNo}</span>` : ''}
       <span class="edition-card-cta">
         <i class="fas fa-book-open"></i> Read edition
@@ -383,7 +404,7 @@ function loadTrustees() {
         || social.facebook || social.twitter || social.linkedin;
       const actionsHTML = hasContact ? `
         <div class="trustee-actions">
-          ${t.phone    ? `<a href="tel:${t.phone}" title="Call ${t.name}"><i class="fas fa-phone"></i></a>` : ''}
+          ${t.phone    ? `<a href="tel:${t.phone}" title="Call ${escapeHtml(t.name)}"><i class="fas fa-phone"></i></a>` : ''}
           ${t.whatsapp ? `<a href="https://wa.me/${t.whatsapp}" target="_blank" rel="noopener" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>` : ''}
           ${t.email    ? `<a href="mailto:${t.email}" title="Email"><i class="fas fa-envelope"></i></a>` : ''}
           ${social.facebook ? `<a href="${social.facebook}" target="_blank" rel="noopener" title="Facebook"><i class="fab fa-facebook-f"></i></a>` : ''}
@@ -396,17 +417,17 @@ function loadTrustees() {
       const guRole = designationGu[t.designation];
       const roleHTML = `
         <div class="role">
-          <span class="role-en">${t.designation}</span>
+          <span class="role-en">${escapeHtml(t.designation)}</span>
           ${guRole ? `<span class="role-sep">·</span><span class="role-gu">${guRole}</span>` : ''}
         </div>
       `;
 
       card.innerHTML = `
         <div class="trustee-photo">${safeImg(t.image, t.name, FALLBACK_PHOTO)}</div>
-        <h4>${t.name}</h4>
-        ${t.nameGu ? `<div class="trustee-name-gu">${t.nameGu}</div>` : ''}
+        <h4>${escapeHtml(t.name)}</h4>
+        ${t.nameGu ? `<div class="trustee-name-gu">${escapeHtml(t.nameGu)}</div>` : ''}
         ${roleHTML}
-        <p class="bio">${t.bio || ''}</p>
+        <p class="bio">${escapeHtml(t.bio || '')}</p>
         ${actionsHTML}
       `;
       grid.appendChild(card);
@@ -452,10 +473,10 @@ function loadNetwork() {
       const card = document.createElement('article');
       card.className = 'directory-card';
       card.innerHTML = `
-        <span class="location"><i class="fas fa-map-marker-alt"></i> ${item.city}, ${item.state}</span>
-        <h3>${item.contactPerson}</h3>
-        <div class="info"><i class="fas fa-home"></i> <span>${item.address}</span></div>
-        <div class="info"><i class="fas fa-phone"></i>    <a href="tel:${item.mobile}">${item.mobile}</a></div>
+        <span class="location"><i class="fas fa-map-marker-alt"></i> ${escapeHtml(item.city)}, ${escapeHtml(item.state)}</span>
+        <h3>${escapeHtml(item.contactPerson)}</h3>
+        <div class="info"><i class="fas fa-home"></i> <span>${escapeHtml(item.address)}</span></div>
+        <div class="info"><i class="fas fa-phone"></i>    <a href="tel:${item.mobile}">${escapeHtml(item.mobile)}</a></div>
         <div class="info"><i class="fab fa-whatsapp"></i> <a href="https://wa.me/${item.whatsapp}" target="_blank" rel="noopener">Chat on WhatsApp</a></div>
       `;
       directory.appendChild(card);
@@ -718,8 +739,8 @@ function openEventModal(ev) {
       <div class="event-highlights">
         ${ev.highlights.map((h) => `
           <div class="event-stat">
-            <div class="event-stat-num">${h.number}</div>
-            <div class="event-stat-label">${h.label}</div>
+            <div class="event-stat-num">${escapeHtml(h.number)}</div>
+            <div class="event-stat-label">${escapeHtml(h.label)}</div>
           </div>
         `).join('')}
       </div>
@@ -731,7 +752,7 @@ function openEventModal(ev) {
       <h3>Agenda</h3>
       <ol class="event-agenda">
         ${ev.agenda.map((a) => `
-          <li><span class="event-agenda-time">${a.time}</span><span>${a.title}</span></li>
+          <li><span class="event-agenda-time">${escapeHtml(a.time)}</span><span>${escapeHtml(a.title)}</span></li>
         `).join('')}
       </ol>
     </section>
@@ -742,14 +763,14 @@ function openEventModal(ev) {
       <h3>How to reach</h3>
       <p class="event-location-line">
         <i class="fas fa-location-dot"></i>
-        <strong>${venueWithCity(ev.venue, ev.city)}</strong>
+        <strong>${escapeHtml(venueWithCity(ev.venue, ev.city))}</strong>
       </p>
       <div class="event-map">
         <iframe
           src="${mapsEmbedFor(ev)}"
           loading="lazy"
           referrerpolicy="no-referrer-when-downgrade"
-          title="Map showing ${ev.venue || ev.city}"
+          title="Map showing ${escapeHtml(ev.venue || ev.city)}"
           allowfullscreen></iframe>
       </div>
       <div class="event-map-actions">
@@ -767,10 +788,10 @@ function openEventModal(ev) {
       <div class="event-gallery">
         ${galleryItems.map((g, i) => `
           <figure class="event-gallery-thumb">
-            <button type="button" class="event-gallery-btn" data-gallery-index="${i}" aria-label="Open photo ${i + 1}${g.caption ? ': ' + g.caption : ''}">
+            <button type="button" class="event-gallery-btn" data-gallery-index="${i}" aria-label="Open photo ${i + 1}${g.caption ? ': ' + escapeHtml(g.caption) : ''}">
               ${safeImg(g.src, g.caption || ('Photo ' + (i + 1)), FALLBACK_PHOTO)}
             </button>
-            ${g.caption ? `<figcaption>${g.caption}</figcaption>` : ''}
+            ${g.caption ? `<figcaption>${escapeHtml(g.caption)}</figcaption>` : ''}
           </figure>
         `).join('')}
       </div>
@@ -782,13 +803,13 @@ function openEventModal(ev) {
       ${safeImg(ev.image, ev.title, FALLBACK_PHOTO)}
       <span class="event-status ${isPast ? 'is-past' : ''}">${isPast ? 'Past Event' : 'Upcoming'}</span>
       <div class="event-modal-hero-text">
-        <h2 id="eventModalTitle">${ev.title}</h2>
+        <h2 id="eventModalTitle">${escapeHtml(ev.title)}</h2>
         <div class="event-modal-meta">
           <span><i class="fas fa-calendar"></i> ${fmtFull}</span>
-          ${ev.gujaratiDate ? `<span title="Vikram Samvat tithi"><i class="fas fa-moon"></i> ${ev.gujaratiDate}</span>` : ''}
-          ${ev.time ? `<span><i class="fas fa-clock"></i> ${ev.time}</span>` : ''}
+          ${ev.gujaratiDate ? `<span title="Vikram Samvat tithi"><i class="fas fa-moon"></i> ${escapeHtml(ev.gujaratiDate)}</span>` : ''}
+          ${ev.time ? `<span><i class="fas fa-clock"></i> ${escapeHtml(ev.time)}</span>` : ''}
           <span><i class="fas fa-location-dot"></i>
-            <a href="${mapsLinkFor(ev)}" target="_blank" rel="noopener" class="event-map-link on-dark" title="Open in Google Maps">${venueWithCity(ev.venue, ev.city)} <i class="fas fa-arrow-up-right-from-square"></i></a>
+            <a href="${mapsLinkFor(ev)}" target="_blank" rel="noopener" class="event-map-link on-dark" title="Open in Google Maps">${escapeHtml(venueWithCity(ev.venue, ev.city))} <i class="fas fa-arrow-up-right-from-square"></i></a>
           </span>
         </div>
       </div>
@@ -796,7 +817,7 @@ function openEventModal(ev) {
 
     <section class="event-modal-section">
       <h3>About this event</h3>
-      <p>${ev.details || ev.description || ''}</p>
+      <p>${escapeHtml(ev.details || ev.description || '')}</p>
     </section>
 
     ${highlightsHTML}
@@ -904,16 +925,16 @@ function loadEvents() {
         <span class="event-status">${isPast ? 'Past' : 'Upcoming'}</span>
       </div>
       <div class="event-body">
-        <h3>${e.title}</h3>
+        <h3>${escapeHtml(e.title)}</h3>
         <div class="event-meta">
           <span><i class="fas fa-calendar"></i> ${fmtFull(e.date)}</span>
-          ${e.gujaratiDate ? `<span title="Vikram Samvat tithi"><i class="fas fa-moon"></i> ${e.gujaratiDate}</span>` : ''}
-          ${e.time   ? `<span><i class="fas fa-clock"></i> ${e.time}</span>` : ''}
+          ${e.gujaratiDate ? `<span title="Vikram Samvat tithi"><i class="fas fa-moon"></i> ${escapeHtml(e.gujaratiDate)}</span>` : ''}
+          ${e.time   ? `<span><i class="fas fa-clock"></i> ${escapeHtml(e.time)}</span>` : ''}
           <span><i class="fas fa-location-dot"></i>
-            <a href="${mapsLinkFor(e)}" target="_blank" rel="noopener" class="event-map-link" title="Open in Google Maps">${venueWithCity(e.venue, e.city)} <i class="fas fa-arrow-up-right-from-square"></i></a>
+            <a href="${mapsLinkFor(e)}" target="_blank" rel="noopener" class="event-map-link" title="Open in Google Maps">${escapeHtml(venueWithCity(e.venue, e.city))} <i class="fas fa-arrow-up-right-from-square"></i></a>
           </span>
         </div>
-        <p class="event-desc">${e.description || ''}</p>
+        <p class="event-desc">${escapeHtml(e.description || '')}</p>
         <div class="event-actions">
           <button type="button" class="btn" data-event-readmore="${idx}">
             <i class="fas fa-arrow-right"></i> Read more
@@ -1200,17 +1221,17 @@ function loadNews() {
           <span class="month">${fmtMon(n.date)}</span>
           <span class="year">${yearOf(n.date)}</span>
         </div>
-        <span class="event-status">${n.category || 'News'}</span>
+        <span class="event-status">${escapeHtml(n.category || 'News')}</span>
       </div>
       <div class="event-body">
-        <h3>${n.title}</h3>
-        ${n.titleGu ? `<div class="news-title-gu">${n.titleGu}</div>` : ''}
+        <h3>${escapeHtml(n.title)}</h3>
+        ${n.titleGu ? `<div class="news-title-gu">${escapeHtml(n.titleGu)}</div>` : ''}
         <div class="event-meta">
           <span><i class="fas fa-calendar"></i> ${fmtFull(n.date)}</span>
-          ${n.city ? `<span><i class="fas fa-location-dot"></i> ${n.city}</span>` : ''}
-          ${n.publishedIn ? `<span><i class="fas fa-book-open"></i> ${n.publishedIn}</span>` : ''}
+          ${n.city ? `<span><i class="fas fa-location-dot"></i> ${escapeHtml(n.city)}</span>` : ''}
+          ${n.publishedIn ? `<span><i class="fas fa-book-open"></i> ${escapeHtml(n.publishedIn)}</span>` : ''}
         </div>
-        <p class="event-desc">${n.summary || ''}</p>
+        <p class="event-desc">${escapeHtml(n.summary || '')}</p>
         <div class="event-actions">
           <button type="button" class="btn" data-news-readmore="${idx}">
             <i class="fas fa-arrow-right"></i> Read more
@@ -1319,10 +1340,10 @@ function openNewsModal(n) {
       <div class="event-gallery">
         ${galleryItems.map((g, i) => `
           <figure class="event-gallery-thumb">
-            <button type="button" class="event-gallery-btn" data-gallery-index="${i}" aria-label="Open photo ${i + 1}${g.caption ? ': ' + g.caption : ''}">
+            <button type="button" class="event-gallery-btn" data-gallery-index="${i}" aria-label="Open photo ${i + 1}${g.caption ? ': ' + escapeHtml(g.caption) : ''}">
               ${safeImg(g.src, g.caption || ('Photo ' + (i + 1)), FALLBACK_PHOTO)}
             </button>
-            ${g.caption ? `<figcaption>${g.caption}</figcaption>` : ''}
+            ${g.caption ? `<figcaption>${escapeHtml(g.caption)}</figcaption>` : ''}
           </figure>
         `).join('')}
       </div>
@@ -1332,21 +1353,21 @@ function openNewsModal(n) {
   body.innerHTML = `
     <div class="event-modal-hero">
       ${safeImg(n.image, n.title, FALLBACK_PHOTO)}
-      <span class="event-status">${n.category || 'News'}</span>
+      <span class="event-status">${escapeHtml(n.category || 'News')}</span>
       <div class="event-modal-hero-text">
-        <h2 id="eventModalTitle">${n.title}</h2>
-        ${n.titleGu ? `<div class="news-title-gu" style="color:rgba(255,255,255,0.85); margin:0 0 6px;">${n.titleGu}</div>` : ''}
+        <h2 id="eventModalTitle">${escapeHtml(n.title)}</h2>
+        ${n.titleGu ? `<div class="news-title-gu" style="color:rgba(255,255,255,0.85); margin:0 0 6px;">${escapeHtml(n.titleGu)}</div>` : ''}
         <div class="event-modal-meta">
           <span><i class="fas fa-calendar"></i> ${fmtFull}</span>
-          ${n.city ? `<span><i class="fas fa-location-dot"></i> ${n.city}</span>` : ''}
-          ${n.publishedIn ? `<span><i class="fas fa-book-open"></i> ${n.publishedIn}</span>` : ''}
+          ${n.city ? `<span><i class="fas fa-location-dot"></i> ${escapeHtml(n.city)}</span>` : ''}
+          ${n.publishedIn ? `<span><i class="fas fa-book-open"></i> ${escapeHtml(n.publishedIn)}</span>` : ''}
         </div>
       </div>
     </div>
 
     <section class="event-modal-section">
       <h3>The story</h3>
-      <p>${n.details || n.summary || ''}</p>
+      <p>${escapeHtml(n.details || n.summary || '')}</p>
     </section>
 
     ${galleryHTML}
@@ -1443,18 +1464,18 @@ function loadMemorials() {
         <span class="memorial-flame" aria-hidden="true">🕯</span>
       </div>
       <div class="memorial-body">
-        <h3>${m.name}</h3>
-        ${m.nameGu ? `<div class="memorial-name-gu">${m.nameGu}</div>` : ''}
+        <h3>${escapeHtml(m.name)}</h3>
+        ${m.nameGu ? `<div class="memorial-name-gu">${escapeHtml(m.nameGu)}</div>` : ''}
         <div class="memorial-dates">
           ${m.bornDate ? `<span><i class="fas fa-circle"></i> Born ${fmtDay(m.bornDate)}</span>` : ''}
           ${m.passedDate ? `<span><i class="fas fa-cross"></i> Passed ${fmtDay(m.passedDate)}</span>` : ''}
         </div>
-        ${m.city ? `<div class="memorial-city"><i class="fas fa-location-dot"></i> ${m.city}</div>` : ''}
-        ${m.tribute ? `<p class="memorial-tribute">${m.tribute}</p>` : ''}
-        ${m.publishedIn ? `<div class="memorial-pub"><i class="fas fa-book-open"></i> Tribute first appeared in <strong>${m.publishedIn}</strong></div>` : ''}
+        ${m.city ? `<div class="memorial-city"><i class="fas fa-location-dot"></i> ${escapeHtml(m.city)}</div>` : ''}
+        ${m.tribute ? `<p class="memorial-tribute">${escapeHtml(m.tribute)}</p>` : ''}
+        ${m.publishedIn ? `<div class="memorial-pub"><i class="fas fa-book-open"></i> Tribute first appeared in <strong>${escapeHtml(m.publishedIn)}</strong></div>` : ''}
         ${(m.family || m.phone) ? `
           <div class="memorial-family">
-            ${m.family ? `<span><i class="fas fa-users"></i> ${m.family}</span>` : ''}
+            ${m.family ? `<span><i class="fas fa-users"></i> ${escapeHtml(m.family)}</span>` : ''}
             ${m.phone  ? `<a href="tel:${m.phone}" class="ad-contact-btn"><i class="fas fa-phone"></i> Condolences</a>` : ''}
           </div>` : ''}
       </div>
@@ -1558,14 +1579,14 @@ function loadAds() {
     <article class="ad-card ad-display">
       <div class="ad-media">
         ${safeImg(a.image, a.title, FALLBACK_PHOTO)}
-        <span class="ad-category">${a.category}</span>
+        <span class="ad-category">${escapeHtml(a.category)}</span>
       </div>
       <div class="ad-body">
-        <h3>${a.title}</h3>
-        <p class="ad-desc">${a.description || ''}</p>
+        <h3>${escapeHtml(a.title)}</h3>
+        <p class="ad-desc">${escapeHtml(a.description || '')}</p>
         <div class="ad-meta">
-          <span><i class="fas fa-user"></i> ${a.advertiser}</span>
-          ${a.city ? `<span><i class="fas fa-location-dot"></i> ${a.city}</span>` : ''}
+          <span><i class="fas fa-user"></i> ${escapeHtml(a.advertiser)}</span>
+          ${a.city ? `<span><i class="fas fa-location-dot"></i> ${escapeHtml(a.city)}</span>` : ''}
           ${a.validUntil ? `<span><i class="fas fa-calendar-day"></i> Valid till ${fmtDate(a.validUntil)}</span>` : ''}
         </div>
         ${contactRowHTML(a)}
@@ -1577,13 +1598,13 @@ function loadAds() {
     <article class="ad-card ad-classified">
       <div class="ad-body">
         <div class="ad-classified-head">
-          <span class="ad-category">${a.category}</span>
-          ${a.city ? `<span class="ad-city"><i class="fas fa-location-dot"></i> ${a.city}</span>` : ''}
+          <span class="ad-category">${escapeHtml(a.category)}</span>
+          ${a.city ? `<span class="ad-city"><i class="fas fa-location-dot"></i> ${escapeHtml(a.city)}</span>` : ''}
         </div>
-        <h3>${a.title}</h3>
-        <p class="ad-desc">${a.description || ''}</p>
+        <h3>${escapeHtml(a.title)}</h3>
+        <p class="ad-desc">${escapeHtml(a.description || '')}</p>
         <div class="ad-meta">
-          <span><i class="fas fa-user"></i> ${a.advertiser}</span>
+          <span><i class="fas fa-user"></i> ${escapeHtml(a.advertiser)}</span>
           ${a.validUntil ? `<span><i class="fas fa-calendar-day"></i> Valid till ${fmtDate(a.validUntil)}</span>` : ''}
         </div>
         ${contactRowHTML(a)}
