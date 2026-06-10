@@ -40,6 +40,12 @@
                   e.g. /editions/May-2026/
                        /editions/Jan-2025/
                        /editions/June-2025/
+     goLive     → OPTIONAL. Exact publish date (YYYY-MM-DD) for this
+                  edition. Leave it BLANK to use the automatic rule
+                  (goes live on the last day of the cover month - see
+                  "Scheduled publishing" below). Fill it in only when
+                  you want a specific day, e.g. 2026-06-01 to publish
+                  the June issue on the 1st instead of the 30th.
 
    📊 ANCHOR (so editors can verify their numbers)
    --------------------------------------------------------------
@@ -63,6 +69,10 @@
        is hidden from the archive and the "Editions Published" count.
      • Tip: the day-of-month in `date` doesn't matter for this -
        only the month/year decides the go-live day (month-end).
+     • Want a SPECIFIC day instead? Fill the optional `goLive`
+       column with a date (YYYY-MM-DD). The edition then publishes
+       at 00:00 on exactly that day, overriding the month-end rule.
+       Leave `goLive` blank for the automatic behaviour.
 
    ✨ AUTOMATIC FEATURES (handled by the .map() at the bottom)
    --------------------------------------------------------------
@@ -84,7 +94,7 @@
 ============================================================ */
 
 const editionsData = parseTSV(`
-year	date	title	volume	editionNo	cover	link
+year	date	title	volume	editionNo	cover	link	goLive
 # === Year 2024 ===
 2024	2024-09-15	September 2024	Year 49, Issue 5	589	/editions/Sep-2024/files/thumb/1.jpg	/editions/Sep-2024/
 

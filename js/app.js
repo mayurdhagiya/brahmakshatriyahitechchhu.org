@@ -151,12 +151,20 @@ function initNav() {
    so a typo can never hide an issue forever.
 ============================================================= */
 
-/** The moment an edition publishes: 00:00 on the last day of its
- *  cover month. Returns null for undated rows (always live). */
+/** The moment an edition publishes (becomes the live "Current
+ *  Edition" and enters the archive). Resolved two ways:
+ *    1. MANUAL - if the row has a `goLive` date (YYYY-MM-DD), the
+ *       edition publishes at 00:00 on exactly that day.
+ *    2. AUTO   - otherwise, 00:00 on the last day of the cover month.
+ *  Returns null for undated rows (treated as always live). */
 function editionGoLiveDate(ed) {
-  const d = safeDate(ed && ed.date);
+  if (!ed) return null;
+  // 1) Manual override - an explicit go-live date typed by the editor.
+  const manual = safeDate(ed.goLive);
+  if (manual) { manual.setHours(0, 0, 0, 0); return manual; }
+  // 2) Auto - day 0 of the NEXT month === the last day of THIS month.
+  const d = safeDate(ed.date);
   if (!d) return null;
-  // Day 0 of the NEXT month === the last calendar day of THIS month.
   return new Date(d.getFullYear(), d.getMonth() + 1, 0, 0, 0, 0, 0);
 }
 
