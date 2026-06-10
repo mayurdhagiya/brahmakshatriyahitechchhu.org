@@ -52,10 +52,22 @@
    ⚠️  URLs are case-sensitive on most servers, so keep the
        capitalised first letter exactly as the folder is named.
 
+   📅 SCHEDULED PUBLISHING (set-and-forget)
+   --------------------------------------------------------------
+     • An edition goes LIVE on the LAST DAY of its cover month.
+       So you can paste next month's row in advance and it stays
+       hidden until then - no need to edit anything on the day.
+       Example: a row dated 2026-06-15 (June 2026) appears as the
+       Current Edition automatically on 30 June 2026. Until then
+       the previous live edition stays "current", and the new row
+       is hidden from the archive and the "Editions Published" count.
+     • Tip: the day-of-month in `date` doesn't matter for this -
+       only the month/year decides the go-live day (month-end).
+
    ✨ AUTOMATIC FEATURES (handled by the .map() at the bottom)
    --------------------------------------------------------------
-     • The newest row (by `date`) automatically becomes the
-       "Current Edition" hero on the home page.
+     • The newest LIVE row (by `date`) automatically becomes the
+       "Current Edition" hero on the home page (see scheduling above).
      • Past editions are grouped by `year` in the archive.
      • The "Editions Published" stat on the home page reads the
        highest editionNo in this table - so it's always correct.

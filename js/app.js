@@ -136,6 +136,45 @@ function initNav() {
   });
 }
 
+/* =============================================================
+   🗓️  Scheduled publishing - editions go live on their month-end
+   -------------------------------------------------------------
+   An edition "goes live" on the LAST DAY of its cover month, so
+   you can paste next month's row into js/data/editions.js ahead
+   of time and it appears automatically - no edit needed on the day.
+
+   Example: a row dated 2026-06-15 (June 2026) stays hidden until
+   30 June 2026, then becomes the Current Edition on the home page.
+   Until then, the previous live edition remains "current".
+
+   Rows with a missing / invalid date are always treated as live,
+   so a typo can never hide an issue forever.
+============================================================= */
+
+/** The moment an edition publishes: 00:00 on the last day of its
+ *  cover month. Returns null for undated rows (always live). */
+function editionGoLiveDate(ed) {
+  const d = safeDate(ed && ed.date);
+  if (!d) return null;
+  // Day 0 of the NEXT month === the last calendar day of THIS month.
+  return new Date(d.getFullYear(), d.getMonth() + 1, 0, 0, 0, 0, 0);
+}
+
+/** True once an edition's cover month has reached its final day. */
+function editionIsLive(ed, now) {
+  const go = editionGoLiveDate(ed);
+  return !go || go <= (now || new Date());
+}
+
+/** Editions that are published right now. Falls back to the full
+ *  list if every row is future-dated, so the hero is never empty. */
+function livePublishedEditions() {
+  if (typeof editionsData === 'undefined' || !Array.isArray(editionsData)) return [];
+  const now = new Date();
+  const live = editionsData.filter((ed) => editionIsLive(ed, now));
+  return live.length ? live : editionsData.slice();
+}
+
 /* ---------- Home: current edition + past editions grouped by year ---------- */
 function loadEditions() {
   // No-op when this page didn't load editions.js (about, contact, etc.).
@@ -145,9 +184,11 @@ function loadEditions() {
     return;
   }
 
-  // Sort newest-first. Rows with a missing/invalid date sink to the
-  // bottom rather than crashing the comparator.
-  const sorted = [...editionsData].sort((a, b) => {
+  // Keep only editions that have reached their go-live date (the last
+  // day of their cover month), then sort newest-first. Rows with a
+  // missing/invalid date sink to the bottom rather than crashing the
+  // comparator. Future-dated editions stay hidden until they publish.
+  const sorted = livePublishedEditions().sort((a, b) => {
     const da = safeDate(a.date), db = safeDate(b.date);
     if (!da && !db) return 0;
     if (!da) return 1;
@@ -1910,10 +1951,13 @@ function loadStats() {
   // Falls back to the row count if no editionNo is set anywhere.
   const editionsEl = section.querySelector('[data-stat="editions"]');
   if (editionsEl && typeof editionsData !== 'undefined' && Array.isArray(editionsData)) {
-    const numbered = editionsData
+    // Count only editions that are live (a scheduled future issue
+    // shouldn't bump the number before it publishes).
+    const live = livePublishedEditions();
+    const numbered = live
       .map((e) => Number(e.editionNo))
       .filter((n) => Number.isFinite(n));
-    const total = numbered.length ? Math.max(...numbered) : editionsData.length;
+    const total = numbered.length ? Math.max(...numbered) : live.length;
     editionsEl.innerHTML = total + '<span class="stat-plus">+</span>';
   }
 }
