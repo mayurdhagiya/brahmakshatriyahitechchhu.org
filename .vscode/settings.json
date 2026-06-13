@@ -1,7 +1,7 @@
 {
   // ========== Visuals ==========
   "editor.cursorSmoothCaretAnimation": "on",
-  "editor.fontFamily": "Input Mono, monospace",
+  "editor.fontFamily": "JetBrains Mono, Menlo, Monaco, monospace",
   "editor.guides.bracketPairs": "active",
   "editor.lineNumbers": "interval",
   "editor.renderWhitespace": "boundary",
@@ -19,7 +19,7 @@
   "workbench.tree.expandMode": "singleClick",
   "workbench.tree.indent": 10,
 
-  // ========== Editor ========== 
+  // ========== Editor ==========
   "debug.onTaskErrors": "debugAnyway",
   "diffEditor.ignoreTrimWhitespace": false,
   "editor.wordSeparators": "`~!@#%^&*()=+[{]}\\|;:'\",.<>/?",
@@ -81,14 +81,14 @@
     "**/LICENSE*": true,
   },
 
-  // ==========  Global Level Config, needs to put in User Settings ========== 
+  // ==========  Global Level Config, needs to put in User Settings ==========
   "window.dialogStyle": "custom",
   "window.nativeTabs": true, // this is great, macOS only
   "window.title": "${rootName}", // this make tabs more readable
   "window.titleBarStyle": "custom",
   "extensions.autoUpdate": "onlyEnabledExtensions",
 
-  // ========== Extension configs ========== 
+  // ========== Extension configs ==========
   "emmet.showSuggestionsAsSnippets": true,
   "emmet.triggerExpansionOnTab": false,
   "errorLens.enabledDiagnosticLevels": [

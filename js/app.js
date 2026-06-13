@@ -57,28 +57,46 @@ const FALLBACK_PHOTO =
 function safeImg(src, alt, fb, extra) {
   const fallback = fb || FALLBACK_COVER;
   const safeAlt  = escapeHtml(alt);
-  const safeSrc  = (src || fallback);
+  // Reject unsafe URL schemes (javascript: etc.) - falls back to placeholder
+  const safeSrc  = safeUrl(src, fallback);
   // onerror disables itself first so a broken fallback can't loop forever
   return `<img src="${safeSrc}" alt="${safeAlt}" loading="lazy" ${extra || ''} onerror="this.onerror=null;this.src='${fallback}'" />`;
 }
 
 /**
- * Safe date parser - returns a real Date or `null` for bad input.
- * Avoids the JavaScript "Invalid Date" trap that breaks sorts.
+ * Allow-list URL validator for data-derived href/src values.
+ * Permits http(s), mailto:, tel:, our own data:image fallbacks,
+ * and site-relative paths (/x, ./x, #x). Anything else - notably
+ * javascript: / vbscript: / arbitrary data: - is replaced by the
+ * fallback so a bad cell in a data file can never execute script.
+ * Defence-in-depth: data files are editor-controlled today, but
+ * this keeps the renderer safe if that ever changes.
  */
-function safeDate(iso) {
-  if (!iso) return null;
-  const d = new Date(iso);
-  return isNaN(d.getTime()) ? null : d;
+function safeUrl(url, fallback) {
+  const fb = (fallback !== undefined) ? fallback : '#';
+  if (!url) return fb;
+  const u = String(url).trim();
+  if (/^(https?:|mailto:|tel:|data:image\/)/i.test(u)) return u;
+  if (/^[/#.]/.test(u) && !/^\/\//.test(u)) return u;   // relative path / hash (not protocol-relative)
+  return fb;
 }
 
 /**
- * Format an ISO date for display. Returns '' on bad input
- * instead of "Invalid Date" so card UIs stay clean.
+ * Safe date parser - returns a real Date or `null` for bad input.
+ * Avoids the JavaScript "Invalid Date" trap that breaks sorts.
+ *
+ * Date-only strings (YYYY-MM-DD - the format every data file uses)
+ * are parsed as LOCAL midnight, not UTC. Without this, JavaScript
+ * treats "2026-06-01" as UTC midnight, which renders as 31 May for
+ * readers in timezones behind UTC (e.g. community members in the
+ * US/Canada) and flips events to "Past" a day early.
  */
-function formatDate(iso) {
-  const d = safeDate(iso);
-  return d ? d.toLocaleDateString('en-IN', { month: 'long', year: 'numeric' }) : '';
+function safeDate(iso) {
+  if (!iso) return null;
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(iso).trim());
+  if (m) return new Date(+m[1], +m[2] - 1, +m[3]);  // local midnight
+  const d = new Date(iso);
+  return isNaN(d.getTime()) ? null : d;
 }
 
 /**
@@ -231,13 +249,17 @@ function loadEditions() {
   const archive = document.getElementById('archive');
   if (!archive) return;
 
+  // window-resize listeners registered by the current render, so the
+  // next render can detach them (see render() below).
+  const _resizeHandlers = [];
+
   // Filter controls (optional - only present on index.html)
   const yearSel  = document.getElementById('editionYearFilter');
   const monthSel = document.getElementById('editionMonthFilter');
   const resetBtn = document.getElementById('editionFilterReset');
 
   if (yearSel) {
-    const years = [...new Set(rest.map((e) => new Date(e.date).getFullYear()))].sort((a, b) => b - a);
+    const years = [...new Set(rest.map((e) => safeDate(e.date)?.getFullYear()).filter(Boolean))].sort((a, b) => b - a);
     years.forEach((y) => {
       const o = document.createElement('option');
       o.value = y; o.textContent = y;
@@ -250,7 +272,7 @@ function loadEditions() {
   // A subtle "Read >" indicator (not a button) signals interactivity without
   // duplicating the click target visually.
   const cardHTML = (ed) => `
-    <a class="edition-card" href="${ed.link}" target="_blank" rel="noopener"
+    <a class="edition-card" href="${safeUrl(ed.link)}" target="_blank" rel="noopener"
        aria-label="Read ${escapeHtml(ed.title)}, ${escapeHtml(ed.volume || '')}${ed.editionNo ? ', edition #' + ed.editionNo : ''}">
       <div class="cover">${safeImg(ed.cover, ed.title + ' cover', FALLBACK_COVER)}</div>
       <h4 class="title">${escapeHtml(ed.title)}</h4>
@@ -314,7 +336,11 @@ function loadEditions() {
           right.style.display = track.scrollLeft < overflow - 4 ? '' : 'none';
         };
         track.addEventListener('scroll', updateArrows, { passive: true });
+        // The track's own listener dies with the node when the archive is
+        // re-rendered, but window listeners would leak - register them in
+        // _resizeHandlers so render() can detach the stale ones first.
         window.addEventListener('resize', updateArrows);
+        _resizeHandlers.push(updateArrows);
         // Defer one frame so layout is settled before measuring.
         requestAnimationFrame(updateArrows);
       });
@@ -337,6 +363,10 @@ function loadEditions() {
     'July','August','September','October','November','December'][m - 1];
 
   const render = () => {
+    // Detach window-resize listeners from the previous render so they
+    // don't accumulate (and keep dead DOM alive) on every filter change.
+    _resizeHandlers.forEach((h) => window.removeEventListener('resize', h));
+    _resizeHandlers.length = 0;
     archive.innerHTML = '';
     const y = yearSel?.value  || '';
     const m = monthSel?.value || '';
@@ -349,7 +379,8 @@ function loadEditions() {
 
     // Filters applied → flat grid across the *entire* archive (incl. current edition)
     const filtered = sorted.filter((ed) => {
-      const d = new Date(ed.date);
+      const d = safeDate(ed.date);
+      if (!d) return false;   // undated rows can't match a year/month filter
       const yearOk  = !y || String(d.getFullYear()) === y;
       const monthOk = !m || String(d.getMonth() + 1) === m;
       return yearOk && monthOk;
@@ -456,9 +487,9 @@ function loadTrustees() {
           ${t.phone    ? `<a href="tel:${t.phone}" title="Call ${escapeHtml(t.name)}"><i class="fas fa-phone"></i></a>` : ''}
           ${t.whatsapp ? `<a href="https://wa.me/${t.whatsapp}" target="_blank" rel="noopener" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>` : ''}
           ${t.email    ? `<a href="mailto:${t.email}" title="Email"><i class="fas fa-envelope"></i></a>` : ''}
-          ${social.facebook ? `<a href="${social.facebook}" target="_blank" rel="noopener" title="Facebook"><i class="fab fa-facebook-f"></i></a>` : ''}
-          ${social.twitter  ? `<a href="${social.twitter}"  target="_blank" rel="noopener" title="Twitter"><i class="fab fa-twitter"></i></a>` : ''}
-          ${social.linkedin ? `<a href="${social.linkedin}" target="_blank" rel="noopener" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>` : ''}
+          ${social.facebook ? `<a href="${safeUrl(social.facebook)}" target="_blank" rel="noopener" title="Facebook"><i class="fab fa-facebook-f"></i></a>` : ''}
+          ${social.twitter  ? `<a href="${safeUrl(social.twitter)}"  target="_blank" rel="noopener" title="Twitter"><i class="fab fa-twitter"></i></a>` : ''}
+          ${social.linkedin ? `<a href="${safeUrl(social.linkedin)}" target="_blank" rel="noopener" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>` : ''}
         </div>
       ` : '';
 
@@ -573,22 +604,24 @@ function normaliseGalleryItem(item, i) {
 function mapsQuery(ev) {
   return [ev.venue, ev.city].filter(Boolean).join(', ');
 }
-/** Build a Google Maps "search" URL for an event's venue + city. */
+/** Build a Google Maps "search" URL for an event's venue + city.
+ *  An explicit mapUrl override is scheme-checked via safeUrl(). */
 function mapsLinkFor(ev) {
-  if (ev.mapUrl) return ev.mapUrl;
-  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapsQuery(ev))}`;
+  const derived = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapsQuery(ev))}`;
+  return ev.mapUrl ? safeUrl(ev.mapUrl, derived) : derived;
 }
-/** Build a Google Maps embed iframe URL for the event's venue. */
+/** Build a Google Maps embed iframe URL for the event's venue.
+ *  An explicit mapEmbed override is scheme-checked via safeUrl(). */
 function mapsEmbedFor(ev) {
-  if (ev.mapEmbed) return ev.mapEmbed;
-  return `https://www.google.com/maps?q=${encodeURIComponent(mapsQuery(ev))}&output=embed`;
+  const derived = `https://www.google.com/maps?q=${encodeURIComponent(mapsQuery(ev))}&output=embed`;
+  return ev.mapEmbed ? safeUrl(ev.mapEmbed, derived) : derived;
 }
 
 /** Build the {url, text, title} object passed to navigator.share / fallback popover. */
 function buildShareData(ev) {
   const slug = slugify(ev.title);
   const url = `${location.origin}${location.pathname}#event-${slug}`;
-  const text = `${ev.title} - ${new Date(ev.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })} at ${ev.venue}, ${ev.city}`;
+  const text = `${ev.title} - ${safeDate(ev.date)?.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) || ''} at ${ev.venue}, ${ev.city}`;
   return { url, text, title: ev.title };
 }
 
@@ -778,9 +811,10 @@ function openEventModal(ev) {
   const lightbox = backdrop.querySelector('.event-lightbox');
 
   const today = new Date(); today.setHours(0, 0, 0, 0);
-  const isPast = new Date(ev.date) < today;
-  const fmtFull = new Date(ev.date).toLocaleDateString('en-IN',
-    { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  const evDate = safeDate(ev.date);
+  const isPast = evDate ? evDate < today : false;   // undated -> treat as upcoming
+  const fmtFull = evDate ? evDate.toLocaleDateString('en-IN',
+    { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) : '';
 
   const highlightsHTML = ev.highlights?.length ? `
     <section class="event-modal-section">
@@ -876,7 +910,7 @@ function openEventModal(ev) {
 
     <div class="event-modal-cta">
       ${ev.link && ev.link !== '#' ? `
-        <a href="${ev.link}" class="btn" target="_blank" rel="noopener">
+        <a href="${safeUrl(ev.link)}" class="btn" target="_blank" rel="noopener">
           <i class="fas fa-${isPast ? 'images' : 'ticket'}"></i>
           ${isPast ? 'View full photo album' : 'Register / RSVP'}
         </a>` : ''}
@@ -939,7 +973,7 @@ function loadEvents() {
   });
 
   // Populate year + location dropdowns
-  const years     = [...new Set(sorted.map((e) => new Date(e.date).getFullYear()))].sort((a, b) => b - a);
+  const years     = [...new Set(sorted.map((e) => safeDate(e.date)?.getFullYear()).filter(Boolean))].sort((a, b) => b - a);
   const locations = [...new Set(sorted.map((e) => e.city))].sort();
 
   if (yearFilter) {
@@ -957,10 +991,10 @@ function loadEvents() {
 
   let currentTab = 'upcoming';
 
-  const fmtDay   = (d) => new Date(d).toLocaleDateString('en-IN', { day: '2-digit' });
-  const fmtMonth = (d) => new Date(d).toLocaleDateString('en-IN', { month: 'short' }).toUpperCase();
-  const fmtYear  = (d) => new Date(d).getFullYear();
-  const fmtFull  = (d) => new Date(d).toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  const fmtDay   = (d) => safeDate(d)?.toLocaleDateString('en-IN', { day: '2-digit' }) || '';
+  const fmtMonth = (d) => safeDate(d)?.toLocaleDateString('en-IN', { month: 'short' }).toUpperCase() || '';
+  const fmtYear  = (d) => safeDate(d)?.getFullYear() || '';
+  const fmtFull  = (d) => safeDate(d)?.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) || '';
 
   const cardHTML = (e, isPast, idx) => `
     <article class="event-card ${isPast ? 'is-past' : 'is-upcoming'}">
@@ -1002,13 +1036,13 @@ function loadEvents() {
     const q = (searchInput?.value || '').toLowerCase().trim();
 
     const buildSearchCorpus = (e) => {
-      const d = new Date(e.date);
+      const d = safeDate(e.date);
       const parts = [
         e.title, e.description, e.details,
         e.venue, e.city, e.gujaratiDate, e.time,
         fmtFull(e.date), fmtMonth(e.date), String(fmtYear(e.date)),
-        d.toLocaleDateString('en-IN', { month: 'long' }),
-        d.toLocaleDateString('en-IN', { weekday: 'long' })
+        d?.toLocaleDateString('en-IN', { month: 'long' }),
+        d?.toLocaleDateString('en-IN', { weekday: 'long' })
       ];
       (e.agenda     || []).forEach((a) => parts.push(a.time, a.title));
       (e.highlights || []).forEach((h) => parts.push(h.number, h.label));
@@ -1017,7 +1051,9 @@ function loadEvents() {
     };
 
     const filtered = sorted.filter((e) => {
-      const d = new Date(e.date); d.setHours(0, 0, 0, 0);
+      const d = safeDate(e.date);
+      if (!d) return false;   // undated rows can't be placed in either tab
+      d.setHours(0, 0, 0, 0);
       const isPast = d < today;
       const tabOk  = currentTab === 'past' ? isPast : !isPast;
       const yearOk = !y || String(d.getFullYear()) === y;
@@ -1028,8 +1064,8 @@ function loadEvents() {
 
     // Upcoming chronological ascending, past descending
     filtered.sort((a, b) => currentTab === 'past'
-      ? new Date(b.date) - new Date(a.date)
-      : new Date(a.date) - new Date(b.date));
+      ? (safeDate(b.date) || 0) - (safeDate(a.date) || 0)
+      : (safeDate(a.date) || 0) - (safeDate(b.date) || 0));
 
     wrap.innerHTML = filtered.length
       ? `<div class="event-grid">${filtered.map((e) => {
@@ -1055,8 +1091,8 @@ function loadEvents() {
     });
 
     // Update counts on the tab buttons
-    const upcomingCount = sorted.filter((e) => new Date(e.date) >= today).length;
-    const pastCount     = sorted.filter((e) => new Date(e.date) < today).length;
+    const upcomingCount = sorted.filter((e) => { const d = safeDate(e.date); return d && d >= today; }).length;
+    const pastCount     = sorted.filter((e) => { const d = safeDate(e.date); return d && d < today;  }).length;
     const upTab = document.querySelector('[data-event-tab="upcoming"] .count');
     const pTab  = document.querySelector('[data-event-tab="past"] .count');
     if (upTab) upTab.textContent = upcomingCount;
@@ -1378,8 +1414,8 @@ function openNewsModal(n) {
   const body = backdrop.querySelector('.event-modal-body');
   const lightbox = backdrop.querySelector('.event-lightbox');
 
-  const fmtFull = new Date(n.date).toLocaleDateString('en-IN',
-    { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  const fmtFull = safeDate(n.date)?.toLocaleDateString('en-IN',
+    { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) || '';
 
   // Normalise gallery items (string|object) into {src,caption} rows
   const galleryItems = (n.gallery || []).map(normaliseGalleryItem);
@@ -1423,7 +1459,7 @@ function openNewsModal(n) {
 
     <div class="event-modal-cta">
       ${n.link && n.link !== '#' ? `
-        <a href="${n.link}" class="btn" target="_blank" rel="noopener">
+        <a href="${safeUrl(n.link)}" class="btn" target="_blank" rel="noopener">
           <i class="fas fa-arrow-up-right-from-square"></i> Open full story
         </a>` : ''}
       <button type="button" class="btn btn-outline" data-modal-share>
@@ -1583,10 +1619,12 @@ function loadAds() {
 
   const today = new Date(); today.setHours(0, 0, 0, 0);
 
-  // Drop expired ads if validUntil is in the past
+  // Drop expired ads if validUntil is in the past. The ad stays live
+  // through the whole validUntil day (local time) and disappears the
+  // day after. A missing/invalid date means the ad never expires.
   const live = adsData.filter((a) => {
-    if (!a.validUntil) return true;
-    return new Date(a.validUntil) >= today;
+    const vu = safeDate(a.validUntil);
+    return !vu || vu >= today;
   });
 
   // Sort newest-first by publishedDate
@@ -1615,9 +1653,8 @@ function loadAds() {
 
   let currentTab = 'display';
 
-  const fmtDate = (iso) => iso
-    ? new Date(iso).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
-    : '';
+  const fmtDate = (iso) => safeDate(iso)
+    ?.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) || '';
 
   const corpus = (a) => [
     a.title, a.description, a.advertiser, a.category, a.city,
@@ -1815,10 +1852,8 @@ function injectJsonLd(id, data) {
 /** SEO: emit a schema.org Event JSON-LD entry for every row in eventsData. */
 function injectEventStructuredData() {
   if (typeof eventsData === 'undefined' || !eventsData.length) return;
-  const today = new Date(); today.setHours(0, 0, 0, 0);
 
   const items = eventsData.map((e) => {
-    const isPast = new Date(e.date) < today;
     return {
       "@context": "https://schema.org",
       "@type": "Event",
