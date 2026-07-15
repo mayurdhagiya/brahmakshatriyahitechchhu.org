@@ -116,6 +116,7 @@ year	date	title	volume	editionNo	cover	link	goLive
 2026	2026-04-15	April 2026	Year 50, Issue 12	608	/editions/Apr-2026/files/thumb/1.png	/editions/Apr-2026/
 2026	2026-05-15	May 2026	Year 51, Issue 1	609	/editions/May-2026/files/thumb/1.png	/editions/May-2026/
 2026	2026-06-15	June 2026	Year 51, Issue 2	610	/editions/Jun-2026/files/thumb/1.png	/editions/Jun-2026/
+2026	2026-07-15	July 2026	Year 51, Issue 3	611	/editions/Jul-2026/files/thumb/1.png	/editions/Jul-2026/
 
 # Add new editions below this line, keeping the same column order.
 # Tip: copy a row above, paste below, then change the values.
