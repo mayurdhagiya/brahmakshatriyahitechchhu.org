@@ -68,6 +68,7 @@
     '/editions/oct-2025/':  '/editions/Oct-2025/',
     '/editions/nov-2025/':  '/editions/Nov-2025/',
     '/editions/dec-2025/':  '/editions/Dec-2025/',
+    '/editions/jul-2026/': '/editions/Jul-2026/',
 
     /* --- Common typos / legacy paths --- */
     '/trustee.html':        '/trustees.html',
