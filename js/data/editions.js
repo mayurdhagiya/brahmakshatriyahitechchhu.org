@@ -118,7 +118,7 @@ year	date	title	volume	editionNo	cover	link	goLive
 2026	2026-06-15	June 2026	Year 51, Issue 2	610	/editions/Jun-2026/files/thumb/1.png	/editions/Jun-2026/
 2026	2026-07-15	July 2026	Year 51, Issue 3	611	/editions/Jul-2026/files/thumb/1.png	/editions/Jul-2026/
 2026	2026-08-15	August 2026	Year 51, Issue 4	612	/editions/Aug-2026/files/thumb/1.png	/editions/Aug-2026/
-2026  2026-09-15	September 2026	Year 51, Issue 5	613	/editions/Sep-2026/files/thumb/1.png	/editions/Sep-2026/
+2026	2026-09-15	September 2026	Year 51, Issue 5	613	/editions/Sep-2026/files/thumb/1.png	/editions/Sep-2026/
 
 
 # Add new editions below this line, keeping the same column order.
@@ -161,10 +161,32 @@ year	date	title	volume	editionNo	cover	link	goLive
     return `/editions/${SHORT[m[1]] || m[1]}-${m[2]}/`;
   };
 
-  // Guard against a shifted row: a space typed where a TAB belongs
-  // moves every cell one column left (year becomes "2026  2026-09-15",
-  // date becomes the title, …) and the hero then links to a slug of
-  // the volume text. Warn loudly so the editor spots it immediately.
+  // AUTO-REPAIR a shifted row: when SPACES are typed where the first
+  // TAB belongs, the year cell arrives as "2026  2026-09-15" and every
+  // other value sits one column to the left (date holds the title, the
+  // hero links to a slug of the volume text, the cover src becomes the
+  // folder URL, …). That exact pattern can't occur in valid data, so
+  // detect it and shift everything back where it belongs.
+  const squashed = /^(\d{4})\s+(\d{4}-\d{2}-\d{2})$/.exec((e.year || '').trim());
+  if (squashed) {
+    console.warn(
+      `[editions.js] Auto-repaired the ${squashed[2]} row - a SPACE was used ` +
+      `instead of a TAB between year and date. Please fix the row in the file.`
+    );
+    e = {
+      year:      squashed[1],
+      date:      squashed[2],
+      title:     e.date,       // every remaining value shifts one column right
+      volume:    e.title,
+      editionNo: e.volume,
+      cover:     e.editionNo,
+      link:      e.cover,
+      goLive:    e.link
+    };
+  }
+
+  // Guard against any OTHER misalignment (e.g. a space before a later
+  // column): warn loudly so the editor spots it immediately.
   if (!/^\d{4}$/.test((e.year || '').trim()) || !/^\d{4}-\d{2}-\d{2}$/.test((e.date || '').trim())) {
     console.warn(
       `[editions.js] Row for "${e.title || e.date || e.year}" looks misaligned - ` +
