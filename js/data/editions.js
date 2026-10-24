@@ -161,6 +161,17 @@ year	date	title	volume	editionNo	cover	link	goLive
     return `/editions/${SHORT[m[1]] || m[1]}-${m[2]}/`;
   };
 
+  // Guard against a shifted row: a space typed where a TAB belongs
+  // moves every cell one column left (year becomes "2026  2026-09-15",
+  // date becomes the title, …) and the hero then links to a slug of
+  // the volume text. Warn loudly so the editor spots it immediately.
+  if (!/^\d{4}$/.test((e.year || '').trim()) || !/^\d{4}-\d{2}-\d{2}$/.test((e.date || '').trim())) {
+    console.warn(
+      `[editions.js] Row for "${e.title || e.date || e.year}" looks misaligned - ` +
+      `check that every column is separated by a TAB (year="${e.year}", date="${e.date}")`
+    );
+  }
+
   // Return the cleaned-up edition object the renderer expects.
   return {
     ...e,                                                 // keep every parsed field
