@@ -241,10 +241,15 @@ function loadEditions() {
     return parts.join(' · ');
   };
 
-  if (current && heroCover)  heroCover.src = current.cover;
+  if (current && heroCover) {
+    // Fall back to the branded placeholder if the cover URL is bad or
+    // 404s - the hero should never show a raw broken-image icon.
+    heroCover.onerror = () => { heroCover.onerror = null; heroCover.src = FALLBACK_COVER; };
+    heroCover.src = safeUrl(current.cover, FALLBACK_COVER);
+  }
   if (current && heroTitle)  heroTitle.textContent  = current.title;
   if (current && heroVolume) heroVolume.textContent = heroVolumeLabel(current);
-  if (current) heroLinks.forEach((el) => { el.href = current.link; });
+  if (current) heroLinks.forEach((el) => { el.href = safeUrl(current.link); });
 
   const archive = document.getElementById('archive');
   if (!archive) return;
